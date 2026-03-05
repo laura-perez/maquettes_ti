@@ -1,0 +1,2066 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Maison T4 Biarritz — TrackerImmo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+/* ============================================================
+   MAIN LAYOUT
+   ============================================================ */
+.main {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--space-lg) var(--gutter);
+  display: flex;
+  gap: var(--space-lg);
+}
+.col-left {
+  flex: 0 0 62%;
+  max-width: 62%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+.col-right {
+  flex: 0 0 38%;
+  max-width: 38%;
+  position: sticky;
+  top: 72px; /* header 56px + space-md 16px */
+  align-self: flex-start;
+  max-height: calc(100vh - 88px);
+  overflow-y: auto;
+}
+
+/* ============================================================
+   BACK LINK
+   ============================================================ */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-tertiary);
+  text-decoration: none;
+  transition: color 0.15s;
+  margin-bottom: calc(-1 * var(--space-sm)); /* tighten gap before gallery */
+}
+.back-link:hover { color: var(--primary-dark); }
+.back-link svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ============================================================
+   A — GALLERY CAROUSEL
+   ============================================================ */
+.gallery {
+  position: relative;
+  background: var(--bg-section);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.gallery__main {
+  width: 100%;
+  aspect-ratio: 16/10;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.3s;
+}
+.gallery__count {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 5;
+  background: rgba(0,0,0,0.55);
+  color: white;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+}
+.gallery__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.15s, transform 0.15s;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+}
+.gallery__arrow:hover { background: white; }
+.gallery__arrow:active { transform: translateY(-50%) scale(0.95); }
+.gallery__arrow--prev { left: 12px; }
+.gallery__arrow--next { right: 12px; }
+.gallery__arrow svg { width: 18px; height: 18px; stroke: var(--text-heading); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.gallery__dots {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  gap: 6px;
+}
+.gallery__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: rgba(255,255,255,0.5);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.gallery__dot.active { background: white; transform: scale(1.25); }
+.gallery__dot:hover { background: rgba(255,255,255,0.8); }
+
+/* ============================================================
+   B — QUICK VIEW
+   ============================================================ */
+.quick-view {
+  background: var(--bg-section);
+  border-radius: var(--radius-card);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+}
+.quick-view__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+.quick-view__left { flex: 1; }
+.quick-view__title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-heading);
+  letter-spacing: -0.6px;
+  margin-bottom: 4px;
+}
+.quick-view__address { font-size: 14px; color: var(--text-tertiary); }
+.quick-view__right { text-align: right; flex-shrink: 0; }
+.quick-view__price {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--text-heading);
+  letter-spacing: -0.6px;
+  white-space: nowrap;
+}
+.quick-view__price-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-label);
+  text-align: right;
+  margin-bottom: 2px;
+}
+.quick-view__specs { display: flex; gap: var(--space-lg); flex-wrap: wrap; align-items: center; }
+.quick-view__spec {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+.quick-view__spec svg { width: 16px; height: 16px; flex-shrink: 0; }
+/* DPE badge grade colors (base .badge-dpe in shared.css) */
+.badge-dpe--A { background: #e6f5e6; color: #1a7a1a; }
+.badge-dpe--B { background: #e6f9e6; color: #1a8a1a; }
+.badge-dpe--C { background: #fafce6; color: #6b6b00; }
+.badge-dpe--D { background: #fffde6; color: #8a8a00; }
+.badge-dpe--E { background: #fff5e0; color: #995c00; }
+.badge-dpe--F { background: #fff0e0; color: #b34700; }
+.badge-dpe--G { background: #ffe6e6; color: #cc0000; }
+
+/* ============================================================
+   C — DESCRIPTION
+   ============================================================ */
+.description {
+  background: var(--bg-section);
+  border-radius: var(--radius-card);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+}
+.description__label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-label);
+  margin-bottom: var(--space-md);
+}
+.description__text { font-size: 16px; line-height: 26px; color: var(--text-body); }
+.description__text.truncated {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.description__toggle {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary-dark);
+  cursor: pointer;
+}
+.description__toggle:hover { text-decoration: underline; }
+
+/* ============================================================
+   D — CHARACTERISTICS
+   ============================================================ */
+.characteristics {
+  background: var(--bg-section);
+  border-radius: var(--radius-card);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+}
+.characteristics__label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-label);
+  margin-bottom: var(--space-md);
+}
+.characteristics__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md) var(--space-lg);
+}
+.char-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border-default);
+}
+.char-item__key { color: var(--text-secondary); }
+.char-item__val { font-weight: 600; color: var(--text-heading); }
+
+/* ============================================================
+   E — DPE / GES DIAGNOSTIC
+   ============================================================ */
+.diag-section {
+  background: var(--bg-section);
+  border-radius: var(--radius-card);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+}
+.diag-section__label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-label);
+  margin-bottom: var(--space-lg);
+}
+.diag-container { display: flex; gap: var(--space-xl); }
+.diag-block { flex: 1; }
+.diag-block__title { font-size: 14px; font-weight: 600; color: var(--text-heading); margin-bottom: var(--space-md); }
+.diag-block__subtitle { font-size: 12px; color: var(--text-tertiary); margin-bottom: var(--space-sm); }
+.diag-scale { display: flex; flex-direction: column; gap: 3px; }
+.diag-bar { display: flex; align-items: center; height: 24px; position: relative; }
+.diag-bar__fill {
+  height: 100%;
+  border-radius: 3px 0 0 3px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: white;
+  position: relative;
+}
+.diag-bar__fill::after {
+  content: '';
+  position: absolute;
+  right: -8px;
+  top: 0;
+  width: 0;
+  height: 0;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  border-left: 8px solid currentColor;
+}
+.diag-bar.active .diag-bar__fill { font-size: 13px; }
+.diag-bar.active .diag-bar__marker {
+  display: flex;
+  align-items: center;
+  margin-left: 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-heading);
+  white-space: nowrap;
+}
+.diag-bar__marker { display: none; }
+.diag-bar[data-grade="A"] .diag-bar__fill { width: 20%; }
+.diag-bar[data-grade="B"] .diag-bar__fill { width: 30%; }
+.diag-bar[data-grade="C"] .diag-bar__fill { width: 40%; }
+.diag-bar[data-grade="D"] .diag-bar__fill { width: 50%; }
+.diag-bar[data-grade="E"] .diag-bar__fill { width: 60%; }
+.diag-bar[data-grade="F"] .diag-bar__fill { width: 75%; }
+.diag-bar[data-grade="G"] .diag-bar__fill { width: 90%; }
+.diag-bar[data-grade="A"] .diag-bar__fill { background: var(--dpe-a); }
+.diag-bar[data-grade="B"] .diag-bar__fill { background: var(--dpe-b); }
+.diag-bar[data-grade="C"] .diag-bar__fill { background: var(--dpe-c); color: var(--text-body); }
+.diag-bar[data-grade="D"] .diag-bar__fill { background: var(--dpe-d); color: var(--text-body); }
+.diag-bar[data-grade="E"] .diag-bar__fill { background: var(--dpe-e); color: var(--text-body); }
+.diag-bar[data-grade="F"] .diag-bar__fill { background: var(--dpe-f); }
+.diag-bar[data-grade="G"] .diag-bar__fill { background: var(--dpe-g); }
+.diag-bar[data-grade="A"] .diag-bar__fill::after { border-left-color: var(--dpe-a); }
+.diag-bar[data-grade="B"] .diag-bar__fill::after { border-left-color: var(--dpe-b); }
+.diag-bar[data-grade="C"] .diag-bar__fill::after { border-left-color: var(--dpe-c); }
+.diag-bar[data-grade="D"] .diag-bar__fill::after { border-left-color: var(--dpe-d); }
+.diag-bar[data-grade="E"] .diag-bar__fill::after { border-left-color: var(--dpe-e); }
+.diag-bar[data-grade="F"] .diag-bar__fill::after { border-left-color: var(--dpe-f); }
+.diag-bar[data-grade="G"] .diag-bar__fill::after { border-left-color: var(--dpe-g); }
+.diag-block--ges .diag-bar[data-grade="A"] .diag-bar__fill { background: var(--ges-a); color: var(--text-body); }
+.diag-block--ges .diag-bar[data-grade="B"] .diag-bar__fill { background: var(--ges-b); color: var(--text-body); }
+.diag-block--ges .diag-bar[data-grade="C"] .diag-bar__fill { background: var(--ges-c); }
+.diag-block--ges .diag-bar[data-grade="D"] .diag-bar__fill { background: var(--ges-d); }
+.diag-block--ges .diag-bar[data-grade="E"] .diag-bar__fill { background: var(--ges-e); }
+.diag-block--ges .diag-bar[data-grade="F"] .diag-bar__fill { background: var(--ges-f); }
+.diag-block--ges .diag-bar[data-grade="G"] .diag-bar__fill { background: var(--ges-g); }
+.diag-block--ges .diag-bar[data-grade="A"] .diag-bar__fill::after { border-left-color: var(--ges-a); }
+.diag-block--ges .diag-bar[data-grade="B"] .diag-bar__fill::after { border-left-color: var(--ges-b); }
+.diag-block--ges .diag-bar[data-grade="C"] .diag-bar__fill::after { border-left-color: var(--ges-c); }
+.diag-block--ges .diag-bar[data-grade="D"] .diag-bar__fill::after { border-left-color: var(--ges-d); }
+.diag-block--ges .diag-bar[data-grade="E"] .diag-bar__fill::after { border-left-color: var(--ges-e); }
+.diag-block--ges .diag-bar[data-grade="F"] .diag-bar__fill::after { border-left-color: var(--ges-f); }
+.diag-block--ges .diag-bar[data-grade="G"] .diag-bar__fill::after { border-left-color: var(--ges-g); }
+
+/* ============================================================
+   RIGHT PANEL — MONO-AGENCE VARIANT
+   No agency selector. Single card always active.
+   ============================================================ */
+.panel {
+  background: var(--bg-page);
+  border-radius: var(--radius-card);
+}
+.panel__badge-header {
+  padding: 0 var(--space-md) var(--space-md);
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* Agency Card */
+.agency-card {
+  background: var(--bg-section);
+  border: 1.5px solid var(--border-default);
+  border-radius: var(--radius-card-lg);
+  padding: var(--space-md);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.agency-card.premium {
+  padding: var(--space-lg);
+  background: var(--bg-premium);
+}
+.agency-card.premium.active {
+  border-color: var(--border-premium-active);
+}
+.agency-card__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-sm);
+}
+.agency-card__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.agency-card__avatar svg {
+  width: 100%;
+  height: 100%;
+}
+.agency-card.premium .agency-card__avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+}
+.agency-card__name { font-size: 14px; font-weight: 600; color: var(--text-heading); }
+.agency-card__name--link { text-decoration: none; }
+.agency-card__name--link:hover { text-decoration: underline; }
+/* Partenaire badge */
+.agency-card__partner-label {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-tertiary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 2px;
+}
+.agency-card__partner-label svg { width: 12px; height: 12px; }
+.agency-card__data {
+  display: flex;
+  gap: var(--space-md);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.agency-card__price { font-weight: 700; color: var(--text-heading); font-size: 16px; }
+.agency-card.premium .agency-card__price { font-size: 20px; color: var(--primary-dark); }
+
+/* Reassurance tags */
+.agency-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+/* CTA — always visible in mono variant (no click-to-open) */
+.agency-card__cta-zone {
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-default);
+}
+.btn-cta {
+  width: 100%;
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-btn);
+  font-size: 16px;
+  font-weight: 700;
+  transition: transform 0.1s, box-shadow 0.2s;
+}
+.btn-cta:active { transform: scale(0.98); }
+.btn-cta-premium {
+  background: var(--primary-accent);
+  color: var(--text-cta);
+  box-shadow: var(--shadow-lg);
+}
+.btn-cta-premium:hover { background: var(--btn-hover-premium); }
+
+.agency-card__phone-link {
+  display: block;
+  text-align: center;
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--text-tertiary);
+  cursor: pointer;
+}
+.agency-card__phone-link:hover { color: var(--primary-dark); }
+
+/* Lead form */
+.lead-form { display: none; margin-top: var(--space-md); }
+.lead-form.open { display: flex; flex-direction: column; gap: var(--space-sm); }
+.lead-form__field {
+  width: 100%;
+  padding: var(--space-md);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-btn-sm);
+  font-size: 14px;
+  font-family: inherit;
+  background: var(--bg-section);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.lead-form__field:focus-visible { border-color: var(--primary-dark); }
+.lead-form__submit {
+  width: 100%;
+  padding: var(--space-md);
+  border-radius: var(--radius-btn-sm);
+  font-size: 14px;
+  font-weight: 700;
+}
+.lead-form__reassurance {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  text-align: center;
+}
+
+/* Panel cards wrapper */
+.panel__cards {
+  padding: 0 var(--space-md) var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* ============================================================
+   F — AGENCY SECTION
+   ============================================================ */
+.agency-section {
+  background: var(--bg-section);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-card);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+}
+.agency-section__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+.agency-section__logo {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.agency-section__logo svg { width: 100%; height: 100%; }
+.agency-section__title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-heading);
+}
+.agency-section__verified {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--badge-dpe-text);
+  margin-top: 2px;
+}
+.agency-section__verified svg { width: 14px; height: 14px; }
+.agency-section__desc {
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--text-body);
+  line-height: 24px;
+  margin-bottom: var(--space-lg);
+}
+.agency-section__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+.agency-section__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md) var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+.agency-section__grid-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+.agency-section__grid-item svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--text-label);
+}
+.agency-section__grid-label {
+  font-weight: 600;
+  color: var(--text-heading);
+  font-size: 13px;
+  display: block;
+}
+.agency-section__rating {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-default);
+}
+.agency-section__stars { display: flex; gap: 2px; }
+.agency-section__stars svg { width: 16px; height: 16px; color: var(--color-star); }
+.agency-section__rating-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-heading);
+}
+.agency-section__rating-count {
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+.agency-section__label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-label);
+  margin-bottom: var(--space-md);
+}
+
+/* ============================================================
+   MOBILE-ONLY COMPONENTS (hidden by default, shown via @media)
+   ============================================================ */
+
+/* Header back button (mobile) */
+.top-bar__back {
+  display: none;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.top-bar__back svg {
+  width: 16px;
+  height: 16px;
+  color: var(--text-secondary);
+}
+
+/* WOW Banner */
+.wow-banner {
+  display: none;
+  background: var(--bg-section);
+  border-bottom: 1px solid var(--border-default);
+  padding: var(--space-sm) var(--space-md);
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 18px;
+}
+.wow-banner__icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  color: var(--primary-dark);
+}
+.wow-banner__count {
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+/* Mono-agence banner variant */
+.mono-banner {
+  background: var(--bg-section);
+  border-bottom: 1px solid var(--border-default);
+  padding: var(--space-sm) var(--space-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.mono-banner__avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.mono-banner__avatar svg { width: 100%; height: 100%; }
+.mono-banner__text {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.mono-banner__name {
+  font-weight: 600;
+  color: var(--text-heading);
+}
+
+/* Mobile Gallery — edge-to-edge, swipe, no arrows */
+.m-gallery {
+  display: none;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: var(--border-default);
+}
+.m-gallery__track {
+  display: flex;
+  transition: transform 0.3s ease;
+  will-change: transform;
+}
+.m-gallery__slide {
+  flex: 0 0 100%;
+  aspect-ratio: 16/10;
+}
+.m-gallery__slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+.m-gallery__count {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  z-index: 5;
+  background: rgba(0,0,0,0.55);
+  color: white;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 600;
+}
+.m-gallery__dots {
+  position: absolute;
+  bottom: var(--space-sm);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  gap: var(--space-xs);
+}
+.m-gallery__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: rgba(255,255,255,0.45);
+  border: none;
+  padding: 0;
+  transition: background 0.2s, transform 0.2s;
+}
+.m-gallery__dot.active {
+  background: white;
+  transform: scale(1.3);
+}
+
+/* Mobile content sections */
+.m-content {
+  display: none;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+}
+
+/* Mobile Quick view */
+.m-quick {
+  background: var(--bg-section);
+  border-radius: var(--radius-card);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+}
+.m-quick__title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-heading);
+  letter-spacing: -0.5px;
+  margin-bottom: 2px;
+}
+.m-quick__address {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  margin-bottom: var(--space-sm);
+}
+.m-quick__price-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-sm);
+}
+.m-quick__price-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-label);
+}
+.m-quick__price {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-heading);
+  letter-spacing: -0.5px;
+}
+.m-quick__specs {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  align-items: center;
+}
+.m-quick__spec {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+.m-quick__spec svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+/* Mobile Description */
+.m-desc {
+  background: var(--bg-section);
+  border-radius: var(--radius-card);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+}
+.m-desc__label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-label);
+  margin-bottom: var(--space-sm);
+}
+.m-desc__text {
+  font-size: 15px;
+  line-height: 24px;
+  color: var(--text-body);
+}
+.m-desc__text.truncated {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.m-desc__toggle {
+  display: inline-block;
+  margin-top: var(--space-xs);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary-dark);
+  cursor: pointer;
+}
+
+/* Mobile Characteristics */
+.m-chars {
+  background: var(--bg-section);
+  border-radius: var(--radius-card);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+}
+.m-chars__label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-label);
+  margin-bottom: var(--space-sm);
+}
+.m-chars__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+.m-char-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--border-default);
+}
+.m-char-item:last-child { border-bottom: none; }
+.m-char-item__key { color: var(--text-secondary); }
+.m-char-item__val { font-weight: 600; color: var(--text-heading); }
+
+/* Mobile Diagnostic DPE/GES */
+.m-diag {
+  background: var(--bg-section);
+  border-radius: var(--radius-card);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+}
+.m-diag__label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-label);
+  margin-bottom: var(--space-md);
+}
+.m-diag__container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+.m-diag-block__title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: var(--space-sm);
+}
+.m-diag-block__subtitle {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  margin-bottom: var(--space-sm);
+}
+.m-diag-scale { display: flex; flex-direction: column; gap: 2px; }
+.m-diag-bar { display: flex; align-items: center; height: 22px; }
+.m-diag-bar__fill {
+  height: 100%;
+  border-radius: 3px 0 0 3px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  color: white;
+  position: relative;
+}
+.m-diag-bar__fill::after {
+  content: '';
+  position: absolute;
+  right: -7px;
+  top: 0;
+  border-top: 11px solid transparent;
+  border-bottom: 11px solid transparent;
+  border-left: 7px solid currentColor;
+}
+.m-diag-bar.active .m-diag-bar__fill { font-size: 12px; }
+.m-diag-bar.active .m-diag-bar__marker {
+  display: flex;
+  align-items: center;
+  margin-left: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-heading);
+  white-space: nowrap;
+}
+.m-diag-bar__marker { display: none; }
+/* DPE widths */
+.m-diag-bar[data-grade="A"] .m-diag-bar__fill { width: 20%; background: var(--dpe-a); }
+.m-diag-bar[data-grade="B"] .m-diag-bar__fill { width: 30%; background: var(--dpe-b); }
+.m-diag-bar[data-grade="C"] .m-diag-bar__fill { width: 40%; background: var(--dpe-c); color: var(--text-body); }
+.m-diag-bar[data-grade="D"] .m-diag-bar__fill { width: 50%; background: var(--dpe-d); color: var(--text-body); }
+.m-diag-bar[data-grade="E"] .m-diag-bar__fill { width: 60%; background: var(--dpe-e); color: var(--text-body); }
+.m-diag-bar[data-grade="F"] .m-diag-bar__fill { width: 75%; background: var(--dpe-f); }
+.m-diag-bar[data-grade="G"] .m-diag-bar__fill { width: 90%; background: var(--dpe-g); }
+.m-diag-bar[data-grade="A"] .m-diag-bar__fill::after { border-left-color: var(--dpe-a); }
+.m-diag-bar[data-grade="B"] .m-diag-bar__fill::after { border-left-color: var(--dpe-b); }
+.m-diag-bar[data-grade="C"] .m-diag-bar__fill::after { border-left-color: var(--dpe-c); }
+.m-diag-bar[data-grade="D"] .m-diag-bar__fill::after { border-left-color: var(--dpe-d); }
+.m-diag-bar[data-grade="E"] .m-diag-bar__fill::after { border-left-color: var(--dpe-e); }
+.m-diag-bar[data-grade="F"] .m-diag-bar__fill::after { border-left-color: var(--dpe-f); }
+.m-diag-bar[data-grade="G"] .m-diag-bar__fill::after { border-left-color: var(--dpe-g); }
+.m-diag-block--ges .m-diag-bar[data-grade="A"] .m-diag-bar__fill { background: var(--ges-a); color: var(--text-body); }
+.m-diag-block--ges .m-diag-bar[data-grade="B"] .m-diag-bar__fill { background: var(--ges-b); color: var(--text-body); }
+.m-diag-block--ges .m-diag-bar[data-grade="C"] .m-diag-bar__fill { background: var(--ges-c); }
+.m-diag-block--ges .m-diag-bar[data-grade="D"] .m-diag-bar__fill { background: var(--ges-d); }
+.m-diag-block--ges .m-diag-bar[data-grade="E"] .m-diag-bar__fill { background: var(--ges-e); }
+.m-diag-block--ges .m-diag-bar[data-grade="F"] .m-diag-bar__fill { background: var(--ges-f); }
+.m-diag-block--ges .m-diag-bar[data-grade="G"] .m-diag-bar__fill { background: var(--ges-g); }
+.m-diag-block--ges .m-diag-bar[data-grade="A"] .m-diag-bar__fill::after { border-left-color: var(--ges-a); }
+.m-diag-block--ges .m-diag-bar[data-grade="B"] .m-diag-bar__fill::after { border-left-color: var(--ges-b); }
+.m-diag-block--ges .m-diag-bar[data-grade="C"] .m-diag-bar__fill::after { border-left-color: var(--ges-c); }
+.m-diag-block--ges .m-diag-bar[data-grade="D"] .m-diag-bar__fill::after { border-left-color: var(--ges-d); }
+.m-diag-block--ges .m-diag-bar[data-grade="E"] .m-diag-bar__fill::after { border-left-color: var(--ges-e); }
+.m-diag-block--ges .m-diag-bar[data-grade="F"] .m-diag-bar__fill::after { border-left-color: var(--ges-f); }
+.m-diag-block--ges .m-diag-bar[data-grade="G"] .m-diag-bar__fill::after { border-left-color: var(--ges-g); }
+
+/* Mobile Agency section */
+.m-agency {
+  background: var(--bg-section);
+  border-radius: var(--radius-card);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+}
+.m-agency__label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-label);
+  margin-bottom: var(--space-sm);
+}
+.m-agency__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+.m-agency__logo {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.m-agency__logo svg { width: 100%; height: 100%; }
+.m-agency__title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-heading);
+}
+.m-agency__verified {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--badge-dpe-text);
+  margin-top: 1px;
+}
+.m-agency__verified svg { width: 12px; height: 12px; }
+.m-agency__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-sm);
+}
+.m-agency__tags .reassurance-tag { font-size: 11px; padding: 3px 8px; }
+.m-agency__desc {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--text-body);
+  line-height: 22px;
+  margin-bottom: var(--space-md);
+}
+.m-agency__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+.m-agency__grid-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.m-agency__grid-item svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--text-label);
+}
+.m-agency__grid-label {
+  font-weight: 600;
+  color: var(--text-heading);
+  font-size: 12px;
+  display: block;
+}
+.m-agency__rating {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border-default);
+}
+.m-agency__stars { display: flex; gap: 1px; }
+.m-agency__stars svg { width: 14px; height: 14px; color: var(--color-star); }
+.m-agency__rating-text { font-size: 13px; font-weight: 600; color: var(--text-heading); }
+.m-agency__rating-count { font-size: 12px; color: var(--text-tertiary); }
+
+/* Back to top */
+.m-back-to-top {
+  display: none;
+  padding: var(--space-md) var(--gutter) var(--space-xl);
+  text-align: center;
+}
+.m-back-to-top__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  transition: color 0.15s;
+}
+.m-back-to-top__link:active { color: var(--primary-dark); }
+.m-back-to-top__link svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Mobile Bottom Bar */
+.m-bottom-bar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: var(--bg-section);
+  border-top: 1px solid var(--border-default);
+  padding: var(--space-md);
+  padding-bottom: max(var(--space-md), env(safe-area-inset-bottom));
+  box-shadow: var(--shadow-bar);
+}
+.m-bottom-bar__inner {
+  display: flex;
+  align-items: center;
+}
+.m-bottom-bar__agency {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 50%;
+  min-width: 0;
+}
+.m-bottom-bar__cta-wrap {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+}
+.m-bottom-bar__avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.m-bottom-bar__avatar svg { width: 100%; height: 100%; }
+.m-bottom-bar__info { min-width: 0; }
+.m-bottom-bar__name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-heading);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.m-bottom-bar__price {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-heading);
+}
+.m-bottom-bar__cta {
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-btn);
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  transition: transform 0.1s, background 0.15s;
+}
+.m-bottom-bar__cta:active { transform: scale(0.97); }
+
+/* Mobile Bottom Sheet */
+.m-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0,0,0,0.4);
+}
+.m-overlay.open { display: block; }
+.m-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 201;
+  background: var(--bg-section);
+  border-radius: var(--radius-card-lg) var(--radius-card-lg) 0 0;
+  padding: var(--space-md);
+  padding-bottom: max(var(--space-lg), env(safe-area-inset-bottom));
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+.m-sheet.open { transform: translateY(0); }
+.m-sheet__handle {
+  width: 36px;
+  height: 4px;
+  background: var(--border-divider);
+  border-radius: 2px;
+  margin: 0 auto var(--space-md);
+}
+.m-sheet__title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-heading);
+  margin-bottom: 2px;
+}
+.m-sheet__subtitle {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  margin-bottom: var(--space-md);
+}
+.m-sheet__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.m-sheet__field {
+  width: 100%;
+  padding: var(--space-md);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-btn-sm);
+  font-size: 14px;
+  font-family: inherit;
+  background: var(--bg-section);
+  outline: none;
+}
+.m-sheet__field:focus-visible { border-color: var(--primary-dark); }
+.m-sheet__actions {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: stretch;
+}
+.m-sheet__submit {
+  flex: 1;
+  padding: var(--space-md);
+  border-radius: var(--radius-btn-sm);
+  font-size: 15px;
+  font-weight: 700;
+}
+.m-sheet__call {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  flex-shrink: 0;
+  border-radius: var(--radius-btn-sm);
+  background: var(--primary-dark);
+  transition: background 0.15s;
+}
+.m-sheet__call:active { background: var(--btn-hover-gratuit); }
+.m-sheet__call svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: white;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.m-sheet__reassurance {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  text-align: center;
+  margin-top: var(--space-xs);
+}
+
+/* ============================================================
+   RESPONSIVE — MOBILE (max-width: 768px)
+   ============================================================ */
+@media (max-width: 768px) {
+  /* Header */
+  .top-bar__inner { justify-content: space-between; }
+  .top-bar__back { display: flex; }
+
+  /* Show mobile-only components */
+  .wow-banner { display: flex; }
+  .m-gallery { display: block; }
+  .m-content { display: flex; }
+  .m-back-to-top { display: block; }
+  .m-bottom-bar { display: block; }
+
+  /* Hide desktop-only components */
+  .col-right { display: none; }
+  .gallery { display: none; }
+  .quick-view { display: none; }
+  .description { display: none; }
+  .characteristics { display: none; }
+  .diag-section { display: none; }
+  .agency-section { display: none; }
+  .footer { display: none; }
+
+  /* Adjust main layout */
+  .main { display: none; }
+
+  /* Body padding for bottom bar */
+  body { padding-bottom: var(--space-5xl); }
+}
+
+/* Desktop: ensure mobile components hidden */
+@media (min-width: 769px) {
+  .wow-banner { display: none; }
+  .m-gallery { display: none; }
+  .m-content { display: none; }
+  .m-back-to-top { display: none; }
+  .m-bottom-bar { display: none; }
+  .m-overlay, .m-sheet { display: none; }
+  .top-bar__back { display: none; }
+  .mono-banner { display: none; }
+}
+
+/* Compact layout for <=1080p screens (e.g. 14" laptop @125%) */
+@media (min-width: 769px) and (max-height: 820px) {
+  .main { padding: var(--space-md); gap: var(--space-md); }
+  .col-right { top: 60px; max-height: calc(100vh - 72px); }
+  .gallery__main { aspect-ratio: 16/8; }
+  .panel__badge-header { padding: 0 var(--space-md) var(--space-sm); }
+  .agency-card { padding: var(--space-sm) var(--space-md); }
+  .agency-card.premium { padding: var(--space-md); }
+  .agency-card__header { gap: var(--space-sm); margin-bottom: var(--space-xs); }
+  .agency-card__avatar { width: 32px; height: 32px; }
+  .agency-card.premium .agency-card__avatar { width: 36px; height: 36px; }
+  .agency-card__name { font-size: 13px; }
+  .agency-card__partner-label { font-size: 10px; margin-top: 1px; }
+  .agency-card__data { gap: var(--space-sm); font-size: 12px; }
+  .agency-card__price { font-size: 14px; }
+  .agency-card.premium .agency-card__price { font-size: 16px; }
+  .agency-card__tags { margin-top: var(--space-sm); gap: var(--space-xs); }
+  .reassurance-tag { font-size: 11px; padding: 3px var(--space-sm); }
+  .agency-card__cta-zone { margin-top: var(--space-sm); padding-top: var(--space-sm); }
+  .btn-cta { padding: var(--space-sm) var(--space-md); font-size: 14px; }
+  .lead-form { padding: var(--space-sm); margin-top: var(--space-sm); }
+  .lead-form__field { padding: var(--space-sm); font-size: 13px; }
+  .quick-view, .description, .characteristics, .diag-section { padding: var(--space-md); }
+  .quick-view__title { font-size: 20px; }
+  .quick-view__price { font-size: 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     COMPONENT: TopBar
+     Desktop: Logo only. Mobile: Back button + Logo.
+     ============================================================ -->
+<header class="top-bar">
+  <div class="top-bar__inner">
+    <a href="search_results.html" class="top-bar__back" aria-label="Retour aux resultats">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="10 3 5 8 10 13"/></svg>
+      Resultats
+    </a>
+    <a href="landing.html"><img class="top-bar__logo" src="logo-trackerimmo.svg" alt="TrackerImmo"></a>
+  </div>
+</header>
+
+<!-- ============================================================
+     COMPONENT: WowBanner — MOBILE ONLY
+     Mono-agence: shows "Commercialise par [agency name]".
+     ============================================================ -->
+<div class="wow-banner" id="wowBanner">
+  <svg class="wow-banner__icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5">
+    <circle cx="7.5" cy="7.5" r="5.5"/><path d="M16 16l-3.5-3.5"/>
+  </svg>
+  <span id="wowText"></span>
+</div>
+
+<!-- ============================================================
+     COMPONENT: MobileGallery — MOBILE ONLY
+     Edge-to-edge swipeable gallery.
+     ============================================================ -->
+<section class="m-gallery" id="mGallery">
+  <div class="m-gallery__track" id="mGalleryTrack"></div>
+  <span class="m-gallery__count" id="mGalleryCount"></span>
+  <div class="m-gallery__dots" id="mGalleryDots"></div>
+</section>
+
+<!-- ============================================================
+     COMPONENT: Mobile Content Sections — MOBILE ONLY
+     ============================================================ -->
+<div class="m-content">
+  <section class="m-quick" id="mQuick"></section>
+  <section class="m-desc" id="mDesc"></section>
+  <section class="m-chars" id="mChars"></section>
+  <section class="m-diag" id="mDiag"></section>
+  <section class="m-agency" id="mAgency"></section>
+</div>
+
+<!-- ============================================================
+     COMPONENT: BackToTop — MOBILE ONLY
+     ============================================================ -->
+<div class="m-back-to-top">
+  <a href="#" class="m-back-to-top__link" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });">
+    <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 11 9 6 14 11"/></svg>
+    Retour en haut
+  </a>
+</div>
+
+<!-- MAIN CONTENT — Split layout 62/38 desktop, linear mobile -->
+<main class="main">
+  <div class="col-left">
+
+    <!-- ============================================================
+         BACK LINK
+         ============================================================ -->
+    <a href="search_results.html" class="back-link" aria-label="Retour aux resultats de recherche">
+      <svg viewBox="0 0 16 16"><polyline points="10 4 5 8 10 12"/></svg>
+      Retour aux resultats
+    </a>
+
+    <!-- ============================================================
+         COMPONENT: Gallery
+         Photo carousel with arrows, dots, counter.
+         Single agency — no context switching.
+         ============================================================ -->
+    <section class="gallery" id="gallery">
+      <span class="gallery__count" id="galleryCount"></span>
+      <img class="gallery__main" id="galleryMain" src="" alt="Photo principale">
+      <button class="gallery__arrow gallery__arrow--prev" onclick="galleryPrev()" aria-label="Photo precedente">
+        <svg viewBox="0 0 18 18"><polyline points="11 4 6 9 11 14"/></svg>
+      </button>
+      <button class="gallery__arrow gallery__arrow--next" onclick="galleryNext()" aria-label="Photo suivante">
+        <svg viewBox="0 0 18 18"><polyline points="7 4 12 9 7 14"/></svg>
+      </button>
+      <div class="gallery__dots" id="galleryDots"></div>
+    </section>
+
+    <!-- ============================================================
+         COMPONENT: QuickView
+         Title, address, price (top-right), specs row, DPE badge.
+         ============================================================ -->
+    <section class="quick-view">
+      <div class="quick-view__top">
+        <div class="quick-view__left">
+          <h1 class="quick-view__title">Maison T4 — Milady</h1>
+          <p class="quick-view__address">Biarritz 64200 — Quartier Milady</p>
+        </div>
+        <div class="quick-view__right">
+          <p class="quick-view__price-label">Prix agence</p>
+          <p class="quick-view__price">445 000 &euro;</p>
+        </div>
+      </div>
+      <div class="quick-view__specs">
+        <span class="quick-view__spec">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="1"/><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>
+          110 m&sup2;
+        </span>
+        <span class="quick-view__spec">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="7" width="14" height="7" rx="1"/><path d="M3 7V4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v3"/></svg>
+          3 chambres
+        </span>
+        <span class="quick-view__spec">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="2"/><line x1="2" y1="6" x2="14" y2="6"/></svg>
+          4 pi&egrave;ces
+        </span>
+        <span class="badge-dpe badge-dpe--C">DPE C</span>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         COMPONENT: Description
+         Truncated text (4 lines) + "Lire la suite" toggle.
+         ============================================================ -->
+    <section class="description" id="descSection">
+      <p class="description__label">Description</p>
+      <div class="description__text truncated" id="descText">Superbe maison T4 de plain-pied situ&eacute;e dans le quartier r&eacute;sidentiel de Milady &agrave; Biarritz. &Agrave; seulement 5 minutes &agrave; pied de la plage de la Milady, cette propri&eacute;t&eacute; de 110 m&sup2; offre un cadre de vie exceptionnel. Le s&eacute;jour lumineux de 35 m&sup2; s&rsquo;ouvre sur un jardin paysager de 450 m&sup2; expos&eacute; plein sud. Cuisine enti&egrave;rement &eacute;quip&eacute;e et am&eacute;nag&eacute;e, trois chambres spacieuses dont une suite parentale avec salle d&rsquo;eau privative. Garage double, terrasse couverte et piscine hors-sol. Quartier calme et familial, &agrave; proximit&eacute; des &eacute;coles et commerces.</div>
+      <span class="description__toggle" id="descToggle">Lire la suite</span>
+    </section>
+
+    <!-- ============================================================
+         COMPONENT: Characteristics
+         Key/value grid (2 columns).
+         ============================================================ -->
+    <section class="characteristics">
+      <p class="characteristics__label">Caract&eacute;ristiques</p>
+      <div class="characteristics__grid" id="charGrid"></div>
+    </section>
+
+    <!-- ============================================================
+         COMPONENT: DiagnosticDPE
+         DPE + GES scales (A-G colored bars). Active grade highlighted.
+         ============================================================ -->
+    <section class="diag-section">
+      <p class="diag-section__label">Diagnostic de performance</p>
+      <div class="diag-container">
+        <div class="diag-block diag-block--dpe" id="diagDpe"></div>
+        <div class="diag-block diag-block--ges" id="diagGes"></div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         COMPONENT: AgencySection — Premium variant
+         Full profile: logo 56px, badge Certifie TrackerImmo,
+         tags, description, grid 6 items, rating stars.
+         ============================================================ -->
+    <section class="agency-section" id="agencySection">
+      <p class="agency-section__label">&Agrave; propos de l&rsquo;agence</p>
+      <div class="agency-section__header">
+        <div class="agency-section__logo">
+          <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#FFD700"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#2D5016" letter-spacing="0.3">LAFORET</text><path d="M20 36 L24 25 L28 36" stroke="#2D5016" stroke-width="1.5" fill="none"/><path d="M18 36 L24 28 L30 36" stroke="#2D5016" stroke-width="1.2" fill="none" opacity="0.5"/></svg>
+        </div>
+        <div>
+          <div class="agency-section__title">Lafor&ecirc;t Biarritz</div>
+          <div class="agency-section__verified">
+            <svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" fill="#BACE27"/><path d="M4 7L6 9L10 5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Certifi&eacute; TrackerImmo
+          </div>
+        </div>
+      </div>
+      <div class="agency-section__tags">
+        <span class="reassurance-tag">Visite virtuelle</span>
+        <span class="reassurance-tag">Dossier complet</span>
+        <span class="reassurance-tag">R&eacute;ponse &lt; 2h</span>
+      </div>
+      <p class="agency-section__desc">Lafor&ecirc;t Biarritz, votre agence immobili&egrave;re de proximit&eacute; sur la C&ocirc;te Basque. Plus de 15 ans d&rsquo;exp&eacute;rience dans l&rsquo;accompagnement de vos projets immobiliers &agrave; Biarritz, Anglet et Bayonne. Notre &eacute;quipe de 8 conseillers d&eacute;di&eacute;s vous propose un suivi personnalis&eacute;.</p>
+      <div class="agency-section__grid">
+        <div class="agency-section__grid-item">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M13 6.67C13 11 8 14.5 8 14.5S3 11 3 6.67a5 5 0 0 1 10 0z"/><circle cx="8" cy="6.67" r="1.8"/></svg>
+          <div><span class="agency-section__grid-label">Adresse</span>12 Avenue de la Marne, 64200 Biarritz</div>
+        </div>
+        <div class="agency-section__grid-item">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M14.5 11.3v2a1.3 1.3 0 0 1-1.4 1.3A13 13 0 0 1 1.4 2.9 1.3 1.3 0 0 1 2.7 1.5h2a1.3 1.3 0 0 1 1.3 1l.5 2.2a1.3 1.3 0 0 1-.4 1.3l-.9.9a10.5 10.5 0 0 0 4 4l.9-.9a1.3 1.3 0 0 1 1.3-.4l2.2.5a1.3 1.3 0 0 1 1 1.3z"/></svg>
+          <div><span class="agency-section__grid-label">T&eacute;l&eacute;phone</span>05 59 41 23 45</div>
+        </div>
+        <div class="agency-section__grid-item">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="1.5" y="3" width="13" height="10" rx="1.5"/><path d="M1.5 3l6.5 5.5L14.5 3"/></svg>
+          <div><span class="agency-section__grid-label">Email</span>biarritz@laforet.com</div>
+        </div>
+        <div class="agency-section__grid-item">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8" cy="8" r="6.5"/><path d="M2 8h12M8 1.5a10.5 10.5 0 0 1 2.7 13M8 1.5a10.5 10.5 0 0 0-2.7 13"/></svg>
+          <div><span class="agency-section__grid-label">Site web</span>www.laforet-biarritz.com</div>
+        </div>
+        <div class="agency-section__grid-item">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8" cy="8" r="6.5"/><path d="M8 4v4l2.5 1.5"/></svg>
+          <div><span class="agency-section__grid-label">Horaires</span>Lun-Sam 9h-19h</div>
+        </div>
+        <div class="agency-section__grid-item">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="2" y="2" width="12" height="12" rx="1.5"/><path d="M2 6h12M6 2v12"/></svg>
+          <div><span class="agency-section__grid-label">Annonces actives</span>63 biens</div>
+        </div>
+      </div>
+      <div class="agency-section__rating" id="agencyRating"></div>
+    </section>
+  </div>
+
+  <!-- ============================================================
+       COMPONENT: AgencyPanel (col-right) — MONO-AGENCE VARIANT
+       No agency selector. Single Premium card always active.
+       Header = plain text "Commercialise par Laforet Biarritz".
+       CTA zone always visible (no click-to-reveal).
+       ============================================================ -->
+  <aside class="col-right">
+    <div class="panel">
+      <div class="panel__badge-header">
+        <span style="font-size: 13px; color: var(--text-tertiary);">Commercialis&eacute; par Lafor&ecirc;t Biarritz</span>
+      </div>
+      <div class="panel__cards">
+
+        <!-- Single Premium Agency Card — always active -->
+        <div class="agency-card premium active">
+          <div class="agency-card__header">
+            <div class="agency-card__avatar">
+              <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#FFD700"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#2D5016" letter-spacing="0.3">LAFORET</text><path d="M20 36 L24 25 L28 36" stroke="#2D5016" stroke-width="1.5" fill="none"/><path d="M18 36 L24 28 L30 36" stroke="#2D5016" stroke-width="1.2" fill="none" opacity="0.5"/></svg>
+            </div>
+            <div>
+              <a class="agency-card__name agency-card__name--link" href="#agencySection" onclick="document.getElementById('agencySection').scrollIntoView({behavior:'smooth'}); return false;">Lafor&ecirc;t Biarritz</a>
+              <div class="agency-card__partner-label">
+                <svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.5" fill="#BACE27" stroke="#8FA31C"/><path d="M3.5 6L5.5 8L8.5 4.5" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Partenaire v&eacute;rifi&eacute;
+              </div>
+            </div>
+          </div>
+          <div class="agency-card__data">
+            <span class="agency-card__price">445 000 &euro;</span>
+            <span>110 m&sup2;</span>
+            <span>8 photos</span>
+          </div>
+          <div class="agency-card__tags">
+            <span class="reassurance-tag">Visite virtuelle</span>
+            <span class="reassurance-tag">Dossier complet</span>
+            <span class="reassurance-tag">R&eacute;ponse &lt; 2h</span>
+          </div>
+          <!-- CTA zone always visible in mono variant -->
+          <div class="agency-card__cta-zone">
+            <button class="btn-cta btn-cta-premium" id="ctaBtn" onclick="toggleLeadForm()" aria-label="Contacter l'agence">
+              Contacter l&rsquo;agence &rarr;
+            </button>
+            <span class="agency-card__phone-link" id="phoneLink" onclick="this.textContent='05 59 41 23 45'" aria-label="Afficher le numero de telephone">
+              Afficher le num&eacute;ro
+            </span>
+            <div class="lead-form" id="leadForm">
+              <input class="lead-form__field" placeholder="Votre nom" aria-label="Votre nom" />
+              <input class="lead-form__field" placeholder="Votre email" type="email" aria-label="Votre email" />
+              <input class="lead-form__field" placeholder="Votre telephone" type="tel" aria-label="Votre telephone" />
+              <button class="lead-form__submit btn-cta btn-cta-premium" onclick="event.stopPropagation()" aria-label="Envoyer ma demande de contact">Envoyer ma demande</button>
+              <p class="lead-form__reassurance">&#128274; Transmis &agrave; Lafor&ecirc;t Biarritz uniquement.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </aside>
+</main>
+
+<!-- ============================================================
+     COMPONENT: BottomBar — MOBILE ONLY
+     Fixed bottom. 2-col 50/50: agency info | CTA.
+     ============================================================ -->
+<div class="m-bottom-bar" id="mBottomBar">
+  <div class="m-bottom-bar__inner">
+    <div class="m-bottom-bar__agency">
+      <div class="m-bottom-bar__avatar" id="bbAvatar"></div>
+      <div class="m-bottom-bar__info">
+        <div class="m-bottom-bar__name" id="bbName"></div>
+        <div class="m-bottom-bar__price" id="bbPrice"></div>
+      </div>
+    </div>
+    <div class="m-bottom-bar__cta-wrap">
+      <button class="m-bottom-bar__cta" id="bbCta" onclick="openSheet()"></button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     COMPONENT: BottomSheet — MOBILE ONLY
+     ============================================================ -->
+<div class="m-overlay" id="mOverlay" onclick="closeSheet()" aria-hidden="true"></div>
+<div class="m-sheet" id="mSheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="m-sheet__handle"></div>
+  <div id="sheetContent"></div>
+</div>
+
+<script>
+// ============================================================
+// MONO-AGENCE PREMIUM — DATA MODEL
+// ============================================================
+
+const photos = [
+  'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=800&h=500&fit=crop',
+  'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&h=500&fit=crop',
+  'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&h=500&fit=crop',
+  'https://images.unsplash.com/photo-1600573472592-401b489a3cdc?w=800&h=500&fit=crop',
+  'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&h=500&fit=crop',
+  'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&h=500&fit=crop',
+  'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=800&h=500&fit=crop',
+  'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&h=500&fit=crop',
+];
+
+const agency = {
+  name: "Lafor\u00eat Biarritz",
+  short: "Lafor\u00eat",
+  logo: '<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#FFD700"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#2D5016" letter-spacing="0.3">LAFORET</text><path d="M20 36 L24 25 L28 36" stroke="#2D5016" stroke-width="1.5" fill="none"/><path d="M18 36 L24 28 L30 36" stroke="#2D5016" stroke-width="1.2" fill="none" opacity="0.5"/></svg>',
+  tier: "premium",
+  price: "445 000",
+  priceNum: 445000,
+  surface: "110 m\u00b2",
+  rooms: 4,
+  bedrooms: 3,
+  dpe: "C",
+  ges: "B",
+  dpeValue: "165 kWh/m\u00b2/an",
+  gesValue: "18 kgCO\u2082/m\u00b2/an",
+  photos: photos,
+  tags: ["Visite virtuelle", "Dossier complet", "R\u00e9ponse < 2h"],
+  description: "Superbe maison T4 de plain-pied situ\u00e9e dans le quartier r\u00e9sidentiel de Milady \u00e0 Biarritz. \u00c0 seulement 5 minutes \u00e0 pied de la plage de la Milady, cette propri\u00e9t\u00e9 de 110 m\u00b2 offre un cadre de vie exceptionnel. Le s\u00e9jour lumineux de 35 m\u00b2 s\u2019ouvre sur un jardin paysager de 450 m\u00b2 expos\u00e9 plein sud. Cuisine enti\u00e8rement \u00e9quip\u00e9e et am\u00e9nag\u00e9e, trois chambres spacieuses dont une suite parentale avec salle d\u2019eau privative. Garage double, terrasse couverte et piscine hors-sol. Quartier calme et familial, \u00e0 proximit\u00e9 des \u00e9coles et commerces.",
+  characteristics: {
+    "Type": "Maison T4",
+    "Surface habitable": "110 m\u00b2",
+    "Terrain": "450 m\u00b2",
+    "Pi\u00e8ces": "4",
+    "Chambres": "3",
+    "Salles de bains": "2",
+    "Garage": "Double",
+    "Piscine": "Hors-sol",
+    "Chauffage": "Pompe \u00e0 chaleur",
+    "Ann\u00e9e construction": "1998 (r\u00e9nov\u00e9e 2021)",
+    "Taxe fonci\u00e8re": "1 850 \u20ac/an",
+    "Charges": "Aucune (maison individuelle)"
+  },
+  agencyDesc: "Lafor\u00eat Biarritz, votre agence immobili\u00e8re de proximit\u00e9 sur la C\u00f4te Basque. Plus de 15 ans d\u2019exp\u00e9rience dans l\u2019accompagnement de vos projets immobiliers \u00e0 Biarritz, Anglet et Bayonne. Notre \u00e9quipe de 8 conseillers d\u00e9di\u00e9s vous propose un suivi personnalis\u00e9.",
+  address: "12 Avenue de la Marne, 64200 Biarritz",
+  phone: "05 59 41 23 45",
+  email: "biarritz@laforet.com",
+  website: "www.laforet-biarritz.com",
+  hours: "Lun-Sam 9h-19h",
+  listingsCount: 63,
+  rating: 4.6,
+  reviewsCount: 89
+};
+
+// ============================================================
+// HELPERS
+// ============================================================
+function formatPrice(n) { return n.toLocaleString('fr-FR'); }
+function ctaClassShort(ag) {
+  if (ag.tier === 'premium') return 'btn-cta-premium';
+  if (ag.tier === 'gratuit') return 'btn-cta-gratuit';
+  return 'btn-cta-scrape';
+}
+
+// SVG icon helpers
+const svgIcons = {
+  surface: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="1"/><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>',
+  bed: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="7" width="14" height="7" rx="1"/><path d="M3 7V4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v3"/></svg>',
+  rooms: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="2"/><line x1="2" y1="6" x2="14" y2="6"/></svg>',
+  pin: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M13 6.67C13 11 8 14.5 8 14.5S3 11 3 6.67a5 5 0 0 1 10 0z"/><circle cx="8" cy="6.67" r="1.8"/></svg>',
+  phone: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M14.5 11.3v2a1.3 1.3 0 0 1-1.4 1.3A13 13 0 0 1 1.4 2.9 1.3 1.3 0 0 1 2.7 1.5h2a1.3 1.3 0 0 1 1.3 1l.5 2.2a1.3 1.3 0 0 1-.4 1.3l-.9.9a10.5 10.5 0 0 0 4 4l.9-.9a1.3 1.3 0 0 1 1.3-.4l2.2.5a1.3 1.3 0 0 1 1 1.3z"/></svg>',
+  mail: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="1.5" y="3" width="13" height="10" rx="1.5"/><path d="M1.5 3l6.5 5.5L14.5 3"/></svg>',
+  globe: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8" cy="8" r="6.5"/><path d="M2 8h12M8 1.5a10.5 10.5 0 0 1 2.7 13M8 1.5a10.5 10.5 0 0 0-2.7 13"/></svg>',
+  clock: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8" cy="8" r="6.5"/><path d="M8 4v4l2.5 1.5"/></svg>',
+  grid: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="2" y="2" width="12" height="12" rx="1.5"/><path d="M2 6h12M6 2v12"/></svg>',
+  checkAnis: '<svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" fill="#BACE27"/><path d="M4 7L6 9L10 5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  checkAnisLg: '<svg viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" fill="#BACE27"/><path d="M5.5 9L8 11.5L12.5 6.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  checkAnisSm: '<svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.5" fill="#BACE27"/><path d="M3.5 6L5.5 8L8.5 4.5" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  partnerBadge: '<svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.5" fill="#BACE27" stroke="#8FA31C"/><path d="M3.5 6L5.5 8L8.5 4.5" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  star: (filled) => `<svg viewBox="0 0 16 16" fill="${filled ? 'currentColor' : 'var(--color-star-empty)'}"><path d="M8 1.12l1.95 3.95 4.36.64-3.16 3.08.75 4.34L8 10.94l-3.9 2.19.75-4.34L1.69 5.71l4.36-.64L8 1.12z"/></svg>`,
+  phoneCall: '<svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+};
+
+function starsHTML(rating) {
+  return Array(5).fill(0).map((_, i) => svgIcons.star(i < Math.round(rating))).join('');
+}
+
+// ============================================================
+// DESKTOP GALLERY CAROUSEL
+// ============================================================
+let currentPhotoIndex = 0;
+
+function initGallery() {
+  const main = document.getElementById('galleryMain');
+  main.src = photos[0];
+  main.alt = 'Photo \u2014 ' + agency.name;
+  document.getElementById('galleryCount').textContent = `1 / ${photos.length}`;
+
+  const dotsContainer = document.getElementById('galleryDots');
+  dotsContainer.innerHTML = '';
+  for (let i = 0; i < photos.length; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'gallery__dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', `Photo ${i + 1}`);
+    dot.onclick = () => goToPhoto(i);
+    dotsContainer.appendChild(dot);
+  }
+}
+
+function goToPhoto(index) {
+  if (index < 0 || index >= photos.length) return;
+  currentPhotoIndex = index;
+  document.getElementById('galleryMain').src = photos[index];
+  document.getElementById('galleryCount').textContent = `${index + 1} / ${photos.length}`;
+  document.querySelectorAll('.gallery__dot').forEach((d, i) => d.classList.toggle('active', i === index));
+}
+
+function galleryPrev() {
+  goToPhoto((currentPhotoIndex - 1 + photos.length) % photos.length);
+}
+function galleryNext() {
+  goToPhoto((currentPhotoIndex + 1) % photos.length);
+}
+
+// ============================================================
+// MOBILE GALLERY — swipeable
+// ============================================================
+let mobileCurrentPhoto = 0;
+let touchStartX = 0;
+let touchDeltaX = 0;
+let isSwiping = false;
+
+function renderMobileGallery(ag) {
+  mobileCurrentPhoto = 0;
+  const track = document.getElementById('mGalleryTrack');
+  track.innerHTML = ag.photos.map(p => `<div class="m-gallery__slide"><img src="${p}" alt="Photo ${ag.name}" draggable="false"></div>`).join('');
+  track.style.transform = 'translateX(0)';
+
+  document.getElementById('mGalleryCount').textContent = `1 / ${ag.photos.length}`;
+
+  const dotsEl = document.getElementById('mGalleryDots');
+  dotsEl.innerHTML = '';
+  const maxDots = Math.min(ag.photos.length, 7);
+  for (let i = 0; i < maxDots; i++) {
+    const dot = document.createElement('span');
+    dot.className = 'm-gallery__dot' + (i === 0 ? ' active' : '');
+    dotsEl.appendChild(dot);
+  }
+}
+
+function mobileGoToPhoto(index) {
+  if (index < 0 || index >= agency.photos.length) return;
+  mobileCurrentPhoto = index;
+  const track = document.getElementById('mGalleryTrack');
+  track.style.transition = 'transform 0.3s ease';
+  track.style.transform = `translateX(-${index * 100}%)`;
+  document.getElementById('mGalleryCount').textContent = `${index + 1} / ${agency.photos.length}`;
+  document.querySelectorAll('.m-gallery__dot').forEach((d, i) => d.classList.toggle('active', i === index));
+}
+
+// Touch swipe
+const mGalleryEl = document.getElementById('mGallery');
+mGalleryEl.addEventListener('touchstart', (e) => {
+  touchStartX = e.touches[0].clientX;
+  isSwiping = true;
+  document.getElementById('mGalleryTrack').style.transition = 'none';
+}, { passive: true });
+
+mGalleryEl.addEventListener('touchmove', (e) => {
+  if (!isSwiping) return;
+  touchDeltaX = e.touches[0].clientX - touchStartX;
+  const offset = -(mobileCurrentPhoto * 100) + (touchDeltaX / mGalleryEl.offsetWidth * 100);
+  document.getElementById('mGalleryTrack').style.transform = `translateX(${offset}%)`;
+}, { passive: true });
+
+mGalleryEl.addEventListener('touchend', () => {
+  if (!isSwiping) return;
+  isSwiping = false;
+  const threshold = mGalleryEl.offsetWidth * 0.2;
+  if (touchDeltaX < -threshold && mobileCurrentPhoto < agency.photos.length - 1) {
+    mobileGoToPhoto(mobileCurrentPhoto + 1);
+  } else if (touchDeltaX > threshold && mobileCurrentPhoto > 0) {
+    mobileGoToPhoto(mobileCurrentPhoto - 1);
+  } else {
+    mobileGoToPhoto(mobileCurrentPhoto);
+  }
+  touchDeltaX = 0;
+});
+
+// ============================================================
+// DESKTOP RENDER FUNCTIONS
+// ============================================================
+function renderCharacteristics() {
+  const grid = document.getElementById('charGrid');
+  grid.innerHTML = '';
+  Object.entries(agency.characteristics).forEach(([key, val]) => {
+    grid.innerHTML += `<div class="char-item"><span class="char-item__key">${key}</span><span class="char-item__val">${val}</span></div>`;
+  });
+}
+
+function renderDiagnostic() {
+  const grades = ['A','B','C','D','E','F','G'];
+
+  function renderScale(containerId, grade, value, title, subtitle) {
+    const el = document.getElementById(containerId);
+    let html = `<p class="diag-block__title">${title}</p><p class="diag-block__subtitle">${subtitle}</p><div class="diag-scale">`;
+    grades.forEach(g => {
+      const isActive = g === grade;
+      html += `<div class="diag-bar ${isActive ? 'active' : ''}" data-grade="${g}">
+        <div class="diag-bar__fill">${g}</div>
+        ${isActive ? `<span class="diag-bar__marker">${value}</span>` : ''}
+      </div>`;
+    });
+    html += '</div>';
+    el.innerHTML = html;
+  }
+
+  renderScale('diagDpe', agency.dpe, agency.dpeValue,
+    'DPE \u2014 Consommation \u00e9nerg\u00e9tique',
+    'Consommation conventionnelle en \u00e9nergie primaire');
+  renderScale('diagGes', agency.ges, agency.gesValue,
+    'GES \u2014 \u00c9missions de gaz',
+    '\u00c9missions de gaz \u00e0 effet de serre');
+}
+
+function renderRating() {
+  document.getElementById('agencyRating').innerHTML = `
+    <div class="agency-section__stars">${starsHTML(agency.rating)}</div>
+    <span class="agency-section__rating-text">${agency.rating}/5</span>
+    <span class="agency-section__rating-count">(${agency.reviewsCount} avis)</span>
+  `;
+}
+
+// ============================================================
+// MOBILE RENDER FUNCTIONS
+// ============================================================
+function renderWow() {
+  const el = document.getElementById('wowText');
+  el.innerHTML = `Commercialis\u00e9 par <span class="wow-banner__count">${agency.name}</span>`;
+}
+
+function renderMobileQuickView(ag) {
+  document.getElementById('mQuick').innerHTML = `
+    <h1 class="m-quick__title">Maison T4 \u2014 Milady</h1>
+    <p class="m-quick__address">Biarritz 64200 \u2014 Quartier Milady</p>
+    <div class="m-quick__price-row">
+      <span class="m-quick__price-label">Prix agence</span>
+      <span class="m-quick__price">${ag.price} \u20ac</span>
+    </div>
+    <div class="m-quick__specs">
+      <span class="m-quick__spec">${svgIcons.surface} ${ag.surface}</span>
+      <span class="m-quick__spec">${svgIcons.bed} ${ag.bedrooms} chambre${ag.bedrooms > 1 ? 's' : ''}</span>
+      <span class="m-quick__spec">${svgIcons.rooms} ${ag.rooms} pi\u00e8ces</span>
+      <span class="badge-dpe badge-dpe--${ag.dpe}">DPE ${ag.dpe}</span>
+    </div>`;
+}
+
+function renderMobileDescription(ag) {
+  document.getElementById('mDesc').innerHTML = `
+    <p class="m-desc__label">Description</p>
+    <div class="m-desc__text truncated" id="mDescText">${ag.description}</div>
+    <span class="m-desc__toggle" id="mDescToggle">Lire la suite</span>`;
+  document.getElementById('mDescToggle').addEventListener('click', function() {
+    const text = document.getElementById('mDescText');
+    text.classList.toggle('truncated');
+    this.textContent = text.classList.contains('truncated') ? 'Lire la suite' : 'R\u00e9duire';
+  });
+}
+
+function renderMobileCharacteristics(ag) {
+  const items = Object.entries(ag.characteristics).map(([k, v]) =>
+    `<div class="m-char-item"><span class="m-char-item__key">${k}</span><span class="m-char-item__val">${v}</span></div>`
+  ).join('');
+  document.getElementById('mChars').innerHTML = `
+    <p class="m-chars__label">Caract\u00e9ristiques</p>
+    <div class="m-chars__grid">${items}</div>`;
+}
+
+function renderMobileDiagnostic(ag) {
+  const grades = ['A','B','C','D','E','F','G'];
+  function scale(grade, value, title, subtitle, cssClass) {
+    let html = `<div class="m-diag-block ${cssClass}"><p class="m-diag-block__title">${title}</p><p class="m-diag-block__subtitle">${subtitle}</p><div class="m-diag-scale">`;
+    grades.forEach(g => {
+      const active = g === grade;
+      html += `<div class="m-diag-bar ${active ? 'active' : ''}" data-grade="${g}"><div class="m-diag-bar__fill">${g}</div>${active ? `<span class="m-diag-bar__marker">${value}</span>` : ''}</div>`;
+    });
+    return html + '</div></div>';
+  }
+  document.getElementById('mDiag').innerHTML = `
+    <p class="m-diag__label">Diagnostic de performance</p>
+    <div class="m-diag__container">
+      ${scale(ag.dpe, ag.dpeValue, 'DPE \u2014 Consommation \u00e9nerg\u00e9tique', 'Consommation conventionnelle', '')}
+      ${scale(ag.ges, ag.gesValue, 'GES \u2014 \u00c9missions de gaz', '\u00c9missions de gaz \u00e0 effet de serre', 'm-diag-block--ges')}
+    </div>`;
+}
+
+function renderMobileAgencySection(ag) {
+  const section = document.getElementById('mAgency');
+  let html = '<p class="m-agency__label">\u00c0 propos de l\'agence</p>';
+
+  html += `
+    <div class="m-agency__header">
+      <div class="m-agency__logo">${ag.logo}</div>
+      <div>
+        <div class="m-agency__title">${ag.name}</div>
+        <div class="m-agency__verified">${svgIcons.checkAnisSm} Certifi\u00e9 TrackerImmo</div>
+      </div>
+    </div>
+    <div class="m-agency__tags">${ag.tags.map(t => `<span class="reassurance-tag">${t}</span>`).join('')}</div>
+    <p class="m-agency__desc">${ag.agencyDesc}</p>
+    <div class="m-agency__grid">
+      <div class="m-agency__grid-item">${svgIcons.pin}<div><span class="m-agency__grid-label">Adresse</span>${ag.address}</div></div>
+      <div class="m-agency__grid-item">${svgIcons.phone}<div><span class="m-agency__grid-label">T\u00e9l\u00e9phone</span>${ag.phone}</div></div>
+      <div class="m-agency__grid-item">${svgIcons.mail}<div><span class="m-agency__grid-label">Email</span>${ag.email}</div></div>
+      <div class="m-agency__grid-item">${svgIcons.globe}<div><span class="m-agency__grid-label">Site web</span>${ag.website}</div></div>
+      <div class="m-agency__grid-item">${svgIcons.clock}<div><span class="m-agency__grid-label">Horaires</span>${ag.hours}</div></div>
+    </div>
+    <div class="m-agency__rating">
+      <div class="m-agency__stars">${starsHTML(ag.rating)}</div>
+      <span class="m-agency__rating-text">${ag.rating}/5</span>
+      <span class="m-agency__rating-count">(${ag.reviewsCount} avis)</span>
+    </div>`;
+
+  section.innerHTML = html;
+}
+
+// ============================================================
+// MOBILE BOTTOM BAR
+// ============================================================
+function renderMobileBottomBar(ag) {
+  document.getElementById('bbAvatar').innerHTML = ag.logo;
+  const nameEl = document.getElementById('bbName');
+  nameEl.textContent = ag.name;
+  nameEl.onclick = () => document.getElementById('mAgency').scrollIntoView({ behavior: 'smooth' });
+  nameEl.style.cursor = 'pointer';
+  document.getElementById('bbPrice').textContent = `${ag.price} \u20ac`;
+  const btn = document.getElementById('bbCta');
+  btn.textContent = 'Contacter l\u2019agence';
+  btn.className = 'm-bottom-bar__cta ' + ctaClassShort(ag);
+}
+
+// ============================================================
+// MOBILE BOTTOM SHEET — Premium lead form + phone call button
+// ============================================================
+function openSheet() {
+  document.getElementById('mOverlay').classList.add('open');
+  document.getElementById('mSheet').classList.add('open');
+
+  const content = document.getElementById('sheetContent');
+  const phoneBtn = agency.phone
+    ? `<a href="tel:${agency.phone.replace(/\s/g,'')}" class="m-sheet__call" aria-label="Appeler ${agency.name}">${svgIcons.phoneCall}</a>`
+    : '';
+  content.innerHTML = `
+    <h3 class="m-sheet__title" id="sheetTitle">Contacter ${agency.name}</h3>
+    <p class="m-sheet__subtitle">${agency.price} \u20ac \u2014 ${agency.surface}</p>
+    <div class="m-sheet__fields">
+      <input class="m-sheet__field" placeholder="Votre nom" />
+      <input class="m-sheet__field" placeholder="Votre email" type="email" />
+      <input class="m-sheet__field" placeholder="Votre t\u00e9l\u00e9phone" type="tel" />
+      <div class="m-sheet__actions">
+        <button class="m-sheet__submit ${ctaClassShort(agency)}">Envoyer ma demande</button>
+        ${phoneBtn}
+      </div>
+    </div>
+    <p class="m-sheet__reassurance">\uD83D\uDD12 Transmis \u00e0 ${agency.name} uniquement.</p>`;
+}
+
+function closeSheet() {
+  document.getElementById('mOverlay').classList.remove('open');
+  document.getElementById('mSheet').classList.remove('open');
+}
+
+// ============================================================
+// DESKTOP INTERACTIONS
+// ============================================================
+function toggleLeadForm() {
+  const form = document.getElementById('leadForm');
+  const cta = document.getElementById('ctaBtn');
+  form.classList.toggle('open');
+  const isOpen = form.classList.contains('open');
+  if (cta) cta.style.display = isOpen ? 'none' : '';
+}
+
+document.getElementById('descToggle').addEventListener('click', function() {
+  const text = document.getElementById('descText');
+  const isOpen = !text.classList.contains('truncated');
+  text.classList.toggle('truncated');
+  this.textContent = isOpen ? 'Lire la suite' : 'R\u00e9duire';
+});
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowLeft') galleryPrev();
+  if (e.key === 'ArrowRight') galleryNext();
+});
+
+// ============================================================
+// INIT
+// ============================================================
+initGallery();
+renderCharacteristics();
+renderDiagnostic();
+renderRating();
+renderWow();
+renderMobileGallery(agency);
+renderMobileQuickView(agency);
+renderMobileDescription(agency);
+renderMobileCharacteristics(agency);
+renderMobileDiagnostic(agency);
+renderMobileAgencySection(agency);
+renderMobileBottomBar(agency);
+</script>
+
+<!-- ============================================================
+     FOOTER (shared component — desktop only, hidden on mobile)
+     ============================================================ -->
+<footer class="footer">
+  <div class="footer__inner">
+    <div class="footer__brand">
+      <div class="footer__brand-name">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L4 7v10l8 5 8-5V7l-8-5z" fill="#BACE27"/>
+          <path d="M8 12l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>TrackerImmo</span>
+      </div>
+      <p class="footer__brand-desc">Le comparateur intelligent pour l'immobilier.<br>Transparence, rapidit&eacute; et &eacute;conomies.</p>
+    </div>
+    <div class="footer__links">
+      <div>
+        <div class="footer__col-title">Soci&eacute;t&eacute;</div>
+        <a href="#" class="footer__link">&Agrave; propos</a>
+        <a href="#" class="footer__link">Carri&egrave;res</a>
+        <a href="#" class="footer__link">Presse</a>
+      </div>
+      <div>
+        <div class="footer__col-title">L&eacute;gal</div>
+        <a href="#" class="footer__link">Mentions l&eacute;gales</a>
+        <a href="#" class="footer__link">Confidentialit&eacute;</a>
+        <a href="#" class="footer__link">Cookies</a>
+      </div>
+    </div>
+    <div class="footer__social">
+      <a href="#" class="footer__social-link" aria-label="Facebook">
+        <svg viewBox="0 0 12 12"><path d="M9 1H7.5A2.5 2.5 0 0 0 5 3.5V5H3.5v2H5v4h2V7h1.5L9 5H7V3.5a.5.5 0 0 1 .5-.5H9V1z"/></svg>
+      </a>
+      <a href="#" class="footer__social-link" aria-label="Twitter">
+        <svg viewBox="0 0 12 12"><path d="M11 1.5a5.08 5.08 0 0 1-1.5.75 2.28 2.28 0 0 0-4 1.5v.5A5.4 5.4 0 0 1 1 2s-2 4.5 2.5 6.5A5.84 5.84 0 0 1 0 10c4.5 2.5 10 0 10-5.75 0-.14 0-.28-.02-.42A3.63 3.63 0 0 0 11 1.5z"/></svg>
+      </a>
+      <a href="#" class="footer__social-link" aria-label="Instagram">
+        <svg viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10" rx="3" stroke="currentColor" fill="none" stroke-width="1"/><circle cx="6" cy="6" r="2" stroke="currentColor" fill="none" stroke-width="1"/><circle cx="9" cy="3" r="0.5" fill="currentColor"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <p class="footer__copyright">&copy; 2025 TrackerImmo. Tous droits r&eacute;serv&eacute;s.</p>
+  </div>
+</footer>
+
+</body>
+</html>

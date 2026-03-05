@@ -1,0 +1,2767 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Appartement T3 Biarritz — TrackerImmo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+/* ============================================================
+   MAIN LAYOUT
+   ============================================================ */
+.main {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--space-lg) var(--gutter);
+  display: flex;
+  gap: var(--space-lg);
+}
+.col-left {
+  flex: 0 0 62%;
+  max-width: 62%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+.col-right {
+  flex: 0 0 38%;
+  max-width: 38%;
+  position: sticky;
+  top: 72px; /* header 56px + space-md 16px */
+  align-self: flex-start;
+  max-height: calc(100vh - 88px);
+  overflow-y: auto;
+}
+
+/* ============================================================
+   A — GALLERY CAROUSEL (desktop)
+   ============================================================ */
+.gallery {
+  position: relative;
+  background: var(--bg-section);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.gallery__main {
+  width: 100%;
+  aspect-ratio: 16/10;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.3s;
+}
+.gallery__count {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 5;
+  background: rgba(0,0,0,0.55);
+  color: white;
+  padding: 5px 12px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+}
+.gallery__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.15s, transform 0.15s;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+}
+.gallery__arrow:hover { background: white; }
+.gallery__arrow:active { transform: translateY(-50%) scale(0.95); }
+.gallery__arrow--prev { left: 12px; }
+.gallery__arrow--next { right: 12px; }
+.gallery__arrow svg { width: 18px; height: 18px; stroke: var(--text-heading); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.gallery__dots {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  gap: 6px;
+}
+.gallery__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: rgba(255,255,255,0.5);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.gallery__dot.active { background: white; transform: scale(1.25); }
+.gallery__dot:hover { background: rgba(255,255,255,0.8); }
+
+/* ============================================================
+   B — QUICK VIEW
+   ============================================================ */
+.quick-view {
+  background: var(--bg-section);
+  border-radius: var(--radius-card);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+}
+.quick-view__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+.quick-view__left { flex: 1; }
+.quick-view__title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-heading);
+  letter-spacing: -0.6px;
+  margin-bottom: 4px;
+}
+.quick-view__address { font-size: 14px; color: var(--text-tertiary); }
+.quick-view__right { text-align: right; flex-shrink: 0; }
+.quick-view__price {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--text-heading);
+  letter-spacing: -0.6px;
+  white-space: nowrap;
+}
+.quick-view__price-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-label);
+  text-align: right;
+  margin-bottom: 2px;
+}
+.quick-view__specs { display: flex; gap: var(--space-lg); flex-wrap: wrap; align-items: center; }
+.quick-view__spec {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+.quick-view__spec svg { width: 16px; height: 16px; flex-shrink: 0; }
+/* DPE badge grade colors (base .badge-dpe in shared.css) */
+.badge-dpe--A { background: #e6f5e6; color: #1a7a1a; }
+.badge-dpe--B { background: #e6f9e6; color: #1a8a1a; }
+.badge-dpe--C { background: #fafce6; color: #6b6b00; }
+.badge-dpe--D { background: #fffde6; color: #8a8a00; }
+.badge-dpe--E { background: #fff5e0; color: #995c00; }
+.badge-dpe--F { background: #fff0e0; color: #b34700; }
+.badge-dpe--G { background: #ffe6e6; color: #cc0000; }
+
+/* ============================================================
+   C — DESCRIPTION
+   ============================================================ */
+.description {
+  background: var(--bg-section);
+  border-radius: var(--radius-card);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+}
+.description__label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-label);
+  margin-bottom: var(--space-md);
+}
+.description__text { font-size: 16px; line-height: 26px; color: var(--text-body); }
+.description__text.truncated {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.description__toggle {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary-dark);
+  cursor: pointer;
+}
+.description__toggle:hover { text-decoration: underline; }
+
+/* ============================================================
+   D — CHARACTERISTICS
+   ============================================================ */
+.characteristics {
+  background: var(--bg-section);
+  border-radius: var(--radius-card);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+}
+.characteristics__label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-label);
+  margin-bottom: var(--space-md);
+}
+.characteristics__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md) var(--space-lg);
+}
+.char-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border-default);
+}
+.char-item__key { color: var(--text-secondary); }
+.char-item__val { font-weight: 600; color: var(--text-heading); }
+
+/* ============================================================
+   E — DPE / GES DIAGNOSTIC
+   ============================================================ */
+.diag-section {
+  background: var(--bg-section);
+  border-radius: var(--radius-card);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+}
+.diag-section__label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-label);
+  margin-bottom: var(--space-lg);
+}
+.diag-container { display: flex; gap: var(--space-xl); }
+.diag-block { flex: 1; }
+.diag-block__title { font-size: 14px; font-weight: 600; color: var(--text-heading); margin-bottom: var(--space-md); }
+.diag-block__subtitle { font-size: 12px; color: var(--text-tertiary); margin-bottom: var(--space-sm); }
+.diag-scale { display: flex; flex-direction: column; gap: 3px; }
+.diag-bar { display: flex; align-items: center; height: 24px; position: relative; }
+.diag-bar__fill {
+  height: 100%;
+  border-radius: 3px 0 0 3px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  color: white;
+  position: relative;
+}
+.diag-bar__fill::after {
+  content: '';
+  position: absolute;
+  right: -8px;
+  top: 0;
+  width: 0;
+  height: 0;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  border-left: 8px solid currentColor;
+}
+.diag-bar.active .diag-bar__fill { font-size: 13px; }
+.diag-bar.active .diag-bar__marker {
+  display: flex;
+  align-items: center;
+  margin-left: 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-heading);
+  white-space: nowrap;
+}
+.diag-bar__marker { display: none; }
+.diag-bar[data-grade="A"] .diag-bar__fill { width: 20%; }
+.diag-bar[data-grade="B"] .diag-bar__fill { width: 30%; }
+.diag-bar[data-grade="C"] .diag-bar__fill { width: 40%; }
+.diag-bar[data-grade="D"] .diag-bar__fill { width: 50%; }
+.diag-bar[data-grade="E"] .diag-bar__fill { width: 60%; }
+.diag-bar[data-grade="F"] .diag-bar__fill { width: 75%; }
+.diag-bar[data-grade="G"] .diag-bar__fill { width: 90%; }
+.diag-bar[data-grade="A"] .diag-bar__fill { background: var(--dpe-a); }
+.diag-bar[data-grade="B"] .diag-bar__fill { background: var(--dpe-b); }
+.diag-bar[data-grade="C"] .diag-bar__fill { background: var(--dpe-c); color: var(--text-body); }
+.diag-bar[data-grade="D"] .diag-bar__fill { background: var(--dpe-d); color: var(--text-body); }
+.diag-bar[data-grade="E"] .diag-bar__fill { background: var(--dpe-e); color: var(--text-body); }
+.diag-bar[data-grade="F"] .diag-bar__fill { background: var(--dpe-f); }
+.diag-bar[data-grade="G"] .diag-bar__fill { background: var(--dpe-g); }
+.diag-bar[data-grade="A"] .diag-bar__fill::after { border-left-color: var(--dpe-a); }
+.diag-bar[data-grade="B"] .diag-bar__fill::after { border-left-color: var(--dpe-b); }
+.diag-bar[data-grade="C"] .diag-bar__fill::after { border-left-color: var(--dpe-c); }
+.diag-bar[data-grade="D"] .diag-bar__fill::after { border-left-color: var(--dpe-d); }
+.diag-bar[data-grade="E"] .diag-bar__fill::after { border-left-color: var(--dpe-e); }
+.diag-bar[data-grade="F"] .diag-bar__fill::after { border-left-color: var(--dpe-f); }
+.diag-bar[data-grade="G"] .diag-bar__fill::after { border-left-color: var(--dpe-g); }
+.diag-block--ges .diag-bar[data-grade="A"] .diag-bar__fill { background: var(--ges-a); color: var(--text-body); }
+.diag-block--ges .diag-bar[data-grade="B"] .diag-bar__fill { background: var(--ges-b); color: var(--text-body); }
+.diag-block--ges .diag-bar[data-grade="C"] .diag-bar__fill { background: var(--ges-c); }
+.diag-block--ges .diag-bar[data-grade="D"] .diag-bar__fill { background: var(--ges-d); }
+.diag-block--ges .diag-bar[data-grade="E"] .diag-bar__fill { background: var(--ges-e); }
+.diag-block--ges .diag-bar[data-grade="F"] .diag-bar__fill { background: var(--ges-f); }
+.diag-block--ges .diag-bar[data-grade="G"] .diag-bar__fill { background: var(--ges-g); }
+.diag-block--ges .diag-bar[data-grade="A"] .diag-bar__fill::after { border-left-color: var(--ges-a); }
+.diag-block--ges .diag-bar[data-grade="B"] .diag-bar__fill::after { border-left-color: var(--ges-b); }
+.diag-block--ges .diag-bar[data-grade="C"] .diag-bar__fill::after { border-left-color: var(--ges-c); }
+.diag-block--ges .diag-bar[data-grade="D"] .diag-bar__fill::after { border-left-color: var(--ges-d); }
+.diag-block--ges .diag-bar[data-grade="E"] .diag-bar__fill::after { border-left-color: var(--ges-e); }
+.diag-block--ges .diag-bar[data-grade="F"] .diag-bar__fill::after { border-left-color: var(--ges-f); }
+.diag-block--ges .diag-bar[data-grade="G"] .diag-bar__fill::after { border-left-color: var(--ges-g); }
+
+/* ============================================================
+   RIGHT PANEL
+   ============================================================ */
+.panel {
+  background: var(--bg-page);
+  border-radius: var(--radius-card);
+}
+.panel__badge-header {
+  padding: 0 var(--space-md) var(--space-md);
+  display: flex;
+  justify-content: flex-end;
+}
+.panel__badge {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary-dark);
+  background: rgba(14, 78, 87, 0.08);
+  border: 1px solid rgba(14, 78, 87, 0.15);
+  border-radius: var(--radius-badge);
+  padding: 5px 14px;
+  letter-spacing: 0.3px;
+  line-height: 20px;
+}
+.panel__cards {
+  padding: 0 var(--space-md) var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* Agency Card */
+.agency-card {
+  background: var(--bg-section);
+  border: 1.5px solid var(--border-default);
+  border-radius: var(--radius-card-lg);
+  padding: var(--space-md);
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.agency-card:hover { border-color: var(--border-hover-subtle); }
+.agency-card.active {
+  border-color: var(--border-active);
+}
+.agency-card.premium {
+  padding: var(--space-lg);
+  background: var(--bg-premium);
+}
+.agency-card.premium.active {
+  border-color: var(--border-premium-active);
+}
+.agency-card__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-sm);
+}
+.agency-card__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.agency-card__avatar svg {
+  width: 100%;
+  height: 100%;
+}
+.agency-card.premium .agency-card__avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+}
+.agency-card__name { font-size: 14px; font-weight: 600; color: var(--text-heading); }
+.agency-card__name--link { text-decoration: none; }
+.agency-card__name--link:hover { text-decoration: underline; }
+/* Partenaire badge — discrete, small text */
+.agency-card__partner-label {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-tertiary);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 2px;
+}
+.agency-card__partner-label svg { width: 12px; height: 12px; }
+.agency-card__data {
+  display: flex;
+  gap: var(--space-md);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.agency-card__price { font-weight: 700; color: var(--text-heading); font-size: 16px; }
+.agency-card.premium .agency-card__price { font-size: 20px; color: var(--primary-dark); }
+
+/* Reassurance tags — prominent */
+.agency-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+/* .reassurance-tag — defined in shared.css */
+
+/* CTA */
+.agency-card__cta-zone {
+  display: none;
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-default);
+}
+.agency-card.active .agency-card__cta-zone { display: block; }
+.btn-cta {
+  width: 100%;
+  padding: var(--space-md) var(--space-lg);
+  border-radius: var(--radius-btn);
+  font-size: 16px;
+  font-weight: 700;
+  transition: transform 0.1s, box-shadow 0.2s;
+}
+.btn-cta:active { transform: scale(0.98); }
+.btn-cta-premium {
+  background: var(--primary-accent);
+  color: var(--text-cta);
+  box-shadow: var(--shadow-lg);
+}
+.btn-cta-premium:hover { background: var(--btn-hover-premium); }
+.btn-cta-gratuit {
+  background: var(--primary-dark);
+  color: white;
+}
+.btn-cta-gratuit:hover { background: var(--btn-hover-gratuit); }
+.btn-cta-scrape {
+  background: var(--bg-page);
+  border: 1px solid var(--border-default);
+  color: var(--text-heading);
+}
+.btn-cta-scrape:hover { background: var(--btn-hover-scrape); }
+
+.agency-card__phone-link {
+  display: block;
+  text-align: center;
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--text-tertiary);
+  cursor: pointer;
+}
+.agency-card__phone-link:hover { color: var(--primary-dark); }
+
+/* Lead form */
+.lead-form { display: none; margin-top: var(--space-md); }
+.lead-form.open { display: flex; flex-direction: column; gap: var(--space-sm); }
+.lead-form__field {
+  width: 100%;
+  padding: var(--space-md);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-btn-sm);
+  font-size: 14px;
+  font-family: inherit;
+  background: var(--bg-section);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.lead-form__field:focus-visible { border-color: var(--primary-dark); }
+.lead-form__submit {
+  width: 100%;
+  padding: var(--space-md);
+  border-radius: var(--radius-btn-sm);
+  font-size: 14px;
+  font-weight: 700;
+}
+.lead-form__reassurance {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  text-align: center;
+}
+
+/* ============================================================
+   SCRAPE INLINE EXPANSION
+   ============================================================ */
+.scrape-expand { display: none; margin-top: var(--space-md); }
+.scrape-expand.open { display: flex; flex-direction: column; gap: var(--space-md); }
+
+/* Info notice */
+.scrape-expand__notice {
+  display: flex;
+  gap: var(--space-md);
+  align-items: flex-start;
+  padding: var(--space-md);
+  background: var(--bg-scrape-notice);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-card);
+}
+.scrape-expand__notice-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  background: var(--color-warning);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.scrape-expand__notice-icon svg { width: 14px; height: 14px; fill: white; }
+.scrape-expand__notice-text {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--text-body);
+}
+
+/* Email field */
+.scrape-expand__email-field {
+  width: 100%;
+  padding: var(--space-md);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-card);
+  font-size: 14px;
+  font-family: inherit;
+  background: var(--bg-section);
+  outline: none;
+}
+.scrape-expand__email-field:focus-visible { border-color: var(--primary-dark); }
+
+/* Notify button — grey with bell icon */
+.scrape-expand__notify-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-notify);
+  border: 1px solid var(--border-divider);
+  border-radius: var(--radius-card);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-heading);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.scrape-expand__notify-btn:hover { background: var(--bg-notify-hover); }
+.scrape-expand__notify-btn svg { width: 16px; height: 16px; fill: var(--text-heading); }
+
+/* Alternative premium card — mirrors premium agency card style */
+.scrape-expand__alt-card {
+  background: var(--bg-premium);
+  border: 1.5px solid var(--primary-accent);
+  border-radius: var(--radius-card-lg);
+  padding: var(--space-lg);
+}
+.scrape-expand__alt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-md);
+}
+.scrape-expand__alt-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  color: var(--primary-dark);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.scrape-expand__alt-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.scrape-expand__alt-name svg { width: 18px; height: 18px; }
+.scrape-expand__alt-tag {
+  margin-bottom: var(--space-md);
+}
+.scrape-expand__alt-cta {
+  width: 100%;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--primary-accent);
+  color: var(--text-cta);
+  border: none;
+  border-radius: var(--radius-btn);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background 0.15s;
+}
+.scrape-expand__alt-cta:hover { background: var(--btn-hover-premium); }
+
+/* ============================================================
+   F — AGENCY SECTION (desktop)
+   ============================================================ */
+.agency-section {
+  background: var(--bg-section);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-card);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+}
+.agency-section__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+.agency-section__logo {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.agency-section__logo svg { width: 100%; height: 100%; }
+.agency-section__title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-heading);
+}
+.agency-section__verified {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--badge-dpe-text);
+  margin-top: 2px;
+}
+.agency-section__verified svg { width: 14px; height: 14px; }
+.agency-section__desc {
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--text-body);
+  line-height: 24px;
+  margin-bottom: var(--space-lg);
+}
+.agency-section__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+.agency-section__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md) var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+.agency-section__grid-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+.agency-section__grid-item svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--text-label);
+}
+.agency-section__grid-label {
+  font-weight: 600;
+  color: var(--text-heading);
+  font-size: 13px;
+  display: block;
+}
+.agency-section__rating {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-default);
+}
+.agency-section__stars { display: flex; gap: 2px; }
+.agency-section__stars svg { width: 16px; height: 16px; color: var(--color-star); }
+.agency-section__rating-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-heading);
+}
+.agency-section__rating-count {
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+.agency-section__minimal {
+  font-size: 14px;
+  color: var(--text-tertiary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.agency-section__minimal svg {
+  width: 14px;
+  height: 14px;
+  color: var(--text-label);
+}
+.agency-section__phone-discrete { color: var(--text-tertiary); }
+.agency-section__header-minimal { margin-bottom: 4px; }
+.agency-section__title--sm { font-size: 17px; }
+.agency-section__label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-label);
+  margin-bottom: var(--space-md);
+}
+
+/* ============================================================
+   MOBILE-ONLY COMPONENTS (hidden by default, shown via @media)
+   ============================================================ */
+
+/* Header back button (mobile) */
+.top-bar__back {
+  display: none;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.top-bar__back svg {
+  width: 16px;
+  height: 16px;
+  color: var(--text-secondary);
+}
+
+/* WOW Banner */
+.wow-banner {
+  display: none;
+  background: var(--bg-section);
+  border-bottom: 1px solid var(--border-default);
+  padding: var(--space-sm) var(--space-md);
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 18px;
+}
+.wow-banner__icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  color: var(--primary-dark);
+}
+.wow-banner__count {
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+.wow-banner__range {
+  font-weight: 600;
+  color: var(--text-heading);
+}
+
+/* Agency Selector — Trivago-style */
+.agency-selector {
+  display: none;
+  background: var(--bg-section);
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--border-default);
+}
+
+/* Premium featured card — compact */
+.selector-premium {
+  background: var(--bg-premium);
+  border: 1.5px solid var(--border-default);
+  border-radius: var(--radius-card-lg);
+  padding: var(--space-sm) var(--space-md);
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.selector-premium.active {
+  border-color: var(--border-premium-active);
+}
+.selector-premium__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xs);
+}
+.selector-premium__avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.selector-premium__avatar svg { width: 100%; height: 100%; }
+.selector-premium__info { flex: 1; min-width: 0; }
+.selector-premium__name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-heading);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+.selector-premium__name svg { width: 12px; height: 12px; flex-shrink: 0; }
+.selector-premium__label {
+  font-size: 10px;
+  color: var(--text-tertiary);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.selector-premium__label svg { width: 9px; height: 9px; }
+.selector-premium__data {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xs);
+}
+.selector-premium__price {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+.selector-premium__meta {
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+.selector-premium__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+.selector-premium__tags .reassurance-tag {
+  font-size: 10px;
+  padding: 2px 6px;
+}
+
+/* Other agencies — compact rows */
+.selector-others {
+  margin-top: var(--space-xs);
+}
+.selector-others__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-xs) 0;
+  cursor: pointer;
+  user-select: none;
+}
+.selector-others__toggle-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.selector-others__toggle-chevron {
+  width: 16px;
+  height: 16px;
+  color: var(--text-label);
+  transition: transform 0.2s;
+}
+.selector-others__toggle.open .selector-others__toggle-chevron {
+  transform: rotate(180deg);
+}
+.selector-others__list {
+  display: none;
+  flex-direction: column;
+  gap: 0;
+  overflow: hidden;
+}
+.selector-others__list.open {
+  display: flex;
+}
+
+/* Individual compact row */
+.selector-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs);
+  border-radius: var(--radius-card);
+  cursor: pointer;
+  transition: background 0.15s;
+  border: 1.5px solid transparent;
+}
+.selector-row:active { background: rgba(0,0,0,0.03); }
+.selector-row.active {
+  background: rgba(14,78,87,0.04);
+  border-color: var(--border-active);
+}
+.selector-row__avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.selector-row__avatar svg { width: 100%; height: 100%; }
+.selector-row__name {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-heading);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.selector-row__price {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-heading);
+  white-space: nowrap;
+}
+.selector-row__photos {
+  font-size: 10px;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+}
+
+/* Mono-agence banner variant */
+.mono-banner {
+  background: var(--bg-section);
+  border-bottom: 1px solid var(--border-default);
+  padding: var(--space-sm) var(--space-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.mono-banner__avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.mono-banner__avatar svg { width: 100%; height: 100%; }
+.mono-banner__text {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.mono-banner__name {
+  font-weight: 600;
+  color: var(--text-heading);
+}
+
+/* Mobile Gallery — edge-to-edge, swipe, no arrows */
+.m-gallery {
+  display: none;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: var(--border-default);
+}
+.m-gallery__track {
+  display: flex;
+  transition: transform 0.3s ease;
+  will-change: transform;
+}
+.m-gallery__slide {
+  flex: 0 0 100%;
+  aspect-ratio: 16/10;
+}
+.m-gallery__slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+.m-gallery__count {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  z-index: 5;
+  background: rgba(0,0,0,0.55);
+  color: white;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 600;
+}
+.m-gallery__dots {
+  position: absolute;
+  bottom: var(--space-sm);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  gap: var(--space-xs);
+}
+.m-gallery__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: rgba(255,255,255,0.45);
+  border: none;
+  padding: 0;
+  transition: background 0.2s, transform 0.2s;
+}
+.m-gallery__dot.active {
+  background: white;
+  transform: scale(1.3);
+}
+
+/* Mobile content sections */
+.m-content {
+  display: none;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+}
+
+/* Mobile Quick view */
+.m-quick {
+  background: var(--bg-section);
+  border-radius: var(--radius-card);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+}
+.m-quick__title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-heading);
+  letter-spacing: -0.5px;
+  margin-bottom: 2px;
+}
+.m-quick__address {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  margin-bottom: var(--space-sm);
+}
+.m-quick__price-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-sm);
+}
+.m-quick__price-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-label);
+}
+.m-quick__price {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-heading);
+  letter-spacing: -0.5px;
+}
+.m-quick__specs {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  align-items: center;
+}
+.m-quick__spec {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+.m-quick__spec svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+/* Mobile Description */
+.m-desc {
+  background: var(--bg-section);
+  border-radius: var(--radius-card);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+}
+.m-desc__label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-label);
+  margin-bottom: var(--space-sm);
+}
+.m-desc__text {
+  font-size: 15px;
+  line-height: 24px;
+  color: var(--text-body);
+}
+.m-desc__text.truncated {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.m-desc__toggle {
+  display: inline-block;
+  margin-top: var(--space-xs);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary-dark);
+  cursor: pointer;
+}
+
+/* Mobile Characteristics */
+.m-chars {
+  background: var(--bg-section);
+  border-radius: var(--radius-card);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+}
+.m-chars__label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-label);
+  margin-bottom: var(--space-sm);
+}
+.m-chars__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+.m-char-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--border-default);
+}
+.m-char-item:last-child { border-bottom: none; }
+.m-char-item__key { color: var(--text-secondary); }
+.m-char-item__val { font-weight: 600; color: var(--text-heading); }
+
+/* Mobile Diagnostic DPE/GES */
+.m-diag {
+  background: var(--bg-section);
+  border-radius: var(--radius-card);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+}
+.m-diag__label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-label);
+  margin-bottom: var(--space-md);
+}
+.m-diag__container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+.m-diag-block__title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: var(--space-sm);
+}
+.m-diag-block__subtitle {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  margin-bottom: var(--space-sm);
+}
+.m-diag-scale { display: flex; flex-direction: column; gap: 2px; }
+.m-diag-bar { display: flex; align-items: center; height: 22px; }
+.m-diag-bar__fill {
+  height: 100%;
+  border-radius: 3px 0 0 3px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  color: white;
+  position: relative;
+}
+.m-diag-bar__fill::after {
+  content: '';
+  position: absolute;
+  right: -7px;
+  top: 0;
+  border-top: 11px solid transparent;
+  border-bottom: 11px solid transparent;
+  border-left: 7px solid currentColor;
+}
+.m-diag-bar.active .m-diag-bar__fill { font-size: 12px; }
+.m-diag-bar.active .m-diag-bar__marker {
+  display: flex;
+  align-items: center;
+  margin-left: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-heading);
+  white-space: nowrap;
+}
+.m-diag-bar__marker { display: none; }
+/* DPE widths */
+.m-diag-bar[data-grade="A"] .m-diag-bar__fill { width: 20%; background: var(--dpe-a); }
+.m-diag-bar[data-grade="B"] .m-diag-bar__fill { width: 30%; background: var(--dpe-b); }
+.m-diag-bar[data-grade="C"] .m-diag-bar__fill { width: 40%; background: var(--dpe-c); color: var(--text-body); }
+.m-diag-bar[data-grade="D"] .m-diag-bar__fill { width: 50%; background: var(--dpe-d); color: var(--text-body); }
+.m-diag-bar[data-grade="E"] .m-diag-bar__fill { width: 60%; background: var(--dpe-e); color: var(--text-body); }
+.m-diag-bar[data-grade="F"] .m-diag-bar__fill { width: 75%; background: var(--dpe-f); }
+.m-diag-bar[data-grade="G"] .m-diag-bar__fill { width: 90%; background: var(--dpe-g); }
+.m-diag-bar[data-grade="A"] .m-diag-bar__fill::after { border-left-color: var(--dpe-a); }
+.m-diag-bar[data-grade="B"] .m-diag-bar__fill::after { border-left-color: var(--dpe-b); }
+.m-diag-bar[data-grade="C"] .m-diag-bar__fill::after { border-left-color: var(--dpe-c); }
+.m-diag-bar[data-grade="D"] .m-diag-bar__fill::after { border-left-color: var(--dpe-d); }
+.m-diag-bar[data-grade="E"] .m-diag-bar__fill::after { border-left-color: var(--dpe-e); }
+.m-diag-bar[data-grade="F"] .m-diag-bar__fill::after { border-left-color: var(--dpe-f); }
+.m-diag-bar[data-grade="G"] .m-diag-bar__fill::after { border-left-color: var(--dpe-g); }
+.m-diag-block--ges .m-diag-bar[data-grade="A"] .m-diag-bar__fill { background: var(--ges-a); color: var(--text-body); }
+.m-diag-block--ges .m-diag-bar[data-grade="B"] .m-diag-bar__fill { background: var(--ges-b); color: var(--text-body); }
+.m-diag-block--ges .m-diag-bar[data-grade="C"] .m-diag-bar__fill { background: var(--ges-c); }
+.m-diag-block--ges .m-diag-bar[data-grade="D"] .m-diag-bar__fill { background: var(--ges-d); }
+.m-diag-block--ges .m-diag-bar[data-grade="E"] .m-diag-bar__fill { background: var(--ges-e); }
+.m-diag-block--ges .m-diag-bar[data-grade="F"] .m-diag-bar__fill { background: var(--ges-f); }
+.m-diag-block--ges .m-diag-bar[data-grade="G"] .m-diag-bar__fill { background: var(--ges-g); }
+.m-diag-block--ges .m-diag-bar[data-grade="A"] .m-diag-bar__fill::after { border-left-color: var(--ges-a); }
+.m-diag-block--ges .m-diag-bar[data-grade="B"] .m-diag-bar__fill::after { border-left-color: var(--ges-b); }
+.m-diag-block--ges .m-diag-bar[data-grade="C"] .m-diag-bar__fill::after { border-left-color: var(--ges-c); }
+.m-diag-block--ges .m-diag-bar[data-grade="D"] .m-diag-bar__fill::after { border-left-color: var(--ges-d); }
+.m-diag-block--ges .m-diag-bar[data-grade="E"] .m-diag-bar__fill::after { border-left-color: var(--ges-e); }
+.m-diag-block--ges .m-diag-bar[data-grade="F"] .m-diag-bar__fill::after { border-left-color: var(--ges-f); }
+.m-diag-block--ges .m-diag-bar[data-grade="G"] .m-diag-bar__fill::after { border-left-color: var(--ges-g); }
+
+/* Mobile Agency section */
+.m-agency {
+  background: var(--bg-section);
+  border-radius: var(--radius-card);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+}
+.m-agency__label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--text-label);
+  margin-bottom: var(--space-sm);
+}
+.m-agency__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+.m-agency__logo {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.m-agency__logo svg { width: 100%; height: 100%; }
+.m-agency__title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-heading);
+}
+.m-agency__title--sm { font-size: 16px; }
+.m-agency__verified {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--badge-dpe-text);
+  margin-top: 1px;
+}
+.m-agency__verified svg { width: 12px; height: 12px; }
+.m-agency__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-sm);
+}
+.m-agency__tags .reassurance-tag { font-size: 11px; padding: 3px 8px; }
+.m-agency__desc {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--text-body);
+  line-height: 22px;
+  margin-bottom: var(--space-md);
+}
+.m-agency__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+.m-agency__grid-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.m-agency__grid-item svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--text-label);
+}
+.m-agency__grid-label {
+  font-weight: 600;
+  color: var(--text-heading);
+  font-size: 12px;
+  display: block;
+}
+.m-agency__rating {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border-default);
+}
+.m-agency__stars { display: flex; gap: 1px; }
+.m-agency__stars svg { width: 14px; height: 14px; color: var(--color-star); }
+.m-agency__rating-text { font-size: 13px; font-weight: 600; color: var(--text-heading); }
+.m-agency__rating-count { font-size: 12px; color: var(--text-tertiary); }
+.m-agency__minimal {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+.m-agency__minimal svg { width: 13px; height: 13px; color: var(--text-label); }
+
+/* Back to top */
+.m-back-to-top {
+  display: none;
+  padding: var(--space-md) var(--gutter) var(--space-xl);
+  text-align: center;
+}
+.m-back-to-top__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  transition: color 0.15s;
+}
+.m-back-to-top__link:active { color: var(--primary-dark); }
+.m-back-to-top__link svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* Mobile Bottom Bar */
+.m-bottom-bar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: var(--bg-section);
+  border-top: 1px solid var(--border-default);
+  padding: var(--space-md);
+  padding-bottom: max(var(--space-md), env(safe-area-inset-bottom));
+  box-shadow: var(--shadow-bar);
+}
+.m-bottom-bar__inner {
+  display: flex;
+  align-items: center;
+}
+.m-bottom-bar__agency {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  width: 50%;
+  min-width: 0;
+}
+.m-bottom-bar__cta-wrap {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+}
+.m-bottom-bar__avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.m-bottom-bar__avatar svg { width: 100%; height: 100%; }
+.m-bottom-bar__info { min-width: 0; }
+.m-bottom-bar__name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-heading);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.m-bottom-bar__price {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-heading);
+}
+.m-bottom-bar__cta {
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-btn);
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  transition: transform 0.1s, background 0.15s;
+}
+.m-bottom-bar__cta:active { transform: scale(0.97); }
+
+/* Mobile Bottom Sheet */
+.m-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0,0,0,0.4);
+}
+.m-overlay.open { display: block; }
+.m-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 201;
+  background: var(--bg-section);
+  border-radius: var(--radius-card-lg) var(--radius-card-lg) 0 0;
+  padding: var(--space-md);
+  padding-bottom: max(var(--space-lg), env(safe-area-inset-bottom));
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+.m-sheet.open { transform: translateY(0); }
+.m-sheet__handle {
+  width: 36px;
+  height: 4px;
+  background: var(--border-divider);
+  border-radius: 2px;
+  margin: 0 auto var(--space-md);
+}
+.m-sheet__title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-heading);
+  margin-bottom: 2px;
+}
+.m-sheet__subtitle {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  margin-bottom: var(--space-md);
+}
+.m-sheet__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.m-sheet__field {
+  width: 100%;
+  padding: var(--space-md);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-btn-sm);
+  font-size: 14px;
+  font-family: inherit;
+  background: var(--bg-section);
+  outline: none;
+}
+.m-sheet__field:focus-visible { border-color: var(--primary-dark); }
+.m-sheet__actions {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: stretch;
+}
+.m-sheet__submit {
+  flex: 1;
+  padding: var(--space-md);
+  border-radius: var(--radius-btn-sm);
+  font-size: 15px;
+  font-weight: 700;
+}
+.m-sheet__call {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  flex-shrink: 0;
+  border-radius: var(--radius-btn-sm);
+  background: var(--primary-dark);
+  transition: background 0.15s;
+}
+.m-sheet__call:active { background: var(--btn-hover-gratuit); }
+.m-sheet__call svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: white;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.m-sheet__reassurance {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  text-align: center;
+  margin-top: var(--space-xs);
+}
+
+/* Scrape sheet */
+.m-sheet__notice {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: flex-start;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg-scrape-notice);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-card);
+  margin-bottom: var(--space-md);
+}
+.m-sheet__notice-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  background: var(--color-warning);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.m-sheet__notice-icon svg { width: 12px; height: 12px; fill: white; }
+.m-sheet__notice-text {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--text-body);
+}
+.m-sheet__notify-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  background: var(--bg-notify);
+  border: 1px solid var(--border-divider);
+  border-radius: var(--radius-card);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-heading);
+  cursor: pointer;
+  margin-top: var(--space-sm);
+}
+.m-sheet__notify-btn svg { width: 15px; height: 15px; fill: var(--text-heading); }
+.m-sheet__divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin: var(--space-md) 0;
+  color: var(--text-label);
+  font-size: 12px;
+}
+.m-sheet__divider::before,
+.m-sheet__divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-divider);
+}
+.m-sheet__alt-card {
+  background: var(--bg-premium);
+  border: 1.5px solid var(--primary-accent);
+  border-radius: var(--radius-card-lg);
+  padding: var(--space-md);
+}
+.m-sheet__alt-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--primary-dark);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-sm);
+}
+.m-sheet__alt-label svg { width: 12px; height: 12px; }
+.m-sheet__alt-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: var(--space-xs);
+}
+.m-sheet__alt-tag { margin-bottom: var(--space-sm); }
+.m-sheet__alt-tag .reassurance-tag { font-size: 11px; padding: 3px 8px; }
+.m-sheet__alt-cta {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--primary-accent);
+  color: var(--text-cta);
+  border: none;
+  border-radius: var(--radius-btn);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.m-sheet__alt-cta:active { background: var(--btn-hover-premium); }
+
+/* ============================================================
+   RESPONSIVE — MOBILE (max-width: 768px)
+   ============================================================ */
+@media (max-width: 768px) {
+  /* Header */
+  .top-bar__inner { justify-content: space-between; }
+  .top-bar__back { display: flex; }
+
+  /* Show mobile-only components */
+  .wow-banner { display: flex; }
+  .agency-selector { display: block; }
+  .m-gallery { display: block; }
+  .m-content { display: flex; }
+  .m-back-to-top { display: block; }
+  .m-bottom-bar { display: block; }
+
+  /* Hide desktop-only components */
+  .col-right { display: none; }
+  .gallery { display: none; }
+  .quick-view { display: none; }
+  .description { display: none; }
+  .characteristics { display: none; }
+  .diag-section { display: none; }
+  .agency-section { display: none; }
+  .footer { display: none; }
+
+  /* Adjust main layout */
+  .main { display: none; }
+
+  /* Body padding for bottom bar */
+  body { padding-bottom: var(--space-5xl); }
+}
+
+/* Desktop: ensure mobile components hidden */
+@media (min-width: 769px) {
+  .wow-banner { display: none; }
+  .agency-selector { display: none; }
+  .m-gallery { display: none; }
+  .m-content { display: none; }
+  .m-back-to-top { display: none; }
+  .m-bottom-bar { display: none; }
+  .m-overlay, .m-sheet { display: none; }
+  .top-bar__back { display: none; }
+}
+
+/* Compact layout for <=1080p screens (e.g. 14" laptop @125%) */
+@media (min-width: 769px) and (max-height: 820px) {
+  .main { padding: var(--space-md); gap: var(--space-md); }
+  .col-right { top: 60px; max-height: calc(100vh - 72px); }
+  .gallery__main { aspect-ratio: 16/8; }
+  .panel__badge-header { padding: 0 var(--space-md) var(--space-sm); }
+  .panel__badge { font-size: 10px; }
+  .agency-card { padding: var(--space-sm) var(--space-md); }
+  .agency-card.premium { padding: var(--space-md); }
+  .agency-card__header { gap: var(--space-sm); margin-bottom: var(--space-xs); }
+  .agency-card__avatar { width: 32px; height: 32px; }
+  .agency-card.premium .agency-card__avatar { width: 36px; height: 36px; }
+  .agency-card__name { font-size: 13px; }
+  .agency-card__partner-label { font-size: 10px; margin-top: 1px; }
+  .agency-card__data { gap: var(--space-sm); font-size: 12px; }
+  .agency-card__price { font-size: 14px; }
+  .agency-card.premium .agency-card__price { font-size: 16px; }
+  .agency-card__tags { margin-top: var(--space-sm); gap: var(--space-xs); }
+  .reassurance-tag { font-size: 11px; padding: 3px var(--space-sm); }
+  .agency-card__cta-zone { margin-top: var(--space-sm); padding-top: var(--space-sm); }
+  .btn-cta { padding: var(--space-sm) var(--space-md); font-size: 14px; }
+  .lead-form { padding: var(--space-sm); margin-top: var(--space-sm); }
+  .lead-form__field { padding: var(--space-sm); font-size: 13px; }
+  .quick-view, .description, .characteristics, .diag-section { padding: var(--space-md); }
+  .quick-view__title { font-size: 20px; }
+  .quick-view__price { font-size: 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     COMPONENT: TopBar
+     Desktop: Logo only. Mobile: Back button + Logo.
+     ============================================================ -->
+<header class="top-bar">
+  <div class="top-bar__inner">
+    <a href="search_results.html" class="top-bar__back" aria-label="Retour aux resultats">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="10 3 5 8 10 13"/></svg>
+      Resultats
+    </a>
+    <a href="landing.html"><img class="top-bar__logo" src="logo-trackerimmo.svg" alt="TrackerImmo"></a>
+  </div>
+</header>
+
+<!-- ============================================================
+     COMPONENT: WowBanner — MOBILE ONLY
+     Ephemeral banner showing agency count + price range.
+     ============================================================ -->
+<div class="wow-banner" id="wowBanner">
+  <svg class="wow-banner__icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5">
+    <circle cx="7.5" cy="7.5" r="5.5"/><path d="M16 16l-3.5-3.5"/>
+  </svg>
+  <span id="wowText"></span>
+</div>
+
+<!-- ============================================================
+     COMPONENT: AgencySelector — MOBILE ONLY
+     Trivago-style hierarchical selector.
+     ============================================================ -->
+<div class="agency-selector" id="agencySelector"></div>
+
+<!-- ============================================================
+     COMPONENT: MobileGallery — MOBILE ONLY
+     Edge-to-edge swipeable gallery.
+     ============================================================ -->
+<section class="m-gallery" id="mGallery">
+  <div class="m-gallery__track" id="mGalleryTrack"></div>
+  <span class="m-gallery__count" id="mGalleryCount"></span>
+  <div class="m-gallery__dots" id="mGalleryDots"></div>
+</section>
+
+<!-- ============================================================
+     COMPONENT: Mobile Content Sections — MOBILE ONLY
+     ============================================================ -->
+<div class="m-content">
+  <section class="m-quick" id="mQuick"></section>
+  <section class="m-desc" id="mDesc"></section>
+  <section class="m-chars" id="mChars"></section>
+  <section class="m-diag" id="mDiag"></section>
+  <section class="m-agency" id="mAgency"></section>
+</div>
+
+<!-- ============================================================
+     COMPONENT: BackToTop — MOBILE ONLY
+     ============================================================ -->
+<div class="m-back-to-top">
+  <a href="#" class="m-back-to-top__link" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });">
+    <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 11 9 6 14 11"/></svg>
+    Retour en haut
+  </a>
+</div>
+
+<!-- MAIN CONTENT — Split layout 62/38 desktop -->
+<main class="main">
+  <div class="col-left">
+
+    <!-- ============================================================
+         COMPONENT: Gallery (desktop)
+         Photo carousel with arrows, dots, counter.
+         ============================================================ -->
+    <section class="gallery" id="gallery">
+      <span class="gallery__count" id="galleryCount"></span>
+      <img class="gallery__main" id="galleryMain" src="" alt="Photo principale">
+      <button class="gallery__arrow gallery__arrow--prev" onclick="galleryPrev()" aria-label="Photo precedente">
+        <svg viewBox="0 0 18 18"><polyline points="11 4 6 9 11 14"/></svg>
+      </button>
+      <button class="gallery__arrow gallery__arrow--next" onclick="galleryNext()" aria-label="Photo suivante">
+        <svg viewBox="0 0 18 18"><polyline points="7 4 12 9 7 14"/></svg>
+      </button>
+      <div class="gallery__dots" id="galleryDots"></div>
+    </section>
+
+    <!-- ============================================================
+         COMPONENT: QuickView (desktop)
+         ============================================================ -->
+    <section class="quick-view" id="quickView">
+      <div class="quick-view__top">
+        <div class="quick-view__left">
+          <h1 class="quick-view__title" id="qvTitle"></h1>
+          <p class="quick-view__address">Biarritz 64200 — Quartier Beaurivage</p>
+        </div>
+        <div class="quick-view__right">
+          <p class="quick-view__price-label">Prix agence</p>
+          <p class="quick-view__price" id="qvPrice"></p>
+        </div>
+      </div>
+      <div class="quick-view__specs" id="qvSpecs"></div>
+    </section>
+
+    <!-- ============================================================
+         COMPONENT: Description (desktop)
+         ============================================================ -->
+    <section class="description" id="descSection">
+      <p class="description__label">Description</p>
+      <div class="description__text truncated" id="descText"></div>
+      <span class="description__toggle" id="descToggle">Lire la suite</span>
+    </section>
+
+    <!-- ============================================================
+         COMPONENT: Characteristics (desktop)
+         ============================================================ -->
+    <section class="characteristics" id="charSection">
+      <p class="characteristics__label">Caracteristiques</p>
+      <div class="characteristics__grid" id="charGrid"></div>
+    </section>
+
+    <!-- ============================================================
+         COMPONENT: DiagnosticDPE (desktop)
+         ============================================================ -->
+    <section class="diag-section" id="diagSection">
+      <p class="diag-section__label">Diagnostic de performance</p>
+      <div class="diag-container">
+        <div class="diag-block diag-block--dpe" id="diagDpe"></div>
+        <div class="diag-block diag-block--ges" id="diagGes"></div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         COMPONENT: AgencySection (desktop)
+         ============================================================ -->
+    <section class="agency-section" id="agencySection"></section>
+
+  </div>
+
+  <!-- ============================================================
+       COMPONENT: AgencyPanel (col-right, desktop only)
+       ============================================================ -->
+  <aside class="col-right">
+    <div class="panel">
+      <div class="panel__badge-header">
+        <span class="panel__badge">Trouve chez 4 agences</span>
+      </div>
+      <div class="panel__cards" id="panelCards"></div>
+    </div>
+  </aside>
+</main>
+
+<!-- ============================================================
+     COMPONENT: BottomBar — MOBILE ONLY
+     Fixed bottom. 2-col 50/50: agency info | CTA.
+     ============================================================ -->
+<div class="m-bottom-bar" id="mBottomBar">
+  <div class="m-bottom-bar__inner">
+    <div class="m-bottom-bar__agency">
+      <div class="m-bottom-bar__avatar" id="bbAvatar"></div>
+      <div class="m-bottom-bar__info">
+        <div class="m-bottom-bar__name" id="bbName"></div>
+        <div class="m-bottom-bar__price" id="bbPrice"></div>
+      </div>
+    </div>
+    <div class="m-bottom-bar__cta-wrap">
+      <button class="m-bottom-bar__cta" id="bbCta" onclick="openSheet()"></button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     COMPONENT: BottomSheet — MOBILE ONLY
+     ============================================================ -->
+<div class="m-overlay" id="mOverlay" onclick="closeSheet()" aria-hidden="true"></div>
+<div class="m-sheet" id="mSheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="m-sheet__handle"></div>
+  <div id="sheetContent"></div>
+</div>
+
+<script>
+// ============================================================
+// DATA MODEL
+// ============================================================
+
+const apartmentPhotos = [
+  'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&h=500&fit=crop',
+  'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=500&fit=crop',
+  'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&h=500&fit=crop',
+  'https://images.unsplash.com/photo-1560185893-a55cbc8c57e8?w=800&h=500&fit=crop',
+  'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800&h=500&fit=crop',
+  'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800&h=500&fit=crop',
+];
+const apartmentPhotos2 = [
+  'https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=800&h=500&fit=crop',
+  'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=500&fit=crop',
+  'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=800&h=500&fit=crop',
+  'https://images.unsplash.com/photo-1556020685-ae41e7d651fc?w=800&h=500&fit=crop',
+  'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=800&h=500&fit=crop',
+];
+const apartmentPhotos3 = [
+  'https://images.unsplash.com/photo-1554995207-c18c203602cb?w=800&h=500&fit=crop',
+  'https://images.unsplash.com/photo-1630699144867-37acec97df5a?w=800&h=500&fit=crop',
+  'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=800&h=500&fit=crop',
+  'https://images.unsplash.com/photo-1600121848594-d8644e57abab?w=800&h=500&fit=crop',
+];
+const apartmentPhotos4 = [
+  'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&h=500&fit=crop',
+  'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&h=500&fit=crop',
+  'https://images.unsplash.com/photo-1600573472550-8090b5e0745e?w=800&h=500&fit=crop',
+];
+
+const agencies = [
+  {
+    id: 0,
+    name: "Immobilier Prestige Biarritz",
+    short: "Prestige",
+    logo: '<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#0E4E57"/><text x="24" y="18" text-anchor="middle" font-family="Inter,sans-serif" font-size="7.5" font-weight="700" fill="#BACE27" letter-spacing="0.3">PRESTIGE</text><text x="24" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="600" fill="white">IMMOBILIER</text><rect x="12" y="34" width="24" height="1.2" rx="0.6" fill="#BACE27"/></svg>',
+    tier: "premium",
+    price: "229 000",
+    priceNum: 229000,
+    surface: "68 m\u00b2",
+    rooms: 3,
+    bedrooms: 3,
+    dpe: "B",
+    ges: "A",
+    dpeValue: "95 kWh/m\u00b2/an",
+    gesValue: "4 kgCO\u2082/m\u00b2/an",
+    photos: apartmentPhotos,
+    description: "Magnifique appartement T3 traversant situe dans le quartier prise de Beaurivage, a seulement quelques minutes a pied de la Grande Plage de Biarritz. Entierement renove avec des materiaux haut de gamme, cet appartement offre une luminosite exceptionnelle grace a sa double exposition est-ouest. La cuisine equipee s'ouvre sur un sejour spacieux de 32 m\u00b2 avec acces direct a un balcon offrant une vue degagee. Deux chambres confortables, une salle de bains moderne avec douche a l'italienne, et de nombreux rangements completent ce bien d'exception. Cave et place de parking en sous-sol incluses. Charges de copropriete maitrisees. Proche commerces, ecoles et transports.",
+    characteristics: {
+      "Type": "Appartement T3", "Surface": "68 m\u00b2", "Pieces": "3", "Chambres": "3",
+      "Salle de bains": "1", "Etage": "3\u00e8me / 5", "Balcon": "Oui \u2014 8 m\u00b2", "Cave": "Oui",
+      "Parking": "1 place (sous-sol)", "Chauffage": "Individuel gaz",
+      "Annee construction": "1975 (renove 2022)", "Charges": "180 \u20ac/mois"
+    },
+    tags: ["Visite virtuelle", "Dossier complet", "Reponse < 2h"],
+    agencyDesc: "Immobilier Prestige Biarritz accompagne ses clients dans leurs projets immobiliers haut de gamme sur la Cote Basque depuis 2005. Notre equipe de 12 conseillers certifies vous offre un service personnalise, de l'estimation a la remise des cles.",
+    address: "14 Avenue Edouard VII, 64200 Biarritz",
+    phone: "05 59 24 12 34",
+    email: "contact@prestige-biarritz.fr",
+    website: "www.prestige-biarritz.fr",
+    hours: "Lun-Ven 9h-19h, Sam 10h-17h",
+    listingsCount: 47,
+    rating: 4.8,
+    reviewsCount: 124
+  },
+  {
+    id: 1,
+    name: "Barnes Immobilier",
+    short: "Barnes",
+    logo: '<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#1A1A2E"/><text x="24" y="22" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700" fill="white" letter-spacing="1.5">BARNES</text><rect x="10" y="27" width="28" height="0.8" fill="#C9A96E"/><text x="24" y="36" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="300" fill="#C9A96E" letter-spacing="0.8">IMMOBILIER</text></svg>',
+    tier: "gratuit",
+    price: "225 000",
+    priceNum: 225000,
+    surface: "67 m\u00b2",
+    rooms: 3,
+    bedrooms: 2,
+    dpe: "B",
+    ges: "B",
+    dpeValue: "110 kWh/m\u00b2/an",
+    gesValue: "8 kgCO\u2082/m\u00b2/an",
+    photos: apartmentPhotos2,
+    description: "Appartement T3 lumineux au coeur du quartier Beaurivage. Sejour double de 28 m\u00b2, deux chambres, cuisine amenagee. Balcon avec vue degagee. Parking en sous-sol. Quartier calme et residentiel, a proximite de la plage et des commerces du centre-ville. Copropriete bien entretenue.",
+    characteristics: {
+      "Type": "Appartement T3", "Surface": "67 m\u00b2", "Pieces": "3", "Chambres": "2",
+      "Salle de bains": "1", "Etage": "3\u00e8me / 5", "Balcon": "Oui", "Parking": "1 place",
+      "Chauffage": "Individuel gaz", "Annee construction": "1975"
+    },
+    tags: [],
+    agencyDesc: "Agence immobiliere de prestige, Barnes Immobilier vous accompagne sur le marche biarrot avec discretion et expertise. Specialiste des biens de caractere.",
+    address: "3 Place Clemenceau, 64200 Biarritz",
+    phone: "05 59 22 88 00",
+    email: "biarritz@barnes-international.com",
+    website: "www.barnes-biarritz.com"
+  },
+  {
+    id: 2,
+    name: "Orpi Cote Basque",
+    short: "Orpi",
+    logo: '<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#E30613"/><text x="24" y="29" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="white" letter-spacing="1">ORPI</text></svg>',
+    tier: "scrape",
+    price: "219 000",
+    priceNum: 219000,
+    surface: "68 m\u00b2",
+    rooms: 3,
+    bedrooms: 2,
+    dpe: "C",
+    ges: "B",
+    dpeValue: "145 kWh/m\u00b2/an",
+    gesValue: "12 kgCO\u2082/m\u00b2/an",
+    photos: apartmentPhotos3,
+    description: "T3 Biarritz Beaurivage. 68 m\u00b2, 3 pieces, 2 chambres. Lumineux, balcon, parking. A proximite plage et commerces. DPE : C.",
+    characteristics: {
+      "Type": "Appartement T3", "Surface": "68 m\u00b2", "Pieces": "3", "Chambres": "2",
+      "Etage": "3\u00e8me", "Parking": "Oui", "Chauffage": "Gaz"
+    },
+    tags: [],
+    address: "8 Rue Gambetta, 64200 Biarritz"
+  },
+  {
+    id: 3,
+    name: "Laforet Biarritz",
+    short: "Laforet",
+    logo: '<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#FFD700"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#2D5016" letter-spacing="0.3">LAFORET</text><path d="M20 36 L24 25 L28 36" stroke="#2D5016" stroke-width="1.5" fill="none"/><path d="M18 36 L24 28 L30 36" stroke="#2D5016" stroke-width="1.2" fill="none" opacity="0.5"/></svg>',
+    tier: "scrape",
+    price: "215 000",
+    priceNum: 215000,
+    surface: "65 m\u00b2",
+    rooms: 3,
+    bedrooms: 2,
+    dpe: "B",
+    ges: "A",
+    dpeValue: "98 kWh/m\u00b2/an",
+    gesValue: "5 kgCO\u2082/m\u00b2/an",
+    photos: apartmentPhotos4,
+    description: "Appartement 3 pieces a Biarritz secteur Beaurivage. Surface 65 m\u00b2, 2 chambres, sejour avec balcon. Place de stationnement. Proximite plage.",
+    characteristics: {
+      "Type": "Appartement T3", "Surface": "65 m\u00b2", "Pieces": "3", "Chambres": "2",
+      "Parking": "Oui"
+    },
+    tags: [],
+    address: "22 Avenue de la Marne, 64200 Biarritz"
+  }
+];
+
+let selectedIndex = -1;
+let currentPhotoIndex = 0;
+let mobileCurrentPhoto = 0;
+let touchStartX = 0;
+let touchDeltaX = 0;
+let isSwiping = false;
+
+// ============================================================
+// HELPERS
+// ============================================================
+function getPremiumAgency() { return agencies.find(a => a.tier === 'premium'); }
+function priceRange() {
+  const prices = agencies.map(a => a.priceNum);
+  return { min: Math.min(...prices), max: Math.max(...prices) };
+}
+function formatPrice(n) { return n.toLocaleString('fr-FR'); }
+function ctaBtnClass(ag) {
+  if (ag.tier === 'premium') return 'btn-cta btn-cta-premium';
+  if (ag.tier === 'gratuit') return 'btn-cta btn-cta-gratuit';
+  return 'btn-cta btn-cta-scrape';
+}
+function ctaClassShort(ag) {
+  if (ag.tier === 'premium') return 'btn-cta-premium';
+  if (ag.tier === 'gratuit') return 'btn-cta-gratuit';
+  return 'btn-cta-scrape';
+}
+
+// SVG icon helpers
+const svgIcons = {
+  surface: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="1"/><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>',
+  bed: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="7" width="14" height="7" rx="1"/><path d="M3 7V4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v3"/></svg>',
+  rooms: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="2"/><line x1="2" y1="6" x2="14" y2="6"/></svg>',
+  pin: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M13 6.67C13 11 8 14.5 8 14.5S3 11 3 6.67a5 5 0 0 1 10 0z"/><circle cx="8" cy="6.67" r="1.8"/></svg>',
+  phone: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M14.5 11.3v2a1.3 1.3 0 0 1-1.4 1.3A13 13 0 0 1 1.4 2.9 1.3 1.3 0 0 1 2.7 1.5h2a1.3 1.3 0 0 1 1.3 1l.5 2.2a1.3 1.3 0 0 1-.4 1.3l-.9.9a10.5 10.5 0 0 0 4 4l.9-.9a1.3 1.3 0 0 1 1.3-.4l2.2.5a1.3 1.3 0 0 1 1 1.3z"/></svg>',
+  mail: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="1.5" y="3" width="13" height="10" rx="1.5"/><path d="M1.5 3l6.5 5.5L14.5 3"/></svg>',
+  globe: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8" cy="8" r="6.5"/><path d="M2 8h12M8 1.5a10.5 10.5 0 0 1 2.7 13M8 1.5a10.5 10.5 0 0 0-2.7 13"/></svg>',
+  clock: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8" cy="8" r="6.5"/><path d="M8 4v4l2.5 1.5"/></svg>',
+  grid: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="2" y="2" width="12" height="12" rx="1.5"/><path d="M2 6h12M6 2v12"/></svg>',
+  checkAnis: '<svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" fill="#BACE27"/><path d="M4 7L6 9L10 5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  checkAnisLg: '<svg viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" fill="#BACE27"/><path d="M5.5 9L8 11.5L12.5 6.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  checkAnisSm: '<svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.5" fill="#BACE27"/><path d="M3.5 6L5.5 8L8.5 4.5" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  checkAnisXs: '<svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4.5" fill="#BACE27"/><path d="M3 5L4.5 6.5L7 3.5" stroke="white" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  partnerBadge: '<svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.5" fill="#BACE27" stroke="#8FA31C"/><path d="M3.5 6L5.5 8L8.5 4.5" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  infoCircle: '<svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="6"/><text x="7" y="10.5" text-anchor="middle" font-size="10" font-weight="700" fill="white" font-family="Inter">i</text></svg>',
+  bell: '<svg viewBox="0 0 16 16"><path d="M8 1.5a4 4 0 0 0-4 4v3l-1.3 1.95a.5.5 0 0 0 .42.77h9.76a.5.5 0 0 0 .42-.77L12 8.5v-3a4 4 0 0 0-4-4zM6.5 12.5a1.5 1.5 0 0 0 3 0"/></svg>',
+  star: (filled) => `<svg viewBox="0 0 16 16" fill="${filled ? 'currentColor' : 'var(--color-star-empty)'}"><path d="M8 1.12l1.95 3.95 4.36.64-3.16 3.08.75 4.34L8 10.94l-3.9 2.19.75-4.34L1.69 5.71l4.36-.64L8 1.12z"/></svg>`,
+  phoneCall: '<svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+};
+
+function starsHTML(rating) {
+  return Array(5).fill(0).map((_, i) => svgIcons.star(i < Math.round(rating))).join('');
+}
+
+// ============================================================
+// DESKTOP GALLERY CAROUSEL
+// ============================================================
+function renderGallery(ag) {
+  currentPhotoIndex = 0;
+  const main = document.getElementById('galleryMain');
+  main.src = ag.photos[0];
+  main.alt = `Photo \u2014 ${ag.name}`;
+  document.getElementById('galleryCount').textContent = `1 / ${ag.photos.length}`;
+
+  const dotsContainer = document.getElementById('galleryDots');
+  dotsContainer.innerHTML = '';
+  for (let i = 0; i < ag.photos.length; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'gallery__dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => goToPhoto(i);
+    dotsContainer.appendChild(dot);
+  }
+}
+
+function goToPhoto(index) {
+  const ag = agencies[selectedIndex];
+  if (index < 0 || index >= ag.photos.length) return;
+  currentPhotoIndex = index;
+  document.getElementById('galleryMain').src = ag.photos[index];
+  document.getElementById('galleryCount').textContent = `${index + 1} / ${ag.photos.length}`;
+  document.querySelectorAll('.gallery__dot').forEach((d, i) => d.classList.toggle('active', i === index));
+}
+
+function galleryPrev() {
+  const ag = agencies[selectedIndex];
+  goToPhoto((currentPhotoIndex - 1 + ag.photos.length) % ag.photos.length);
+}
+function galleryNext() {
+  const ag = agencies[selectedIndex];
+  goToPhoto((currentPhotoIndex + 1) % ag.photos.length);
+}
+
+// ============================================================
+// MOBILE GALLERY — swipeable
+// ============================================================
+function renderMobileGallery(ag) {
+  mobileCurrentPhoto = 0;
+  const track = document.getElementById('mGalleryTrack');
+  track.innerHTML = ag.photos.map(p => `<div class="m-gallery__slide"><img src="${p}" alt="Photo ${ag.name}" draggable="false"></div>`).join('');
+  track.style.transform = 'translateX(0)';
+
+  document.getElementById('mGalleryCount').textContent = `1 / ${ag.photos.length}`;
+
+  const dotsEl = document.getElementById('mGalleryDots');
+  dotsEl.innerHTML = '';
+  const maxDots = Math.min(ag.photos.length, 7);
+  for (let i = 0; i < maxDots; i++) {
+    const dot = document.createElement('span');
+    dot.className = 'm-gallery__dot' + (i === 0 ? ' active' : '');
+    dotsEl.appendChild(dot);
+  }
+}
+
+function mobileGoToPhoto(index) {
+  const ag = agencies[selectedIndex];
+  if (index < 0 || index >= ag.photos.length) return;
+  mobileCurrentPhoto = index;
+  const track = document.getElementById('mGalleryTrack');
+  track.style.transition = 'transform 0.3s ease';
+  track.style.transform = `translateX(-${index * 100}%)`;
+  document.getElementById('mGalleryCount').textContent = `${index + 1} / ${ag.photos.length}`;
+  document.querySelectorAll('.m-gallery__dot').forEach((d, i) => d.classList.toggle('active', i === index));
+}
+
+// Touch swipe
+const mGalleryEl = document.getElementById('mGallery');
+mGalleryEl.addEventListener('touchstart', (e) => {
+  touchStartX = e.touches[0].clientX;
+  isSwiping = true;
+  document.getElementById('mGalleryTrack').style.transition = 'none';
+}, { passive: true });
+
+mGalleryEl.addEventListener('touchmove', (e) => {
+  if (!isSwiping) return;
+  touchDeltaX = e.touches[0].clientX - touchStartX;
+  const offset = -(mobileCurrentPhoto * 100) + (touchDeltaX / mGalleryEl.offsetWidth * 100);
+  document.getElementById('mGalleryTrack').style.transform = `translateX(${offset}%)`;
+}, { passive: true });
+
+mGalleryEl.addEventListener('touchend', () => {
+  if (!isSwiping) return;
+  isSwiping = false;
+  const threshold = mGalleryEl.offsetWidth * 0.2;
+  const ag = agencies[selectedIndex];
+  if (touchDeltaX < -threshold && mobileCurrentPhoto < ag.photos.length - 1) {
+    mobileGoToPhoto(mobileCurrentPhoto + 1);
+  } else if (touchDeltaX > threshold && mobileCurrentPhoto > 0) {
+    mobileGoToPhoto(mobileCurrentPhoto - 1);
+  } else {
+    mobileGoToPhoto(mobileCurrentPhoto);
+  }
+  touchDeltaX = 0;
+});
+
+// ============================================================
+// DESKTOP RENDER FUNCTIONS
+// ============================================================
+function renderQuickView(ag) {
+  document.getElementById('qvTitle').textContent = 'Appartement T3 \u2014 Beaurivage';
+  document.getElementById('qvPrice').textContent = `${ag.price} \u20ac`;
+  document.getElementById('qvSpecs').innerHTML = `
+    <span class="quick-view__spec">${svgIcons.surface} ${ag.surface}</span>
+    <span class="quick-view__spec">${svgIcons.bed} ${ag.bedrooms} chambre${ag.bedrooms > 1 ? 's' : ''}</span>
+    <span class="quick-view__spec">${svgIcons.rooms} ${ag.rooms} pieces</span>
+    <span class="badge-dpe badge-dpe--${ag.dpe}">DPE ${ag.dpe}</span>`;
+}
+
+function renderDescription(ag) {
+  document.getElementById('descText').textContent = ag.description;
+  document.getElementById('descText').classList.add('truncated');
+  document.getElementById('descToggle').textContent = 'Lire la suite';
+}
+
+function renderCharacteristics(ag) {
+  const grid = document.getElementById('charGrid');
+  grid.innerHTML = Object.entries(ag.characteristics).map(([key, val]) =>
+    `<div class="char-item"><span class="char-item__key">${key}</span><span class="char-item__val">${val}</span></div>`
+  ).join('');
+}
+
+function renderDiagnostic(ag) {
+  const grades = ['A','B','C','D','E','F','G'];
+  function renderScale(containerId, grade, value, title, subtitle) {
+    const el = document.getElementById(containerId);
+    let html = `<p class="diag-block__title">${title}</p><p class="diag-block__subtitle">${subtitle}</p><div class="diag-scale">`;
+    grades.forEach(g => {
+      const isActive = g === grade;
+      html += `<div class="diag-bar ${isActive ? 'active' : ''}" data-grade="${g}">
+        <div class="diag-bar__fill">${g}</div>
+        ${isActive ? `<span class="diag-bar__marker">${value}</span>` : ''}
+      </div>`;
+    });
+    el.innerHTML = html + '</div>';
+  }
+  renderScale('diagDpe', ag.dpe, ag.dpeValue, 'DPE \u2014 Consommation energetique', 'Consommation conventionnelle en energie primaire');
+  renderScale('diagGes', ag.ges, ag.gesValue, 'GES \u2014 Emissions de gaz', 'Emissions de gaz a effet de serre');
+}
+
+function renderAgencySection(ag) {
+  const section = document.getElementById('agencySection');
+  let html = '';
+  if (ag.tier === 'premium') {
+    html = `
+      <p class="agency-section__label">A propos de l'agence</p>
+      <div class="agency-section__header">
+        <div class="agency-section__logo">${ag.logo}</div>
+        <div>
+          <div class="agency-section__title">${ag.name}</div>
+          <div class="agency-section__verified">${svgIcons.checkAnis} Certifie TrackerImmo</div>
+        </div>
+      </div>
+      <div class="agency-section__tags">${ag.tags.map(t => `<span class="reassurance-tag">${t}</span>`).join('')}</div>
+      <p class="agency-section__desc">${ag.agencyDesc}</p>
+      <div class="agency-section__grid">
+        <div class="agency-section__grid-item">${svgIcons.pin}<div><span class="agency-section__grid-label">Adresse</span>${ag.address}</div></div>
+        <div class="agency-section__grid-item">${svgIcons.phone}<div><span class="agency-section__grid-label">Telephone</span>${ag.phone}</div></div>
+        <div class="agency-section__grid-item">${svgIcons.mail}<div><span class="agency-section__grid-label">Email</span>${ag.email}</div></div>
+        <div class="agency-section__grid-item">${svgIcons.globe}<div><span class="agency-section__grid-label">Site web</span>${ag.website}</div></div>
+        <div class="agency-section__grid-item">${svgIcons.clock}<div><span class="agency-section__grid-label">Horaires</span>${ag.hours}</div></div>
+        <div class="agency-section__grid-item">${svgIcons.grid}<div><span class="agency-section__grid-label">Annonces actives</span>${ag.listingsCount} biens</div></div>
+      </div>
+      <div class="agency-section__rating">
+        <div class="agency-section__stars">${starsHTML(ag.rating)}</div>
+        <span class="agency-section__rating-text">${ag.rating}/5</span>
+        <span class="agency-section__rating-count">(${ag.reviewsCount} avis)</span>
+      </div>`;
+  } else if (ag.tier === 'gratuit') {
+    html = `
+      <p class="agency-section__label">A propos de l'agence</p>
+      <div class="agency-section__header">
+        <div class="agency-section__logo">${ag.logo}</div>
+        <div><div class="agency-section__title">${ag.name}</div></div>
+      </div>
+      <p class="agency-section__desc">${ag.agencyDesc}</p>
+      <div class="agency-section__grid">
+        <div class="agency-section__grid-item">${svgIcons.pin}<div><span class="agency-section__grid-label">Adresse</span>${ag.address}</div></div>
+        <div class="agency-section__grid-item">${svgIcons.phone}<div><span class="agency-section__grid-label">Telephone</span><span class="agency-section__phone-discrete">${ag.phone}</span></div></div>
+      </div>`;
+  } else {
+    html = `
+      <p class="agency-section__label">A propos de l'agence</p>
+      <div class="agency-section__header-minimal">
+        <div class="agency-section__title agency-section__title--sm">${ag.name}</div>
+      </div>
+      <div class="agency-section__minimal">${svgIcons.pin} ${ag.address}</div>`;
+  }
+  section.innerHTML = html;
+}
+
+// ============================================================
+// DESKTOP PANEL CARDS
+// ============================================================
+function renderPanelCards() {
+  const container = document.getElementById('panelCards');
+  container.innerHTML = '';
+  const premium = getPremiumAgency();
+
+  agencies.forEach((ag, i) => {
+    const isActive = i === selectedIndex;
+    const isPremium = ag.tier === 'premium';
+
+    let cardHTML = `
+      <div class="agency-card ${isPremium ? 'premium' : ''} ${isActive ? 'active' : ''}" onclick="selectAgency(${i})" data-index="${i}">
+        <div class="agency-card__header">
+          <div class="agency-card__avatar">${ag.logo}</div>
+          <div>
+            ${ag.tier !== 'scrape' && isActive
+              ? `<a class="agency-card__name agency-card__name--link" href="#agencySection" onclick="event.stopPropagation(); document.getElementById('agencySection').scrollIntoView({behavior:'smooth'})">${ag.name}</a>`
+              : `<span class="agency-card__name">${ag.name}</span>`}`;
+
+    if (isPremium) {
+      cardHTML += `<div class="agency-card__partner-label">${svgIcons.partnerBadge} Partenaire verifie</div>`;
+    }
+
+    cardHTML += `
+          </div>
+        </div>
+        <div class="agency-card__data">
+          <span class="agency-card__price">${ag.price} &euro;</span>
+          <span>${ag.surface}</span>
+          <span>${ag.photos.length} photos</span>
+        </div>`;
+
+    if (isPremium && ag.tags.length) {
+      cardHTML += `<div class="agency-card__tags">${ag.tags.map(t => `<span class="reassurance-tag">${t}</span>`).join('')}</div>`;
+    }
+
+    cardHTML += `<div class="agency-card__cta-zone">`;
+
+    if (ag.tier === 'premium') {
+      cardHTML += `
+        <button class="btn-cta btn-cta-premium" onclick="event.stopPropagation(); toggleLeadForm(${i})">Contacter l'agence &rarr;</button>
+        <span class="agency-card__phone-link" onclick="event.stopPropagation(); this.textContent='06 12 34 56 78'">Afficher le numero</span>
+        <div class="lead-form" id="leadForm${i}">
+          <input class="lead-form__field" placeholder="Votre nom" />
+          <input class="lead-form__field" placeholder="Votre email" type="email" />
+          <input class="lead-form__field" placeholder="Votre telephone" type="tel" />
+          <button class="lead-form__submit btn-cta btn-cta-premium" onclick="event.stopPropagation()">Envoyer ma demande</button>
+          <p class="lead-form__reassurance">&#128274; Transmis a ${ag.name} uniquement.</p>
+        </div>`;
+    } else if (ag.tier === 'gratuit') {
+      cardHTML += `
+        <button class="btn-cta btn-cta-gratuit" onclick="event.stopPropagation(); toggleLeadForm(${i})">Contacter l'agence &rarr;</button>
+        <div class="lead-form" id="leadForm${i}">
+          <input class="lead-form__field" placeholder="Votre nom" />
+          <input class="lead-form__field" placeholder="Votre email" type="email" />
+          <input class="lead-form__field" placeholder="Votre telephone" type="tel" />
+          <button class="lead-form__submit btn-cta btn-cta-gratuit" onclick="event.stopPropagation()">Envoyer ma demande</button>
+          <p class="lead-form__reassurance">&#128274; Transmis a ${ag.name} uniquement.</p>
+        </div>`;
+    } else {
+      cardHTML += `
+        <button class="btn-cta btn-cta-scrape" onclick="event.stopPropagation(); toggleScrapeExpand(${i})">Contacter l'agence &rarr;</button>
+        <div class="scrape-expand" id="scrapeExpand${i}">
+          <div class="scrape-expand__notice">
+            <div class="scrape-expand__notice-icon">${svgIcons.infoCircle}</div>
+            <div class="scrape-expand__notice-text">${ag.name} n'est pas encore partenaire TrackerImmo. Ses informations n'ont pas ete verifiees.</div>
+          </div>
+          <input class="scrape-expand__email-field" placeholder="Votre adresse email" type="email" />
+          <button class="scrape-expand__notify-btn" onclick="event.stopPropagation()">Me pr&eacute;venir quand l'agence rejoint TrackerImmo ${svgIcons.bell}</button>
+          ${premium ? `
+          <div class="scrape-expand__alt-card">
+            <div class="scrape-expand__alt-header">
+              <span class="scrape-expand__alt-label">${svgIcons.checkAnis} Autre option</span>
+            </div>
+            <div class="scrape-expand__alt-name">${premium.name} ${svgIcons.checkAnisLg}</div>
+            <div class="scrape-expand__alt-tag"><span class="reassurance-tag">R&eacute;ponse &lt; 2h</span></div>
+            <button class="scrape-expand__alt-cta" onclick="event.stopPropagation(); selectAgency(${premium.id}); setTimeout(() => toggleLeadForm(${premium.id}), 100)">Voir l'offre &rarr;</button>
+          </div>` : ''}
+        </div>`;
+    }
+
+    cardHTML += `</div></div>`;
+    container.innerHTML += cardHTML;
+  });
+}
+
+// ============================================================
+// MOBILE RENDER FUNCTIONS
+// ============================================================
+function renderWow() {
+  const el = document.getElementById('wowText');
+  if (agencies.length > 1) {
+    const r = priceRange();
+    el.innerHTML = `Ce bien est propose par <span class="wow-banner__count">${agencies.length} agences</span> \u00b7 <span class="wow-banner__range">${formatPrice(r.min)} \u20ac a ${formatPrice(r.max)} \u20ac</span>`;
+  } else {
+    el.innerHTML = `Commercialise par <span class="wow-banner__count">${agencies[0].name}</span>`;
+  }
+}
+
+function renderSelector() {
+  const container = document.getElementById('agencySelector');
+  const premium = getPremiumAgency();
+  const others = agencies.filter(a => a.tier !== 'premium');
+  const isMulti = agencies.length > 1;
+
+  if (!isMulti) {
+    const ag = agencies[0];
+    container.innerHTML = `
+      <div class="mono-banner" style="padding:0; border:none;">
+        <div class="mono-banner__avatar">${ag.logo}</div>
+        <span class="mono-banner__text">Commercialise par <span class="mono-banner__name">${ag.name}</span></span>
+      </div>`;
+    return;
+  }
+
+  // Preserve accordion state
+  const prevToggle = document.getElementById('othersToggle');
+  const isOthersOpen = prevToggle ? prevToggle.classList.contains('open') : true;
+
+  let html = '';
+
+  if (premium) {
+    const isPremActive = premium.id === selectedIndex;
+    html += `
+      <div class="selector-premium ${isPremActive ? 'active' : ''}" onclick="selectAgency(${premium.id})">
+        <div class="selector-premium__header">
+          <div class="selector-premium__avatar">${premium.logo}</div>
+          <div class="selector-premium__info">
+            <div class="selector-premium__name">${premium.name} ${svgIcons.checkAnis}</div>
+            <div class="selector-premium__label">${svgIcons.checkAnisXs} Partenaire verifie</div>
+          </div>
+        </div>
+        <div class="selector-premium__data">
+          <span class="selector-premium__price">${premium.price} \u20ac</span>
+          <span class="selector-premium__meta">${premium.surface} \u00b7 ${premium.photos.length} photos</span>
+        </div>
+        ${premium.tags.length ? `<div class="selector-premium__tags">${premium.tags.map(t => `<span class="reassurance-tag">${t}</span>`).join('')}</div>` : ''}
+      </div>`;
+  }
+
+  if (others.length) {
+    html += `
+      <div class="selector-others">
+        <div class="selector-others__toggle ${isOthersOpen ? 'open' : ''}" id="othersToggle" onclick="toggleOthers()">
+          <span class="selector-others__toggle-label">${others.length} autre${others.length > 1 ? 's' : ''} agence${others.length > 1 ? 's' : ''}</span>
+          <svg class="selector-others__toggle-chevron" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 9 12 14 7"/></svg>
+        </div>
+        <div class="selector-others__list ${isOthersOpen ? 'open' : ''}" id="othersList">
+          ${others.map(ag => `
+            <div class="selector-row ${ag.id === selectedIndex ? 'active' : ''}" onclick="selectAgency(${ag.id})">
+              <div class="selector-row__avatar">${ag.logo}</div>
+              <span class="selector-row__name">${ag.name}</span>
+              <span class="selector-row__photos">${ag.photos.length} photos</span>
+              <span class="selector-row__price">${ag.price} \u20ac</span>
+            </div>`).join('')}
+        </div>
+      </div>`;
+  }
+
+  container.innerHTML = html;
+}
+
+function toggleOthers() {
+  document.getElementById('othersToggle').classList.toggle('open');
+  document.getElementById('othersList').classList.toggle('open');
+}
+
+function renderMobileQuickView(ag) {
+  document.getElementById('mQuick').innerHTML = `
+    <h1 class="m-quick__title">Appartement T3 \u2014 Beaurivage</h1>
+    <p class="m-quick__address">Biarritz 64200 \u2014 Quartier Beaurivage</p>
+    <div class="m-quick__price-row">
+      <span class="m-quick__price-label">Prix agence</span>
+      <span class="m-quick__price">${ag.price} \u20ac</span>
+    </div>
+    <div class="m-quick__specs">
+      <span class="m-quick__spec">${svgIcons.surface} ${ag.surface}</span>
+      <span class="m-quick__spec">${svgIcons.bed} ${ag.bedrooms} chambre${ag.bedrooms > 1 ? 's' : ''}</span>
+      <span class="m-quick__spec">${svgIcons.rooms} ${ag.rooms} pieces</span>
+      <span class="badge-dpe badge-dpe--${ag.dpe}">DPE ${ag.dpe}</span>
+    </div>`;
+}
+
+function renderMobileDescription(ag) {
+  document.getElementById('mDesc').innerHTML = `
+    <p class="m-desc__label">Description</p>
+    <div class="m-desc__text truncated" id="mDescText">${ag.description}</div>
+    <span class="m-desc__toggle" id="mDescToggle">Lire la suite</span>`;
+  document.getElementById('mDescToggle').addEventListener('click', function() {
+    const text = document.getElementById('mDescText');
+    text.classList.toggle('truncated');
+    this.textContent = text.classList.contains('truncated') ? 'Lire la suite' : 'Reduire';
+  });
+}
+
+function renderMobileCharacteristics(ag) {
+  const items = Object.entries(ag.characteristics).map(([k, v]) =>
+    `<div class="m-char-item"><span class="m-char-item__key">${k}</span><span class="m-char-item__val">${v}</span></div>`
+  ).join('');
+  document.getElementById('mChars').innerHTML = `
+    <p class="m-chars__label">Caracteristiques</p>
+    <div class="m-chars__grid">${items}</div>`;
+}
+
+function renderMobileDiagnostic(ag) {
+  const grades = ['A','B','C','D','E','F','G'];
+  function scale(grade, value, title, subtitle, cssClass) {
+    let html = `<div class="m-diag-block ${cssClass}"><p class="m-diag-block__title">${title}</p><p class="m-diag-block__subtitle">${subtitle}</p><div class="m-diag-scale">`;
+    grades.forEach(g => {
+      const active = g === grade;
+      html += `<div class="m-diag-bar ${active ? 'active' : ''}" data-grade="${g}"><div class="m-diag-bar__fill">${g}</div>${active ? `<span class="m-diag-bar__marker">${value}</span>` : ''}</div>`;
+    });
+    return html + '</div></div>';
+  }
+  document.getElementById('mDiag').innerHTML = `
+    <p class="m-diag__label">Diagnostic de performance</p>
+    <div class="m-diag__container">
+      ${scale(ag.dpe, ag.dpeValue, 'DPE \u2014 Consommation energetique', 'Consommation conventionnelle', '')}
+      ${scale(ag.ges, ag.gesValue, 'GES \u2014 Emissions de gaz', 'Emissions de gaz a effet de serre', 'm-diag-block--ges')}
+    </div>`;
+}
+
+function renderMobileAgencySection(ag) {
+  const section = document.getElementById('mAgency');
+  let html = '<p class="m-agency__label">A propos de l\'agence</p>';
+
+  if (ag.tier === 'premium') {
+    html += `
+      <div class="m-agency__header">
+        <div class="m-agency__logo">${ag.logo}</div>
+        <div>
+          <div class="m-agency__title">${ag.name}</div>
+          <div class="m-agency__verified">${svgIcons.checkAnisSm} Certifie TrackerImmo</div>
+        </div>
+      </div>
+      <div class="m-agency__tags">${ag.tags.map(t => `<span class="reassurance-tag">${t}</span>`).join('')}</div>
+      <p class="m-agency__desc">${ag.agencyDesc}</p>
+      <div class="m-agency__grid">
+        <div class="m-agency__grid-item">${svgIcons.pin}<div><span class="m-agency__grid-label">Adresse</span>${ag.address}</div></div>
+        <div class="m-agency__grid-item">${svgIcons.phone}<div><span class="m-agency__grid-label">Telephone</span>${ag.phone}</div></div>
+        <div class="m-agency__grid-item">${svgIcons.mail}<div><span class="m-agency__grid-label">Email</span>${ag.email}</div></div>
+        <div class="m-agency__grid-item">${svgIcons.globe}<div><span class="m-agency__grid-label">Site web</span>${ag.website}</div></div>
+        <div class="m-agency__grid-item">${svgIcons.clock}<div><span class="m-agency__grid-label">Horaires</span>${ag.hours}</div></div>
+      </div>
+      <div class="m-agency__rating">
+        <div class="m-agency__stars">${starsHTML(ag.rating)}</div>
+        <span class="m-agency__rating-text">${ag.rating}/5</span>
+        <span class="m-agency__rating-count">(${ag.reviewsCount} avis)</span>
+      </div>`;
+  } else if (ag.tier === 'gratuit') {
+    html += `
+      <div class="m-agency__header">
+        <div class="m-agency__logo">${ag.logo}</div>
+        <div><div class="m-agency__title">${ag.name}</div></div>
+      </div>
+      <p class="m-agency__desc">${ag.agencyDesc}</p>
+      <div class="m-agency__grid">
+        <div class="m-agency__grid-item">${svgIcons.pin}<div><span class="m-agency__grid-label">Adresse</span>${ag.address}</div></div>
+        <div class="m-agency__grid-item">${svgIcons.phone}<div><span class="m-agency__grid-label">Telephone</span>${ag.phone}</div></div>
+      </div>`;
+  } else {
+    html += `
+      <div class="m-agency__header" style="margin-bottom:4px;">
+        <div><div class="m-agency__title m-agency__title--sm">${ag.name}</div></div>
+      </div>
+      <div class="m-agency__minimal">${svgIcons.pin} ${ag.address}</div>`;
+  }
+
+  section.innerHTML = html;
+}
+
+// ============================================================
+// MOBILE BOTTOM BAR
+// ============================================================
+function renderMobileBottomBar(ag) {
+  document.getElementById('bbAvatar').innerHTML = ag.logo;
+  const nameEl = document.getElementById('bbName');
+  nameEl.textContent = ag.name;
+  nameEl.onclick = () => document.getElementById('mAgency').scrollIntoView({ behavior: 'smooth' });
+  nameEl.style.cursor = 'pointer';
+  document.getElementById('bbPrice').textContent = `${ag.price} \u20ac`;
+  const btn = document.getElementById('bbCta');
+  btn.textContent = 'Contacter l\u2019agence';
+  btn.className = 'm-bottom-bar__cta ' + ctaClassShort(ag);
+}
+
+// ============================================================
+// MOBILE BOTTOM SHEET
+// ============================================================
+function openSheet() {
+  const ag = agencies[selectedIndex];
+  const premium = getPremiumAgency();
+  document.getElementById('mOverlay').classList.add('open');
+  document.getElementById('mSheet').classList.add('open');
+
+  const content = document.getElementById('sheetContent');
+
+  if (ag.tier === 'scrape' && premium && premium.id !== ag.id) {
+    content.innerHTML = `
+      <h3 class="m-sheet__title" id="sheetTitle">Contacter ${ag.name}</h3>
+      <p class="m-sheet__subtitle">${ag.price} \u20ac \u2014 ${ag.surface}</p>
+      <div class="m-sheet__notice">
+        <div class="m-sheet__notice-icon"><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="var(--color-warning)"/><text x="7" y="10.5" text-anchor="middle" font-size="10" font-weight="700" fill="white" font-family="Inter">i</text></svg></div>
+        <div class="m-sheet__notice-text">${ag.name} n'est pas encore partenaire TrackerImmo. Ses informations n'ont pas ete verifiees.</div>
+      </div>
+      <div class="m-sheet__fields">
+        <input class="m-sheet__field" placeholder="Votre adresse email" type="email" />
+        <button class="m-sheet__notify-btn">Me prevenir quand ${ag.short} rejoint TrackerImmo ${svgIcons.bell}</button>
+      </div>
+      <div class="m-sheet__divider">ou</div>
+      <div class="m-sheet__alt-card">
+        <div class="m-sheet__alt-label">${svgIcons.checkAnisSm} Partenaire verifie</div>
+        <div class="m-sheet__alt-name">${premium.name}</div>
+        <div class="m-sheet__alt-tag"><span class="reassurance-tag">Reponse &lt; 2h</span></div>
+        <button class="m-sheet__alt-cta" onclick="closeSheet(); selectAgency(${premium.id}); setTimeout(openSheet, 200);">Voir l'offre ${premium.short} \u2192</button>
+      </div>`;
+  } else if (ag.tier === 'scrape') {
+    content.innerHTML = `
+      <h3 class="m-sheet__title" id="sheetTitle">Contacter ${ag.name}</h3>
+      <p class="m-sheet__subtitle">${ag.price} \u20ac \u2014 ${ag.surface}</p>
+      <div class="m-sheet__fields">
+        <input class="m-sheet__field" placeholder="Votre nom" />
+        <input class="m-sheet__field" placeholder="Votre email" type="email" />
+        <input class="m-sheet__field" placeholder="Votre telephone" type="tel" />
+        <button class="m-sheet__submit ${ctaClassShort(ag)}">Envoyer ma demande</button>
+      </div>
+      <p class="m-sheet__reassurance">\uD83D\uDD12 Transmis a ${ag.name} uniquement.</p>`;
+  } else {
+    const phoneBtn = ag.tier === 'premium' && ag.phone
+      ? `<a href="tel:${ag.phone.replace(/\s/g,'')}" class="m-sheet__call" aria-label="Appeler ${ag.name}">${svgIcons.phoneCall}</a>`
+      : '';
+    content.innerHTML = `
+      <h3 class="m-sheet__title" id="sheetTitle">Contacter ${ag.name}</h3>
+      <p class="m-sheet__subtitle">${ag.price} \u20ac \u2014 ${ag.surface}</p>
+      <div class="m-sheet__fields">
+        <input class="m-sheet__field" placeholder="Votre nom" />
+        <input class="m-sheet__field" placeholder="Votre email" type="email" />
+        <input class="m-sheet__field" placeholder="Votre telephone" type="tel" />
+        <div class="m-sheet__actions">
+          <button class="m-sheet__submit ${ctaClassShort(ag)}">Envoyer ma demande</button>
+          ${phoneBtn}
+        </div>
+      </div>
+      <p class="m-sheet__reassurance">\uD83D\uDD12 Transmis a ${ag.name} uniquement.</p>`;
+  }
+}
+
+function closeSheet() {
+  document.getElementById('mOverlay').classList.remove('open');
+  document.getElementById('mSheet').classList.remove('open');
+}
+
+// ============================================================
+// INTERACTIONS
+// ============================================================
+function selectAgency(index) {
+  if (index === selectedIndex) return;
+  selectedIndex = index;
+  const ag = agencies[index];
+
+  // Desktop
+  renderGallery(ag);
+  renderQuickView(ag);
+  renderDescription(ag);
+  renderCharacteristics(ag);
+  renderDiagnostic(ag);
+  renderAgencySection(ag);
+  renderPanelCards();
+
+  // Mobile
+  renderSelector();
+  renderMobileGallery(ag);
+  renderMobileQuickView(ag);
+  renderMobileDescription(ag);
+  renderMobileCharacteristics(ag);
+  renderMobileDiagnostic(ag);
+  renderMobileAgencySection(ag);
+  renderMobileBottomBar(ag);
+
+  // Reset desktop description toggle
+  document.getElementById('descText').classList.add('truncated');
+  document.getElementById('descToggle').textContent = 'Lire la suite';
+}
+
+function toggleLeadForm(index) {
+  const form = document.getElementById('leadForm' + index);
+  if (!form) return;
+  form.classList.toggle('open');
+  const isOpen = form.classList.contains('open');
+  const zone = form.closest('.agency-card__cta-zone');
+  const cta = zone?.querySelector('.btn-cta:not(.lead-form__submit)');
+  if (cta) cta.style.display = isOpen ? 'none' : '';
+}
+
+function toggleScrapeExpand(index) {
+  const expand = document.getElementById('scrapeExpand' + index);
+  if (!expand) return;
+  expand.classList.toggle('open');
+  const isOpen = expand.classList.contains('open');
+  const zone = expand.closest('.agency-card__cta-zone');
+  const cta = zone?.querySelector('.btn-cta-scrape');
+  if (cta) cta.style.display = isOpen ? 'none' : '';
+}
+
+document.getElementById('descToggle').addEventListener('click', function() {
+  const text = document.getElementById('descText');
+  const isOpen = !text.classList.contains('truncated');
+  text.classList.toggle('truncated');
+  this.textContent = isOpen ? 'Lire la suite' : 'Reduire';
+});
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowLeft') galleryPrev();
+  if (e.key === 'ArrowRight') galleryNext();
+});
+
+// INIT
+renderWow();
+selectAgency(0);
+</script>
+
+<!-- ============================================================
+     FOOTER (shared component — desktop only, hidden on mobile)
+     ============================================================ -->
+<footer class="footer">
+  <div class="footer__inner">
+    <div class="footer__brand">
+      <div class="footer__brand-name">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L4 7v10l8 5 8-5V7l-8-5z" fill="#BACE27"/>
+          <path d="M8 12l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>TrackerImmo</span>
+      </div>
+      <p class="footer__brand-desc">Le comparateur intelligent pour l'immobilier.<br>Transparence, rapidite et economies.</p>
+    </div>
+    <div class="footer__links">
+      <div>
+        <div class="footer__col-title">Societe</div>
+        <a href="#" class="footer__link">A propos</a>
+        <a href="#" class="footer__link">Carrieres</a>
+        <a href="#" class="footer__link">Presse</a>
+      </div>
+      <div>
+        <div class="footer__col-title">Legal</div>
+        <a href="#" class="footer__link">Mentions legales</a>
+        <a href="#" class="footer__link">Confidentialite</a>
+        <a href="#" class="footer__link">Cookies</a>
+      </div>
+    </div>
+    <div class="footer__social">
+      <a href="#" class="footer__social-link" aria-label="Facebook">
+        <svg viewBox="0 0 12 12"><path d="M9 1H7.5A2.5 2.5 0 0 0 5 3.5V5H3.5v2H5v4h2V7h1.5L9 5H7V3.5a.5.5 0 0 1 .5-.5H9V1z"/></svg>
+      </a>
+      <a href="#" class="footer__social-link" aria-label="Twitter">
+        <svg viewBox="0 0 12 12"><path d="M11 1.5a5.08 5.08 0 0 1-1.5.75 2.28 2.28 0 0 0-4 1.5v.5A5.4 5.4 0 0 1 1 2s-2 4.5 2.5 6.5A5.84 5.84 0 0 1 0 10c4.5 2.5 10 0 10-5.75 0-.14 0-.28-.02-.42A3.63 3.63 0 0 0 11 1.5z"/></svg>
+      </a>
+      <a href="#" class="footer__social-link" aria-label="Instagram">
+        <svg viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10" rx="3" stroke="currentColor" fill="none" stroke-width="1"/><circle cx="6" cy="6" r="2" stroke="currentColor" fill="none" stroke-width="1"/><circle cx="9" cy="3" r="0.5" fill="currentColor"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="footer__bottom">
+    <p class="footer__copyright">&copy; 2025 TrackerImmo. Tous droits reserves.</p>
+  </div>
+</footer>
+
+</body>
+</html>

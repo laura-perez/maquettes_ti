@@ -1,0 +1,2400 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Résultats de recherche — TrackerImmo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+/* ============================================================
+   SEARCH RESULTS PAGE — SPECIFIC STYLES
+   Spacing: 8px grid via var(--space-*) tokens from shared.css
+   Layout: all sections use gutter padding + max-width container
+   ============================================================ */
+
+/* ---- ACCESSIBILITY (sr-only in shared.css) ---- */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--primary-accent);
+  outline-offset: 2px;
+}
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--primary-dark);
+  outline-offset: -2px;
+}
+
+/* ---- SEARCH BAR COMPACT (sticky under header) ---- */
+.search-bar-compact {
+  position: sticky;
+  top: 56px;
+  z-index: 90;
+  background: var(--bg-section);
+  border-bottom: 1px solid var(--border-divider);
+  box-shadow: var(--shadow-sm);
+  /* Container stops at ~half the search bar height (67/2 ≈ 34px).
+     Top padding for context text + gap, then only half the bar fits inside. */
+  padding: var(--space-lg) var(--gutter) 0;
+  margin-bottom: 34px; /* reserve space for the overflowing half */
+}
+.search-bar-compact__inner {
+  max-width: var(--content-narrow);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.search-bar-compact__context {
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--text-heading);
+  line-height: 24px;
+  padding-bottom: var(--space-sm);
+}
+.search-bar-compact__form {
+  background: var(--bg-section);
+  border: 1px solid var(--border-default);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  padding: 1px;
+  display: flex;
+  align-items: center;
+  height: 67px;
+  overflow: hidden;
+  /* Push the form so its top half sits inside the white container,
+     bottom half overflows below into the bg-page area */
+  position: relative;
+  top: 0;
+  margin-bottom: -34px;
+}
+.search-bar-compact__section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 12px var(--space-md);
+  height: 100%;
+  border-right: 1px solid #F1F5F9;
+}
+.search-bar-compact__section:last-of-type {
+  border-right: none;
+}
+.search-bar-compact__section-icon {
+  width: 28px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: var(--space-xs);
+}
+.search-bar-compact__section-icon svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--text-label);
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.search-bar-compact__section-content {
+  flex: 1;
+  min-width: 0;
+}
+.search-bar-compact__label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-label);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 15px;
+}
+.search-bar-compact__input {
+  display: block;
+  width: 100%;
+  border: none;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: transparent;
+  line-height: 20px;
+}
+.search-bar-compact__input::placeholder {
+  color: #CBD5E1;
+  font-weight: 600;
+}
+.search-bar-compact__select {
+  display: block;
+  width: 100%;
+  border: none;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  line-height: 20px;
+}
+.search-bar-compact__select-wrapper {
+  position: relative;
+  width: 100%;
+}
+.search-bar-compact__select-arrow {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  width: 16px;
+  height: 16px;
+  color: var(--text-secondary);
+}
+.search-bar-compact__select-arrow svg {
+  width: 100%;
+  height: 100%;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.search-bar-compact__budget-row {
+  display: flex;
+  gap: var(--space-md);
+}
+.search-bar-compact__budget-col {
+  flex: 1;
+}
+.search-bar-compact__btn-section {
+  flex-shrink: 0;
+  width: 192px;
+  padding: var(--space-sm);
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.search-bar-compact__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  width: 100%;
+  height: 100%;
+  background: #B1CC28;
+  border-radius: var(--radius-card-lg);
+  font-size: 16px;
+  font-weight: 700;
+  color: #1E2012;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+}
+.search-bar-compact__btn:hover {
+  background: var(--btn-hover-premium);
+}
+.search-bar-compact__btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---- RESULTS MAIN AREA ---- */
+.results {
+  padding: 0 var(--gutter);
+  padding-top: var(--space-xl);
+  padding-bottom: var(--space-xl);
+}
+.results__inner {
+  max-width: var(--content-narrow);
+  margin: 0 auto;
+  display: flex;
+  gap: var(--space-lg);
+}
+.results__main {
+  flex: 1;
+  min-width: 0;
+}
+/* Sidebar — placeholder for future ads/widgets */
+.results__sidebar {
+  width: 300px;
+  flex-shrink: 0;
+}
+.results__sidebar-inner {
+  position: sticky;
+  top: 160px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+/* ---- SIDEBAR: SAVE SEARCH ---- */
+.sidebar-save {
+  background: var(--bg-section);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-card-lg);
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+.sidebar-save__title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-heading);
+  line-height: 20px;
+}
+.sidebar-save__desc {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  line-height: 18px;
+}
+.sidebar-save__input-row {
+  display: flex;
+  gap: var(--space-sm);
+}
+.sidebar-save__input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-btn);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-body);
+  background: var(--bg-input);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.sidebar-save__input::placeholder {
+  color: var(--text-placeholder);
+}
+.sidebar-save__input:focus {
+  border-color: var(--primary-dark);
+}
+.sidebar-save__btn {
+  flex-shrink: 0;
+  padding: 10px 16px;
+  background: var(--primary-dark);
+  border-radius: var(--radius-btn);
+  font-size: 13px;
+  font-weight: 700;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.sidebar-save__btn:hover {
+  background: var(--btn-hover-gratuit);
+}
+.sidebar-save__toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  cursor: pointer;
+}
+.sidebar-save__checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary-dark);
+  cursor: pointer;
+}
+.sidebar-save__toggle-label {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-tertiary);
+  line-height: 16px;
+  cursor: pointer;
+}
+
+/* ---- SIDEBAR: MARKET STATS ---- */
+.sidebar-stats {
+  background: var(--bg-section);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-card-lg);
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+.sidebar-stats__title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-heading);
+  line-height: 20px;
+}
+.sidebar-stats__grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.sidebar-stats__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--border-divider);
+}
+.sidebar-stats__row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.sidebar-stats__label {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-tertiary);
+  line-height: 16px;
+}
+.sidebar-stats__value {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-heading);
+  line-height: 20px;
+}
+.sidebar-stats__trend {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 16px;
+}
+.sidebar-stats__trend--up { color: #15803D; }
+.sidebar-stats__trend--down { color: #DC2626; }
+.sidebar-stats__source {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--text-label);
+  line-height: 14px;
+}
+
+/* ---- SIDEBAR: TOP AGENCIES ---- */
+.sidebar-agencies {
+  background: var(--bg-section);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-card-lg);
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+.sidebar-agencies__title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-heading);
+  line-height: 20px;
+}
+.sidebar-agencies__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.sidebar-agencies__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  border-radius: var(--radius-btn);
+  transition: background 0.15s;
+}
+.sidebar-agencies__item:hover {
+  background: var(--bg-input);
+}
+.sidebar-agencies__rank {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background: var(--bg-input);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+}
+.sidebar-agencies__item:first-child .sidebar-agencies__rank {
+  background: var(--primary-accent);
+  color: var(--primary-dark);
+}
+.sidebar-agencies__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.sidebar-agencies__avatar svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.sidebar-agencies__info {
+  flex: 1;
+  min-width: 0;
+}
+.sidebar-agencies__name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-heading);
+  line-height: 18px;
+}
+.sidebar-agencies__count {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-tertiary);
+  line-height: 14px;
+}
+.sidebar-agencies__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  background: rgba(186,206,39,0.15);
+  border: 1px solid rgba(186,206,39,0.3);
+  border-radius: var(--radius-badge);
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+/* ---- RESULTS INFO BAR ---- */
+.results-info {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-lg);
+}
+.results-info__count {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: -0.3px;
+  line-height: 24px;
+}
+.results-info__sort {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-placeholder-alt);
+  line-height: 20px;
+}
+.results-info__sort-value {
+  font-weight: 500;
+  color: var(--text-body);
+}
+
+/* ---- CLUSTER LIST ---- */
+.cluster-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* ---- CLUSTER CARD ---- */
+.cluster-card {
+  display: flex;
+  background: var(--bg-section);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-card-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  width: 100%;
+}
+
+/* --- MONO variant: compact, single photo --- */
+.cluster-card--mono {
+  height: 180px;
+}
+
+/* --- MULTI variant: taller, gallery with thumbs --- */
+.cluster-card--multi {
+  height: 240px;
+}
+
+/* Gallery — base (mono: single photo carousel) */
+.cluster-card__gallery {
+  width: 240px;
+  flex-shrink: 0;
+  padding: var(--space-xs);
+}
+.cluster-card__photo-main {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-thumb);
+  overflow: hidden;
+  position: relative;
+}
+.cluster-card__photo-main img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Gallery — multi variant: main + 2 thumbs */
+.cluster-card--multi .cluster-card__gallery {
+  width: 364px;
+  display: flex;
+  gap: var(--space-xs);
+}
+.cluster-card--multi .cluster-card__photo-main {
+  flex: 1;
+  min-width: 0;
+}
+.cluster-card__thumbs {
+  display: none; /* hidden by default (mono) */
+}
+.cluster-card--multi .cluster-card__thumbs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  width: 100px;
+  flex-shrink: 0;
+}
+.cluster-card__thumb {
+  flex: 1;
+  min-height: 0;
+  border-radius: var(--radius-thumb);
+  overflow: hidden;
+  position: relative;
+}
+.cluster-card__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* Photo count overlay on last thumb */
+.cluster-card__thumb-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bg-section);
+}
+
+/* Carousel arrows — hidden by default, shown on hover */
+.cluster-card__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(4px);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.15s, background 0.15s;
+  z-index: 2;
+  opacity: 0;
+}
+.cluster-card__photo-main:hover .cluster-card__arrow {
+  opacity: 1;
+}
+.cluster-card__arrow:hover {
+  background: var(--bg-section);
+}
+.cluster-card__arrow svg {
+  width: 12px;
+  height: 12px;
+  stroke: var(--text-body);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.cluster-card__arrow--prev { left: var(--space-sm); }
+.cluster-card__arrow--next { right: var(--space-sm); }
+
+/* Photo count badge (mono only — multi uses thumb overlay) */
+.cluster-card__photo-count {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  border-radius: var(--radius-full);
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--bg-section);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  z-index: 2;
+}
+.cluster-card__photo-count svg {
+  width: 11px;
+  height: 11px;
+  stroke: var(--bg-section);
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* Hide pill badge on multi (uses thumb overlay instead) */
+.cluster-card--multi .cluster-card__photo-count {
+  display: none;
+}
+
+/* Data panel */
+.cluster-card__data {
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-md) var(--space-lg) var(--space-md) var(--space-md);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.cluster-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.cluster-card__location-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+.cluster-card__location {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-tertiary);
+}
+.cluster-card__location svg {
+  width: 10px;
+  height: 12px;
+  flex-shrink: 0;
+}
+.cluster-card__cluster-badge {
+  display: inline-flex;
+  align-items: center;
+  background: var(--badge-cluster-bg);
+  border: 1px solid var(--badge-cluster-border);
+  border-radius: 6px;
+  padding: 2px var(--space-sm);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--badge-cluster-text);
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  line-height: 16px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+/* Mono-agence label (no badge, just text) */
+.cluster-card__mono-label {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-tertiary);
+  line-height: 16px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.cluster-card__title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-heading);
+  line-height: 24px;
+  letter-spacing: -0.3px;
+}
+.cluster-card__specs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+.cluster-card__spec {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+.cluster-card__spec svg {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+.cluster-card__spec-dot {
+  font-size: 13px;
+  color: var(--border-hover-subtle);
+}
+.cluster-card__dpe-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--badge-dpe-text);
+  background: var(--badge-dpe-bg);
+  border: 1px solid var(--badge-dpe-border);
+  border-radius: var(--radius-badge);
+  padding: 2px 8px;
+}
+.cluster-card__price-section {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+}
+.cluster-card__price-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-label);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  line-height: 14px;
+}
+.cluster-card__price {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-heading);
+  letter-spacing: -0.4px;
+  line-height: 24px;
+}
+
+/* Bottom row: agencies left, CTA right */
+.cluster-card__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+.cluster-card__agencies {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+.cluster-card__avatars {
+  display: flex;
+}
+.cluster-card__avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--bg-section);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  margin-left: -8px;
+}
+.cluster-card__avatar:first-child { margin-left: 0; }
+.cluster-card__avatar svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.cluster-card__avatar--1 { z-index: 4; }
+.cluster-card__avatar--2 { z-index: 3; }
+.cluster-card__avatar--3 { z-index: 2; }
+.cluster-card__avatar--overflow {
+  background: var(--primary-dark);
+  color: var(--bg-section);
+  font-size: 10px;
+  font-weight: 700;
+  z-index: 1;
+}
+.cluster-card__agency-meta {
+  display: flex;
+  flex-direction: column;
+}
+.cluster-card__agency-meta-label {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-label);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 12px;
+}
+.cluster-card__agency-meta-count {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  line-height: 16px;
+}
+
+/* CTA — compact pill */
+.cluster-card__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--primary-accent);
+  border-radius: var(--radius-card-lg);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+  box-shadow: var(--shadow-sm);
+  line-height: 20px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.cluster-card__cta:hover {
+  background: var(--btn-hover-premium);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ---- SECONDARY INFO BAR (under first card only) ---- */
+.cluster-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-xs) var(--space-xs) 0;
+}
+.cluster-card-meta__left {
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+}
+.cluster-card-meta__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-tertiary);
+}
+.cluster-card-meta__item svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+.cluster-card-meta__save {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary-dark);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-btn);
+  transition: background 0.15s;
+}
+.cluster-card-meta__save:hover {
+  background: var(--bg-input);
+}
+.cluster-card-meta__save svg {
+  width: 16px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   MOBILE-ONLY COMPONENTS (hidden by default, shown via @media)
+   ============================================================ */
+
+/* ---- SEARCH BAR MOBILE ---- */
+.search-bar-mobile {
+  display: none;
+  background: var(--bg-section);
+  border-bottom: 1px solid var(--border-divider);
+  padding: var(--space-md);
+}
+.search-bar-mobile__form {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background: var(--bg-page);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-card-lg);
+  padding: var(--space-sm);
+  height: 48px;
+}
+.search-bar-mobile__field {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 var(--space-sm);
+  height: 100%;
+}
+.search-bar-mobile__field svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  stroke: var(--text-label);
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.search-bar-mobile__input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  line-height: 20px;
+}
+.search-bar-mobile__input::placeholder {
+  color: var(--text-placeholder);
+  font-weight: 400;
+}
+.search-bar-mobile__field--budget {
+  flex: 0.7;
+}
+.search-bar-mobile__divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border-divider);
+  flex-shrink: 0;
+}
+.search-bar-mobile__btn {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-card-lg);
+  background: var(--primary-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+}
+.search-bar-mobile__btn svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--primary-dark);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---- RESULTS INFO MOBILE ---- */
+.results-info-mobile {
+  display: none;
+  padding: var(--space-md) var(--space-md) var(--space-sm);
+  align-items: baseline;
+  justify-content: space-between;
+}
+.results-info-mobile__count {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-heading);
+  line-height: 20px;
+}
+.results-info-mobile__sort {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-tertiary);
+}
+
+/* ---- CLUSTER LIST MOBILE ---- */
+.cluster-list-mobile {
+  display: none;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: 0 var(--space-md) var(--space-md);
+}
+
+/* ---- CLUSTER CARD — MOBILE (vertical layout) ---- */
+.m-cluster {
+  background: var(--bg-section);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-card-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.m-cluster__carousel {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+.m-cluster__slides {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.m-cluster__slides::-webkit-scrollbar { display: none; }
+.m-cluster__slide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  position: relative;
+}
+.m-cluster__slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Badge WOW — overlay top-right on photo, same as desktop .cluster-card__cluster-badge */
+.m-cluster__badge-wow {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  display: inline-flex;
+  align-items: center;
+  background: rgba(186,206,39,0.82);
+  border: 1px solid rgba(186,206,39,0.9);
+  border-radius: 6px;
+  padding: 2px var(--space-sm);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--badge-cluster-text);
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  line-height: 16px;
+  z-index: 3;
+  white-space: nowrap;
+}
+
+/* Photo count pill — bottom-right */
+.m-cluster__photo-count {
+  position: absolute;
+  bottom: var(--space-sm);
+  right: var(--space-sm);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  border-radius: var(--radius-full);
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--bg-section);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  z-index: 3;
+}
+.m-cluster__photo-count svg {
+  width: 11px;
+  height: 11px;
+  stroke: var(--bg-section);
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Dots indicator */
+.m-cluster__dots {
+  position: absolute;
+  bottom: var(--space-sm);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  z-index: 3;
+}
+.m-cluster__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.5);
+}
+.m-cluster__dot--active {
+  background: var(--bg-section);
+  transform: scale(1.2);
+}
+
+/* Data panel */
+.m-cluster__data {
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.m-cluster__location {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  line-height: 16px;
+}
+.m-cluster__location svg {
+  width: 10px;
+  height: 12px;
+  flex-shrink: 0;
+}
+.m-cluster__title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-heading);
+  line-height: 22px;
+  letter-spacing: -0.3px;
+}
+.m-cluster__specs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+.m-cluster__spec {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+.m-cluster__spec svg {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+.m-cluster__spec-dot {
+  font-size: 13px;
+  color: var(--border-hover-subtle);
+}
+.m-cluster__dpe-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--badge-dpe-text);
+  background: var(--badge-dpe-bg);
+  border: 1px solid var(--badge-dpe-border);
+  border-radius: var(--radius-badge);
+  padding: 2px 8px;
+}
+.m-cluster__price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 2px;
+}
+.m-cluster__price-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-label);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  line-height: 14px;
+}
+.m-cluster__price {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-heading);
+  letter-spacing: -0.3px;
+  line-height: 22px;
+}
+
+/* Bottom row: avatars + CTA */
+.m-cluster__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-top: var(--space-xs);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--border-divider);
+}
+.m-cluster__agencies {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-width: 0;
+}
+.m-cluster__avatars {
+  display: flex;
+  flex-shrink: 0;
+}
+.m-cluster__avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--bg-section);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  margin-left: -6px;
+}
+.m-cluster__avatar:first-child { margin-left: 0; }
+.m-cluster__avatar svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.m-cluster__avatar--z1 { z-index: 4; }
+.m-cluster__avatar--z2 { z-index: 3; }
+.m-cluster__avatar--overflow {
+  background: var(--primary-dark);
+  color: var(--bg-section);
+  font-size: 9px;
+  font-weight: 700;
+  z-index: 2;
+}
+.m-cluster__agency-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  line-height: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.m-cluster__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  background: var(--primary-accent);
+  border-radius: var(--radius-card-lg);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  line-height: 18px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.m-cluster__cta:hover {
+  background: var(--btn-hover-premium);
+}
+
+/* ---- BACK TO TOP — MOBILE (sticky pill) ---- */
+.m-back-to-top {
+  display: none;
+  position: sticky;
+  bottom: 0;
+  z-index: 50;
+  justify-content: center;
+  padding: var(--space-sm) var(--space-md);
+  background: linear-gradient(transparent, var(--bg-page) 40%);
+  pointer-events: none;
+}
+.m-back-to-top__link {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 8px 20px;
+  background: var(--bg-section);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  text-decoration: none;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.15s;
+}
+.m-back-to-top__link:hover {
+  box-shadow: var(--shadow-lg);
+}
+.m-back-to-top__link svg {
+  width: 14px;
+  height: 14px;
+  stroke: var(--text-tertiary);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ============================================================
+   RESPONSIVE — MOBILE (max-width: 768px)
+   ============================================================ */
+@media (max-width: 768px) {
+  /* Show mobile-only components */
+  .search-bar-mobile { display: block; }
+  .results-info-mobile { display: flex; }
+  .cluster-list-mobile { display: flex; }
+  .m-back-to-top { display: flex; }
+
+  /* Hide desktop-only components */
+  .search-bar-compact { display: none; }
+  .results { display: none; }
+
+  /* Header: logo left-aligned (shared.css handles 48px height) */
+  .top-bar__inner { justify-content: flex-start; }
+}
+
+/* Desktop: ensure mobile components stay hidden */
+@media (min-width: 769px) {
+  .search-bar-mobile { display: none; }
+  .results-info-mobile { display: none; }
+  .cluster-list-mobile { display: none; }
+  .m-back-to-top { display: none; }
+}
+</style>
+</head>
+<body id="top">
+
+<!-- ============================================================
+     HEADER
+     ============================================================ -->
+<header class="top-bar">
+  <div class="top-bar__inner">
+    <a href="landing.html"><img class="top-bar__logo" src="logo-trackerimmo.svg" alt="TrackerImmo"></a>
+  </div>
+</header>
+
+<!-- ============================================================
+     SEARCH BAR COMPACT (sticky under header)
+     ============================================================ -->
+<div class="search-bar-compact">
+  <div class="search-bar-compact__inner">
+    <p class="search-bar-compact__context">Configurez vos critères pour trouver la perle rare.</p>
+    <div class="search-bar-compact__form">
+      <!-- Location -->
+      <div class="search-bar-compact__section">
+        <div class="search-bar-compact__section-icon">
+          <svg viewBox="0 0 16 20"><path d="M8 1C4.13 1 1 4.13 1 8c0 5.25 7 11 7 11s7-5.75 7-11c0-3.87-3.13-7-7-7z"/><circle cx="8" cy="8" r="2.5"/></svg>
+        </div>
+        <div class="search-bar-compact__section-content">
+          <div class="search-bar-compact__label">Localisation</div>
+          <label for="compact-location" class="sr-only">Localisation</label>
+          <input class="search-bar-compact__input" id="compact-location" type="text" placeholder="Où cherchez-vous ? (ex: Paris, Lyon)" value="Biarritz">
+        </div>
+      </div>
+      <!-- Type -->
+      <div class="search-bar-compact__section">
+        <div class="search-bar-compact__section-icon">
+          <svg viewBox="0 0 16 18"><path d="M1 17V7L8 1l7 6v10H11v-5H5v5H1z"/></svg>
+        </div>
+        <div class="search-bar-compact__section-content">
+          <div class="search-bar-compact__label">Type de bien</div>
+          <div class="search-bar-compact__select-wrapper">
+            <label for="compact-type" class="sr-only">Type de bien</label>
+            <select class="search-bar-compact__select" id="compact-type">
+              <option>Tous types</option>
+              <option>Appartement</option>
+              <option>Maison</option>
+            </select>
+            <div class="search-bar-compact__select-arrow">
+              <svg viewBox="0 0 20 20"><path d="M6 8l4 4 4-4"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Budget -->
+      <div class="search-bar-compact__section">
+        <div class="search-bar-compact__section-icon">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="8"/><path d="M9 4v10M6 6.5c0-1 1.3-1.5 3-1.5s3 .5 3 1.5-1.3 1.5-3 2-3 .8-3 1.8 1.3 1.7 3 1.7 3-.5 3-1.5"/></svg>
+        </div>
+        <div class="search-bar-compact__section-content">
+          <div class="search-bar-compact__budget-row">
+            <div class="search-bar-compact__budget-col">
+              <div class="search-bar-compact__label">Budget Min (€)</div>
+              <label for="compact-budget-min" class="sr-only">Budget minimum</label>
+              <input class="search-bar-compact__input" id="compact-budget-min" type="text" placeholder="0" value="0">
+            </div>
+            <div class="search-bar-compact__budget-col">
+              <div class="search-bar-compact__label">Budget Max (€)</div>
+              <label for="compact-budget-max" class="sr-only">Budget maximum</label>
+              <input class="search-bar-compact__input" id="compact-budget-max" type="text" placeholder="Max">
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Search Button -->
+      <div class="search-bar-compact__btn-section">
+        <button class="search-bar-compact__btn" aria-label="Rechercher">
+          <svg viewBox="0 0 18 18"><circle cx="8" cy="8" r="6"/><path d="M13 13l4 4"/></svg>
+          Rechercher
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     RESULTS
+     ============================================================ -->
+<main class="results">
+  <div class="results__inner">
+    <div class="results__main">
+
+    <!-- Results Info Bar -->
+    <div class="results-info">
+      <h1 class="results-info__count">25 biens uniques comparés à Biarritz</h1>
+      <div class="results-info__sort">Tri par : <span class="results-info__sort-value">Pertinence</span></div>
+    </div>
+
+    <!-- Cluster List -->
+    <div class="cluster-list">
+
+      <!-- ==============================
+           MULTI PREMIUM — 4 agences (Prestige + Barnes + Sotheby's + 1)
+           ============================== -->
+      <article>
+        <div class="cluster-card cluster-card--multi">
+          <div class="cluster-card__gallery">
+            <div class="cluster-card__photo-main">
+              <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&h=450&fit=crop" alt="Appartement T3 Beaurivage — salon lumineux">
+              <button class="cluster-card__arrow cluster-card__arrow--prev" aria-label="Photo précédente"><svg viewBox="0 0 14 14"><path d="M9 2L4 7l5 5"/></svg></button>
+              <button class="cluster-card__arrow cluster-card__arrow--next" aria-label="Photo suivante"><svg viewBox="0 0 14 14"><path d="M5 2l5 5-5 5"/></svg></button>
+            </div>
+            <div class="cluster-card__thumbs">
+              <div class="cluster-card__thumb">
+                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=200&h=150&fit=crop" alt="Vue cuisine">
+              </div>
+              <div class="cluster-card__thumb">
+                <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=200&h=150&fit=crop" alt="Vue chambre">
+                <div class="cluster-card__thumb-overlay">+14</div>
+              </div>
+            </div>
+          </div>
+          <div class="cluster-card__data">
+            <div class="cluster-card__info">
+              <div class="cluster-card__location-row">
+                <div class="cluster-card__location">
+                  <svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg>
+                  Biarritz (Beaurivage)
+                </div>
+                <div class="cluster-card__cluster-badge">Trouvé chez 4 agences</div>
+              </div>
+              <h2 class="cluster-card__title">Appartement T3</h2>
+              <div class="cluster-card__specs">
+                <div class="cluster-card__spec">
+                  <svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg>
+                  68 m²
+                </div>
+                <span class="cluster-card__spec-dot">•</span>
+                <div class="cluster-card__spec">
+                  <svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg>
+                  2 ch.
+                </div>
+                <span class="cluster-card__spec-dot">•</span>
+                <span class="cluster-card__dpe-badge">DPE B</span>
+              </div>
+              <div class="cluster-card__price-section">
+                <div class="cluster-card__price-label">Fourchette de prix</div>
+                <div class="cluster-card__price">215 000 € — 229 000 €</div>
+              </div>
+            </div>
+            <div class="cluster-card__bottom">
+              <div class="cluster-card__agencies">
+                <div class="cluster-card__avatars">
+                  <div class="cluster-card__avatar cluster-card__avatar--1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#0E4E57"/><text x="24" y="18" text-anchor="middle" font-family="Inter,sans-serif" font-size="7.5" font-weight="700" fill="#BACE27" letter-spacing="0.3">PRESTIGE</text><text x="24" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="600" fill="white">IMMOBILIER</text><rect x="12" y="34" width="24" height="1.2" rx="0.6" fill="#BACE27"/></svg></div>
+                  <div class="cluster-card__avatar cluster-card__avatar--2"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#1A1A2E"/><text x="24" y="22" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700" fill="white" letter-spacing="1.5">BARNES</text><rect x="10" y="27" width="28" height="0.8" fill="#C9A96E"/><text x="24" y="36" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="300" fill="#C9A96E" letter-spacing="0.8">IMMOBILIER</text></svg></div>
+                  <div class="cluster-card__avatar cluster-card__avatar--3"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#003D6A"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="white" letter-spacing="0.5">SOTHEBY'S</text><rect x="10" y="24" width="28" height="0.6" fill="#C9A96E"/><text x="24" y="34" text-anchor="middle" font-family="Inter,sans-serif" font-size="5" font-weight="300" fill="#C9A96E" letter-spacing="1">REALTY</text></svg></div>
+                  <div class="cluster-card__avatar cluster-card__avatar--overflow">+1</div>
+                </div>
+                <div class="cluster-card__agency-meta">
+                  <span class="cluster-card__agency-meta-label">Diffusé par</span>
+                  <span class="cluster-card__agency-meta-count">4 agences</span>
+                </div>
+              </div>
+              <a href="page_bien.html" class="cluster-card__cta" aria-label="Comparer les offres pour cet appartement T3">Comparer les offres</a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ==============================
+           MULTI PREMIUM — 3 agences (Laforêt + Orpi + Century 21, 2 premium)
+           ============================== -->
+      <article>
+        <div class="cluster-card cluster-card--multi">
+          <div class="cluster-card__gallery">
+            <div class="cluster-card__photo-main">
+              <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&h=450&fit=crop" alt="Maison T5 Anglet — façade">
+              <button class="cluster-card__arrow cluster-card__arrow--prev" aria-label="Photo précédente"><svg viewBox="0 0 14 14"><path d="M9 2L4 7l5 5"/></svg></button>
+              <button class="cluster-card__arrow cluster-card__arrow--next" aria-label="Photo suivante"><svg viewBox="0 0 14 14"><path d="M5 2l5 5-5 5"/></svg></button>
+            </div>
+            <div class="cluster-card__thumbs">
+              <div class="cluster-card__thumb">
+                <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=200&h=150&fit=crop" alt="Vue jardin">
+              </div>
+              <div class="cluster-card__thumb">
+                <img src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=200&h=150&fit=crop" alt="Vue terrasse">
+                <div class="cluster-card__thumb-overlay">+10</div>
+              </div>
+            </div>
+          </div>
+          <div class="cluster-card__data">
+            <div class="cluster-card__info">
+              <div class="cluster-card__location-row">
+                <div class="cluster-card__location">
+                  <svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg>
+                  Anglet (Montbrun)
+                </div>
+                <div class="cluster-card__cluster-badge">Trouvé chez 3 agences</div>
+              </div>
+              <h2 class="cluster-card__title">Maison T5</h2>
+              <div class="cluster-card__specs">
+                <div class="cluster-card__spec">
+                  <svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg>
+                  142 m²
+                </div>
+                <span class="cluster-card__spec-dot">•</span>
+                <div class="cluster-card__spec">
+                  <svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg>
+                  4 ch.
+                </div>
+                <span class="cluster-card__spec-dot">•</span>
+                <span class="cluster-card__dpe-badge">DPE C</span>
+              </div>
+              <div class="cluster-card__price-section">
+                <div class="cluster-card__price-label">Fourchette de prix</div>
+                <div class="cluster-card__price">485 000 € — 520 000 €</div>
+              </div>
+            </div>
+            <div class="cluster-card__bottom">
+              <div class="cluster-card__agencies">
+                <div class="cluster-card__avatars">
+                  <div class="cluster-card__avatar cluster-card__avatar--1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#FFD700"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#2D5016" letter-spacing="0.3">LAFORET</text><path d="M20 36 L24 25 L28 36" stroke="#2D5016" stroke-width="1.5" fill="none"/><path d="M18 36 L24 28 L30 36" stroke="#2D5016" stroke-width="1.2" fill="none" opacity="0.5"/></svg></div>
+                  <div class="cluster-card__avatar cluster-card__avatar--2"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#E30613"/><text x="24" y="29" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="white" letter-spacing="1">ORPI</text></svg></div>
+                  <div class="cluster-card__avatar cluster-card__avatar--3"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#1C1C1C"/><text x="24" y="17" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="#D4AF37" letter-spacing="0.5">CENTURY</text><text x="24" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#D4AF37">21</text><rect x="14" y="34" width="20" height="0.8" fill="#D4AF37"/></svg></div>
+                </div>
+                <div class="cluster-card__agency-meta">
+                  <span class="cluster-card__agency-meta-label">Diffusé par</span>
+                  <span class="cluster-card__agency-meta-count">3 agences</span>
+                </div>
+              </div>
+              <a href="page_bien_2premium.html" class="cluster-card__cta" aria-label="Comparer les offres pour cette maison T5">Comparer les offres</a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ==============================
+           MONO PREMIUM — Laforêt Biarritz (Milady)
+           ============================== -->
+      <article>
+        <div class="cluster-card cluster-card--mono">
+          <div class="cluster-card__gallery">
+            <div class="cluster-card__photo-main">
+              <img src="https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=600&h=450&fit=crop" alt="Maison T4 Biarritz — vue extérieure">
+              <button class="cluster-card__arrow cluster-card__arrow--prev" aria-label="Photo précédente"><svg viewBox="0 0 14 14"><path d="M9 2L4 7l5 5"/></svg></button>
+              <button class="cluster-card__arrow cluster-card__arrow--next" aria-label="Photo suivante"><svg viewBox="0 0 14 14"><path d="M5 2l5 5-5 5"/></svg></button>
+              <div class="cluster-card__photo-count"><svg viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg>8</div>
+            </div>
+          </div>
+          <div class="cluster-card__data">
+            <div class="cluster-card__info">
+              <div class="cluster-card__location-row">
+                <div class="cluster-card__location">
+                  <svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg>
+                  Biarritz (Milady)
+                </div>
+              </div>
+              <h2 class="cluster-card__title">Maison T4</h2>
+              <div class="cluster-card__specs">
+                <div class="cluster-card__spec">
+                  <svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg>
+                  110 m²
+                </div>
+                <span class="cluster-card__spec-dot">•</span>
+                <div class="cluster-card__spec">
+                  <svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg>
+                  3 ch.
+                </div>
+                <span class="cluster-card__spec-dot">•</span>
+                <span class="cluster-card__dpe-badge">DPE C</span>
+              </div>
+              <div class="cluster-card__price-section">
+                <div class="cluster-card__price-label">Prix</div>
+                <div class="cluster-card__price">445 000 €</div>
+              </div>
+            </div>
+            <div class="cluster-card__bottom">
+              <div class="cluster-card__agencies">
+                <div class="cluster-card__avatars">
+                  <div class="cluster-card__avatar cluster-card__avatar--1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#FFD700"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#2D5016" letter-spacing="0.3">LAFORET</text><path d="M20 36 L24 25 L28 36" stroke="#2D5016" stroke-width="1.5" fill="none"/><path d="M18 36 L24 28 L30 36" stroke="#2D5016" stroke-width="1.2" fill="none" opacity="0.5"/></svg></div>
+                </div>
+                <div class="cluster-card__agency-meta">
+                  <span class="cluster-card__agency-meta-label">Diffusé par</span>
+                  <span class="cluster-card__agency-meta-count">Laforêt Biarritz</span>
+                </div>
+              </div>
+              <a href="page_bien_mono_premium.html" class="cluster-card__cta" aria-label="Voir ce bien — Maison T4 à Biarritz">Voir ce bien</a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ==============================
+           MULTI GRATUIT — Stéphane Plaza + AB Immobilier (2 agences)
+           ============================== -->
+      <article>
+        <div class="cluster-card cluster-card--multi">
+          <div class="cluster-card__gallery">
+            <div class="cluster-card__photo-main">
+              <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&h=450&fit=crop" alt="Appartement T4 Bayonne — séjour">
+              <button class="cluster-card__arrow cluster-card__arrow--prev" aria-label="Photo précédente"><svg viewBox="0 0 14 14"><path d="M9 2L4 7l5 5"/></svg></button>
+              <button class="cluster-card__arrow cluster-card__arrow--next" aria-label="Photo suivante"><svg viewBox="0 0 14 14"><path d="M5 2l5 5-5 5"/></svg></button>
+            </div>
+            <div class="cluster-card__thumbs">
+              <div class="cluster-card__thumb">
+                <img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=200&h=150&fit=crop" alt="Vue salon">
+              </div>
+              <div class="cluster-card__thumb">
+                <img src="https://images.unsplash.com/photo-1600573472592-401b489a3cdc?w=200&h=150&fit=crop" alt="Vue salle de bain">
+                <div class="cluster-card__thumb-overlay">+7</div>
+              </div>
+            </div>
+          </div>
+          <div class="cluster-card__data">
+            <div class="cluster-card__info">
+              <div class="cluster-card__location-row">
+                <div class="cluster-card__location">
+                  <svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg>
+                  Bayonne (Saint-Esprit)
+                </div>
+                <div class="cluster-card__cluster-badge">Trouvé chez 2 agences</div>
+              </div>
+              <h2 class="cluster-card__title">Appartement T4</h2>
+              <div class="cluster-card__specs">
+                <div class="cluster-card__spec">
+                  <svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg>
+                  92 m²
+                </div>
+                <span class="cluster-card__spec-dot">•</span>
+                <div class="cluster-card__spec">
+                  <svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg>
+                  3 ch.
+                </div>
+                <span class="cluster-card__spec-dot">•</span>
+                <span class="cluster-card__dpe-badge">DPE D</span>
+              </div>
+              <div class="cluster-card__price-section">
+                <div class="cluster-card__price-label">Fourchette de prix</div>
+                <div class="cluster-card__price">295 000 € — 310 000 €</div>
+              </div>
+            </div>
+            <div class="cluster-card__bottom">
+              <div class="cluster-card__agencies">
+                <div class="cluster-card__avatars">
+                  <div class="cluster-card__avatar cluster-card__avatar--1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#8B1A4A"/><text x="24" y="18" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="white" letter-spacing="0.3">STEPHANE</text><text x="24" y="28" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" font-weight="700" fill="white" letter-spacing="0.5">PLAZA</text><rect x="14" y="33" width="20" height="0.8" fill="rgba(255,255,255,0.4)"/></svg></div>
+                  <div class="cluster-card__avatar cluster-card__avatar--2"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#2563EB"/><text x="24" y="22" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="700" fill="white">AB</text><text x="24" y="34" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="400" fill="rgba(255,255,255,0.8)" letter-spacing="0.5">IMMOBILIER</text></svg></div>
+                </div>
+                <div class="cluster-card__agency-meta">
+                  <span class="cluster-card__agency-meta-label">Diffusé par</span>
+                  <span class="cluster-card__agency-meta-count">2 agences</span>
+                </div>
+              </div>
+              <a href="page_bien_gratuit_scrape.html" class="cluster-card__cta" aria-label="Comparer les offres pour cet appartement T4">Comparer les offres</a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ==============================
+           MULTI SCRAPÉ — 3 agences, 100% scrapé (Biarritz Saint-Charles)
+           ============================== -->
+      <article>
+        <div class="cluster-card cluster-card--multi">
+          <div class="cluster-card__gallery">
+            <div class="cluster-card__photo-main">
+              <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?w=600&h=450&fit=crop" alt="Appartement T3 Biarritz — cuisine">
+              <button class="cluster-card__arrow cluster-card__arrow--prev" aria-label="Photo précédente"><svg viewBox="0 0 14 14"><path d="M9 2L4 7l5 5"/></svg></button>
+              <button class="cluster-card__arrow cluster-card__arrow--next" aria-label="Photo suivante"><svg viewBox="0 0 14 14"><path d="M5 2l5 5-5 5"/></svg></button>
+            </div>
+            <div class="cluster-card__thumbs">
+              <div class="cluster-card__thumb">
+                <img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=200&h=150&fit=crop" alt="Vue séjour">
+              </div>
+              <div class="cluster-card__thumb">
+                <img src="https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=200&h=150&fit=crop" alt="Vue chambre">
+                <div class="cluster-card__thumb-overlay">+8</div>
+              </div>
+            </div>
+          </div>
+          <div class="cluster-card__data">
+            <div class="cluster-card__info">
+              <div class="cluster-card__location-row">
+                <div class="cluster-card__location">
+                  <svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg>
+                  Biarritz (Saint-Charles)
+                </div>
+                <div class="cluster-card__cluster-badge">Trouvé chez 3 agences</div>
+              </div>
+              <h2 class="cluster-card__title">Appartement T3</h2>
+              <div class="cluster-card__specs">
+                <div class="cluster-card__spec">
+                  <svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg>
+                  65 m²
+                </div>
+                <span class="cluster-card__spec-dot">•</span>
+                <div class="cluster-card__spec">
+                  <svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg>
+                  2 ch.
+                </div>
+                <span class="cluster-card__spec-dot">•</span>
+                <span class="cluster-card__dpe-badge">DPE E</span>
+              </div>
+              <div class="cluster-card__price-section">
+                <div class="cluster-card__price-label">Fourchette de prix</div>
+                <div class="cluster-card__price">238 000 € — 252 000 €</div>
+              </div>
+            </div>
+            <div class="cluster-card__bottom">
+              <div class="cluster-card__agencies">
+                <div class="cluster-card__avatars">
+                  <div class="cluster-card__avatar cluster-card__avatar--1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#FFD700"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#2D5016" letter-spacing="0.3">LAFORET</text><path d="M20 36 L24 25 L28 36" stroke="#2D5016" stroke-width="1.5" fill="none"/><path d="M18 36 L24 28 L30 36" stroke="#2D5016" stroke-width="1.2" fill="none" opacity="0.5"/></svg></div>
+                  <div class="cluster-card__avatar cluster-card__avatar--2"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#E30613"/><text x="24" y="29" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="white" letter-spacing="1">ORPI</text></svg></div>
+                  <div class="cluster-card__avatar cluster-card__avatar--3"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#0072BC"/><text x="24" y="18" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="700" fill="white" letter-spacing="0.3">GUY</text><text x="24" y="28" text-anchor="middle" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="white" letter-spacing="0.5">HOQUET</text><rect x="14" y="33" width="20" height="0.8" fill="rgba(255,255,255,0.5)"/></svg></div>
+                </div>
+                <div class="cluster-card__agency-meta">
+                  <span class="cluster-card__agency-meta-label">Diffusé par</span>
+                  <span class="cluster-card__agency-meta-count">3 agences</span>
+                </div>
+              </div>
+              <a href="page_bien_full_scrape.html" class="cluster-card__cta" aria-label="Comparer les offres pour cet appartement T3">Comparer les offres</a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ==============================
+           MONO GRATUIT — Century 21 Bayonne
+           ============================== -->
+      <article>
+        <div class="cluster-card cluster-card--mono">
+          <div class="cluster-card__gallery">
+            <div class="cluster-card__photo-main">
+              <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&h=450&fit=crop" alt="Appartement T2 Bayonne — vue">
+              <button class="cluster-card__arrow cluster-card__arrow--prev" aria-label="Photo précédente"><svg viewBox="0 0 14 14"><path d="M9 2L4 7l5 5"/></svg></button>
+              <button class="cluster-card__arrow cluster-card__arrow--next" aria-label="Photo suivante"><svg viewBox="0 0 14 14"><path d="M5 2l5 5-5 5"/></svg></button>
+              <div class="cluster-card__photo-count"><svg viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg>2</div>
+            </div>
+          </div>
+          <div class="cluster-card__data">
+            <div class="cluster-card__info">
+              <div class="cluster-card__location-row">
+                <div class="cluster-card__location">
+                  <svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg>
+                  Bayonne (Centre)
+                </div>
+              </div>
+              <h2 class="cluster-card__title">Appartement T2</h2>
+              <div class="cluster-card__specs">
+                <div class="cluster-card__spec">
+                  <svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg>
+                  45 m²
+                </div>
+                <span class="cluster-card__spec-dot">•</span>
+                <div class="cluster-card__spec">
+                  <svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg>
+                  1 ch.
+                </div>
+                <span class="cluster-card__spec-dot">•</span>
+                <span class="cluster-card__dpe-badge">DPE E</span>
+              </div>
+              <div class="cluster-card__price-section">
+                <div class="cluster-card__price-label">Prix</div>
+                <div class="cluster-card__price">165 000 €</div>
+              </div>
+            </div>
+            <div class="cluster-card__bottom">
+              <div class="cluster-card__agencies">
+                <div class="cluster-card__avatars">
+                  <div class="cluster-card__avatar cluster-card__avatar--1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#1C1C1C"/><text x="24" y="17" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="#D4AF37" letter-spacing="0.5">CENTURY</text><text x="24" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#D4AF37">21</text><rect x="14" y="34" width="20" height="0.8" fill="#D4AF37"/></svg></div>
+                </div>
+                <div class="cluster-card__agency-meta">
+                  <span class="cluster-card__agency-meta-label">Diffusé par</span>
+                  <span class="cluster-card__agency-meta-count">Century 21 Bayonne</span>
+                </div>
+              </div>
+              <a href="page_bien_mono_gratuit.html" class="cluster-card__cta" aria-label="Voir ce bien — Appartement T2 à Bayonne">Voir ce bien</a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ==============================
+           MONO SCRAPÉ — Orpi Anglet
+           ============================== -->
+      <article>
+        <div class="cluster-card cluster-card--mono">
+          <div class="cluster-card__gallery">
+            <div class="cluster-card__photo-main">
+              <img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=600&h=450&fit=crop" alt="Appartement T3 Anglet — intérieur">
+              <button class="cluster-card__arrow cluster-card__arrow--prev" aria-label="Photo précédente"><svg viewBox="0 0 14 14"><path d="M9 2L4 7l5 5"/></svg></button>
+              <button class="cluster-card__arrow cluster-card__arrow--next" aria-label="Photo suivante"><svg viewBox="0 0 14 14"><path d="M5 2l5 5-5 5"/></svg></button>
+              <div class="cluster-card__photo-count"><svg viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg>6</div>
+            </div>
+          </div>
+          <div class="cluster-card__data">
+            <div class="cluster-card__info">
+              <div class="cluster-card__location-row">
+                <div class="cluster-card__location">
+                  <svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg>
+                  Anglet (Chambre d'Amour)
+                </div>
+              </div>
+              <h2 class="cluster-card__title">Appartement T3</h2>
+              <div class="cluster-card__specs">
+                <div class="cluster-card__spec">
+                  <svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg>
+                  72 m²
+                </div>
+                <span class="cluster-card__spec-dot">•</span>
+                <div class="cluster-card__spec">
+                  <svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg>
+                  2 ch.
+                </div>
+                <span class="cluster-card__spec-dot">•</span>
+                <span class="cluster-card__dpe-badge">DPE B</span>
+              </div>
+              <div class="cluster-card__price-section">
+                <div class="cluster-card__price-label">Prix</div>
+                <div class="cluster-card__price">275 000 €</div>
+              </div>
+            </div>
+            <div class="cluster-card__bottom">
+              <div class="cluster-card__agencies">
+                <div class="cluster-card__avatars">
+                  <div class="cluster-card__avatar cluster-card__avatar--1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#E30613"/><text x="24" y="29" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="white" letter-spacing="1">ORPI</text></svg></div>
+                </div>
+                <div class="cluster-card__agency-meta">
+                  <span class="cluster-card__agency-meta-label">Diffusé par</span>
+                  <span class="cluster-card__agency-meta-count">Orpi Anglet</span>
+                </div>
+              </div>
+              <a href="page_bien_mono_scrape.html" class="cluster-card__cta" aria-label="Voir ce bien — Appartement T3 à Anglet">Voir ce bien</a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div><!-- /cluster-list -->
+
+    </div><!-- /results__main -->
+
+    <!-- Sidebar -->
+    <aside class="results__sidebar">
+      <div class="results__sidebar-inner">
+
+        <!-- 1. Sauvegarder cette recherche -->
+        <div class="sidebar-save">
+          <div class="sidebar-save__title">Sauvegarder cette recherche</div>
+          <div class="sidebar-save__desc">Recevez les nouveaux biens correspondant à vos critères.</div>
+          <div class="sidebar-save__input-row">
+            <input class="sidebar-save__input" type="email" placeholder="votre@email.com" aria-label="Adresse email pour l'alerte">
+            <button class="sidebar-save__btn">M'alerter</button>
+          </div>
+        </div>
+
+        <!-- 2. Résumé marché local -->
+        <div class="sidebar-stats">
+          <div class="sidebar-stats__title">Marché à Biarritz</div>
+          <div class="sidebar-stats__grid">
+            <div class="sidebar-stats__row">
+              <span class="sidebar-stats__label">Biens disponibles</span>
+              <span class="sidebar-stats__value">142</span>
+            </div>
+            <div class="sidebar-stats__row">
+              <span class="sidebar-stats__label">Prix médian / m²</span>
+              <span class="sidebar-stats__value">4 850 €</span>
+            </div>
+            <div class="sidebar-stats__row">
+              <span class="sidebar-stats__label">Évolution 6 mois</span>
+              <span class="sidebar-stats__value"><span class="sidebar-stats__trend sidebar-stats__trend--up">+2,3 %</span></span>
+            </div>
+            <div class="sidebar-stats__row">
+              <span class="sidebar-stats__label">Délai moyen de vente</span>
+              <span class="sidebar-stats__value">68 jours</span>
+            </div>
+          </div>
+          <div class="sidebar-stats__source">Source : données TrackerImmo agrégées</div>
+        </div>
+
+        <!-- 3. Agences Premium actives -->
+        <div class="sidebar-agencies">
+          <div class="sidebar-agencies__title">Agences Premium à Biarritz</div>
+          <div class="sidebar-agencies__list">
+            <div class="sidebar-agencies__item">
+              <div class="sidebar-agencies__rank">1</div>
+              <div class="sidebar-agencies__avatar"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#0E4E57"/><text x="24" y="18" text-anchor="middle" font-family="Inter,sans-serif" font-size="7.5" font-weight="700" fill="#BACE27" letter-spacing="0.3">PRESTIGE</text><text x="24" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="600" fill="white">IMMOBILIER</text><rect x="12" y="34" width="24" height="1.2" rx="0.6" fill="#BACE27"/></svg></div>
+              <div class="sidebar-agencies__info">
+                <div class="sidebar-agencies__name">Prestige Immobilier</div>
+                <div class="sidebar-agencies__count">14 biens à Biarritz</div>
+              </div>
+              <div class="sidebar-agencies__badge">Premium</div>
+            </div>
+            <div class="sidebar-agencies__item">
+              <div class="sidebar-agencies__rank">2</div>
+              <div class="sidebar-agencies__avatar"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#1A1A2E"/><text x="24" y="22" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700" fill="white" letter-spacing="1.5">BARNES</text><rect x="10" y="27" width="28" height="0.8" fill="#C9A96E"/><text x="24" y="36" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="300" fill="#C9A96E" letter-spacing="0.8">IMMOBILIER</text></svg></div>
+              <div class="sidebar-agencies__info">
+                <div class="sidebar-agencies__name">Barnes Biarritz</div>
+                <div class="sidebar-agencies__count">11 biens à Biarritz</div>
+              </div>
+              <div class="sidebar-agencies__badge">Premium</div>
+            </div>
+            <div class="sidebar-agencies__item">
+              <div class="sidebar-agencies__rank">3</div>
+              <div class="sidebar-agencies__avatar"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#003D6A"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="white" letter-spacing="0.5">SOTHEBY'S</text><rect x="10" y="24" width="28" height="0.6" fill="#C9A96E"/><text x="24" y="34" text-anchor="middle" font-family="Inter,sans-serif" font-size="5" font-weight="300" fill="#C9A96E" letter-spacing="1">REALTY</text></svg></div>
+              <div class="sidebar-agencies__info">
+                <div class="sidebar-agencies__name">Sotheby's Realty</div>
+                <div class="sidebar-agencies__count">8 biens à Biarritz</div>
+              </div>
+              <div class="sidebar-agencies__badge">Premium</div>
+            </div>
+            <div class="sidebar-agencies__item">
+              <div class="sidebar-agencies__rank">4</div>
+              <div class="sidebar-agencies__avatar"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#FFD700"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#2D5016" letter-spacing="0.3">LAFORET</text><path d="M20 36 L24 25 L28 36" stroke="#2D5016" stroke-width="1.5" fill="none"/><path d="M18 36 L24 28 L30 36" stroke="#2D5016" stroke-width="1.2" fill="none" opacity="0.5"/></svg></div>
+              <div class="sidebar-agencies__info">
+                <div class="sidebar-agencies__name">Laforêt Biarritz</div>
+                <div class="sidebar-agencies__count">12 biens à Biarritz</div>
+              </div>
+              <div class="sidebar-agencies__badge">Premium</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+  </div>
+</main>
+
+<!-- ============================================================
+     MOBILE-ONLY: SEARCH BAR (static, 2 fields)
+     ============================================================ -->
+<div class="search-bar-mobile">
+  <div class="search-bar-mobile__form">
+    <div class="search-bar-mobile__field">
+      <svg viewBox="0 0 16 20"><path d="M8 1C4.13 1 1 4.13 1 8c0 5.25 7 11 7 11s7-5.75 7-11c0-3.87-3.13-7-7-7z"/><circle cx="8" cy="8" r="2.5"/></svg>
+      <label for="m-location" class="sr-only">Localisation</label>
+      <input class="search-bar-mobile__input" id="m-location" type="text" placeholder="Ville, quartier..." value="Biarritz">
+    </div>
+    <div class="search-bar-mobile__divider"></div>
+    <div class="search-bar-mobile__field search-bar-mobile__field--budget">
+      <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="8"/><path d="M9 4v10M6 6.5c0-1 1.3-1.5 3-1.5s3 .5 3 1.5-1.3 1.5-3 2-3 .8-3 1.8 1.3 1.7 3 1.7 3-.5 3-1.5"/></svg>
+      <label for="m-budget" class="sr-only">Budget maximum</label>
+      <input class="search-bar-mobile__input" id="m-budget" type="text" placeholder="Budget max" value="">
+    </div>
+    <button class="search-bar-mobile__btn" aria-label="Rechercher">
+      <svg viewBox="0 0 18 18"><circle cx="8" cy="8" r="6"/><path d="M13 13l4 4"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ============================================================
+     MOBILE-ONLY: RESULTS INFO
+     ============================================================ -->
+<div class="results-info-mobile">
+  <h1 class="results-info-mobile__count">25 biens compares a Biarritz</h1>
+  <span class="results-info-mobile__sort">Pertinence</span>
+</div>
+
+<!-- ============================================================
+     MOBILE-ONLY: CLUSTER LIST
+     ============================================================ -->
+<div class="cluster-list-mobile">
+
+  <!-- MULTI PREMIUM — 4 agences -->
+  <article class="m-cluster">
+    <div class="m-cluster__carousel">
+      <div class="m-cluster__slides">
+        <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=430&h=269&fit=crop" alt="Appartement T3 Beaurivage — salon lumineux"></div>
+        <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=430&h=269&fit=crop" alt="Vue cuisine"></div>
+        <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=430&h=269&fit=crop" alt="Vue chambre"></div>
+      </div>
+      <div class="m-cluster__badge-wow">Trouve chez 4 agences</div>
+      <div class="m-cluster__photo-count"><svg viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg> 14</div>
+      <div class="m-cluster__dots"><div class="m-cluster__dot m-cluster__dot--active"></div><div class="m-cluster__dot"></div><div class="m-cluster__dot"></div></div>
+    </div>
+    <div class="m-cluster__data">
+      <div class="m-cluster__location"><svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg> Biarritz (Beaurivage)</div>
+      <h2 class="m-cluster__title">Appartement T3</h2>
+      <div class="m-cluster__specs">
+        <div class="m-cluster__spec"><svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg> 68 m2</div>
+        <span class="m-cluster__spec-dot">&middot;</span>
+        <div class="m-cluster__spec"><svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg> 2 ch.</div>
+        <span class="m-cluster__spec-dot">&middot;</span>
+        <span class="m-cluster__dpe-badge">DPE B</span>
+      </div>
+      <div class="m-cluster__price-row"><span class="m-cluster__price-label">Fourchette</span><span class="m-cluster__price">215 000 - 229 000 &euro;</span></div>
+      <div class="m-cluster__bottom">
+        <div class="m-cluster__agencies">
+          <div class="m-cluster__avatars">
+            <div class="m-cluster__avatar m-cluster__avatar--z1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#0E4E57"/><text x="24" y="18" text-anchor="middle" font-family="Inter,sans-serif" font-size="7.5" font-weight="700" fill="#BACE27" letter-spacing="0.3">PRESTIGE</text><text x="24" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="600" fill="white">IMMOBILIER</text><rect x="12" y="34" width="24" height="1.2" rx="0.6" fill="#BACE27"/></svg></div>
+            <div class="m-cluster__avatar m-cluster__avatar--z2"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#1A1A2E"/><text x="24" y="22" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700" fill="white" letter-spacing="1.5">BARNES</text><rect x="10" y="27" width="28" height="0.8" fill="#C9A96E"/><text x="24" y="36" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="300" fill="#C9A96E" letter-spacing="0.8">IMMOBILIER</text></svg></div>
+            <div class="m-cluster__avatar m-cluster__avatar--overflow">+2</div>
+          </div>
+        </div>
+        <a href="page_bien.html" class="m-cluster__cta">Comparer les offres</a>
+      </div>
+    </div>
+  </article>
+
+  <!-- MULTI PREMIUM — 3 agences -->
+  <article class="m-cluster">
+    <div class="m-cluster__carousel">
+      <div class="m-cluster__slides">
+        <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=430&h=269&fit=crop" alt="Maison T5 Anglet — facade"></div>
+
+        <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=430&h=269&fit=crop" alt="Vue jardin"></div>
+        <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=430&h=269&fit=crop" alt="Vue terrasse"></div>
+      </div>
+      <div class="m-cluster__badge-wow">Trouve chez 3 agences</div>
+      <div class="m-cluster__photo-count"><svg viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg> 10</div>
+      <div class="m-cluster__dots"><div class="m-cluster__dot m-cluster__dot--active"></div><div class="m-cluster__dot"></div><div class="m-cluster__dot"></div></div>
+    </div>
+    <div class="m-cluster__data">
+      <div class="m-cluster__location"><svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg> Anglet (Montbrun)</div>
+      <h2 class="m-cluster__title">Maison T5</h2>
+      <div class="m-cluster__specs">
+        <div class="m-cluster__spec"><svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg> 142 m2</div>
+        <span class="m-cluster__spec-dot">&middot;</span>
+        <div class="m-cluster__spec"><svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg> 4 ch.</div>
+        <span class="m-cluster__spec-dot">&middot;</span>
+        <span class="m-cluster__dpe-badge">DPE C</span>
+      </div>
+      <div class="m-cluster__price-row"><span class="m-cluster__price-label">Fourchette</span><span class="m-cluster__price">485 000 - 520 000 &euro;</span></div>
+      <div class="m-cluster__bottom">
+        <div class="m-cluster__agencies">
+          <div class="m-cluster__avatars">
+            <div class="m-cluster__avatar m-cluster__avatar--z1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#FFD700"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#2D5016" letter-spacing="0.3">LAFORET</text><path d="M20 36 L24 25 L28 36" stroke="#2D5016" stroke-width="1.5" fill="none"/><path d="M18 36 L24 28 L30 36" stroke="#2D5016" stroke-width="1.2" fill="none" opacity="0.5"/></svg></div>
+            <div class="m-cluster__avatar m-cluster__avatar--z2"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#E30613"/><text x="24" y="29" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="white" letter-spacing="1">ORPI</text></svg></div>
+            <div class="m-cluster__avatar m-cluster__avatar--overflow">+1</div>
+          </div>
+        </div>
+        <a href="page_bien_2premium.html" class="m-cluster__cta">Comparer les offres</a>
+      </div>
+    </div>
+  </article>
+
+  <!-- MONO PREMIUM — Laforet Biarritz -->
+  <article class="m-cluster">
+    <div class="m-cluster__carousel">
+      <div class="m-cluster__slides">
+        <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=430&h=269&fit=crop" alt="Maison T4 Biarritz"></div>
+        <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=430&h=269&fit=crop" alt="Vue interieure"></div>
+      </div>
+      <div class="m-cluster__photo-count"><svg viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg> 8</div>
+      <div class="m-cluster__dots"><div class="m-cluster__dot m-cluster__dot--active"></div><div class="m-cluster__dot"></div></div>
+    </div>
+    <div class="m-cluster__data">
+      <div class="m-cluster__location"><svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg> Biarritz (Milady)</div>
+      <h2 class="m-cluster__title">Maison T4</h2>
+      <div class="m-cluster__specs">
+        <div class="m-cluster__spec"><svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg> 110 m2</div>
+        <span class="m-cluster__spec-dot">&middot;</span>
+        <div class="m-cluster__spec"><svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg> 3 ch.</div>
+        <span class="m-cluster__spec-dot">&middot;</span>
+        <span class="m-cluster__dpe-badge">DPE C</span>
+      </div>
+      <div class="m-cluster__price-row"><span class="m-cluster__price-label">Prix</span><span class="m-cluster__price">445 000 &euro;</span></div>
+      <div class="m-cluster__bottom">
+        <div class="m-cluster__agencies">
+          <div class="m-cluster__avatars">
+            <div class="m-cluster__avatar m-cluster__avatar--z1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#FFD700"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#2D5016" letter-spacing="0.3">LAFORET</text><path d="M20 36 L24 25 L28 36" stroke="#2D5016" stroke-width="1.5" fill="none"/><path d="M18 36 L24 28 L30 36" stroke="#2D5016" stroke-width="1.2" fill="none" opacity="0.5"/></svg></div>
+          </div>
+          <span class="m-cluster__agency-name">Laforet Biarritz</span>
+        </div>
+        <a href="page_bien_mono_premium.html" class="m-cluster__cta">Voir ce bien</a>
+      </div>
+    </div>
+  </article>
+
+  <!-- MULTI GRATUIT — 2 agences -->
+  <article class="m-cluster">
+    <div class="m-cluster__carousel">
+      <div class="m-cluster__slides">
+        <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=430&h=269&fit=crop" alt="Appartement T4 Bayonne — sejour"></div>
+        <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=430&h=269&fit=crop" alt="Vue salon"></div>
+        <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1600573472592-401b489a3cdc?w=430&h=269&fit=crop" alt="Vue salle de bain"></div>
+      </div>
+      <div class="m-cluster__badge-wow">Trouve chez 2 agences</div>
+      <div class="m-cluster__photo-count"><svg viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg> 7</div>
+      <div class="m-cluster__dots"><div class="m-cluster__dot m-cluster__dot--active"></div><div class="m-cluster__dot"></div><div class="m-cluster__dot"></div></div>
+    </div>
+    <div class="m-cluster__data">
+      <div class="m-cluster__location"><svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg> Bayonne (Saint-Esprit)</div>
+      <h2 class="m-cluster__title">Appartement T4</h2>
+      <div class="m-cluster__specs">
+        <div class="m-cluster__spec"><svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg> 92 m2</div>
+        <span class="m-cluster__spec-dot">&middot;</span>
+        <div class="m-cluster__spec"><svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg> 3 ch.</div>
+        <span class="m-cluster__spec-dot">&middot;</span>
+        <span class="m-cluster__dpe-badge">DPE D</span>
+      </div>
+      <div class="m-cluster__price-row"><span class="m-cluster__price-label">Fourchette</span><span class="m-cluster__price">295 000 - 310 000 &euro;</span></div>
+      <div class="m-cluster__bottom">
+        <div class="m-cluster__agencies">
+          <div class="m-cluster__avatars">
+            <div class="m-cluster__avatar m-cluster__avatar--z1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#8B1A4A"/><text x="24" y="18" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="white" letter-spacing="0.3">STEPHANE</text><text x="24" y="28" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" font-weight="700" fill="white" letter-spacing="0.5">PLAZA</text><rect x="14" y="33" width="20" height="0.8" fill="rgba(255,255,255,0.4)"/></svg></div>
+            <div class="m-cluster__avatar m-cluster__avatar--z2"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#2563EB"/><text x="24" y="22" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="700" fill="white">AB</text><text x="24" y="34" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="400" fill="rgba(255,255,255,0.8)" letter-spacing="0.5">IMMOBILIER</text></svg></div>
+          </div>
+        </div>
+        <a href="page_bien_gratuit_scrape.html" class="m-cluster__cta">Comparer les offres</a>
+      </div>
+    </div>
+  </article>
+
+  <!-- MULTI SCRAPE — 3 agences (100% scrape) -->
+  <article class="m-cluster">
+    <div class="m-cluster__carousel">
+      <div class="m-cluster__slides">
+        <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?w=430&h=269&fit=crop" alt="Appartement T3 Biarritz — cuisine"></div>
+        <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=430&h=269&fit=crop" alt="Vue sejour"></div>
+        <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=430&h=269&fit=crop" alt="Vue chambre"></div>
+      </div>
+      <div class="m-cluster__badge-wow">Trouve chez 3 agences</div>
+      <div class="m-cluster__photo-count"><svg viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg> 8</div>
+      <div class="m-cluster__dots"><div class="m-cluster__dot m-cluster__dot--active"></div><div class="m-cluster__dot"></div><div class="m-cluster__dot"></div></div>
+    </div>
+    <div class="m-cluster__data">
+      <div class="m-cluster__location"><svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg> Biarritz (Saint-Charles)</div>
+      <h2 class="m-cluster__title">Appartement T3</h2>
+      <div class="m-cluster__specs">
+        <div class="m-cluster__spec"><svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg> 65 m2</div>
+        <span class="m-cluster__spec-dot">&middot;</span>
+        <div class="m-cluster__spec"><svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg> 2 ch.</div>
+        <span class="m-cluster__spec-dot">&middot;</span>
+        <span class="m-cluster__dpe-badge">DPE E</span>
+      </div>
+      <div class="m-cluster__price-row"><span class="m-cluster__price-label">Fourchette</span><span class="m-cluster__price">238 000 - 252 000 &euro;</span></div>
+      <div class="m-cluster__bottom">
+        <div class="m-cluster__agencies">
+          <div class="m-cluster__avatars">
+            <div class="m-cluster__avatar m-cluster__avatar--z1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#FFD700"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#2D5016" letter-spacing="0.3">LAFORET</text><path d="M20 36 L24 25 L28 36" stroke="#2D5016" stroke-width="1.5" fill="none"/><path d="M18 36 L24 28 L30 36" stroke="#2D5016" stroke-width="1.2" fill="none" opacity="0.5"/></svg></div>
+            <div class="m-cluster__avatar m-cluster__avatar--z2"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#E30613"/><text x="24" y="29" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="white" letter-spacing="1">ORPI</text></svg></div>
+            <div class="m-cluster__avatar m-cluster__avatar--overflow">+1</div>
+          </div>
+        </div>
+        <a href="page_bien_full_scrape.html" class="m-cluster__cta">Comparer les offres</a>
+      </div>
+    </div>
+  </article>
+
+  <!-- MONO GRATUIT — Century 21 Bayonne -->
+  <article class="m-cluster">
+    <div class="m-cluster__carousel">
+      <div class="m-cluster__slides">
+        <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=430&h=269&fit=crop" alt="Appartement T2 Bayonne"></div>
+        <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=430&h=269&fit=crop" alt="Vue salon"></div>
+      </div>
+      <div class="m-cluster__photo-count"><svg viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg> 2</div>
+      <div class="m-cluster__dots"><div class="m-cluster__dot m-cluster__dot--active"></div><div class="m-cluster__dot"></div></div>
+    </div>
+    <div class="m-cluster__data">
+      <div class="m-cluster__location"><svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg> Bayonne (Centre)</div>
+      <h2 class="m-cluster__title">Appartement T2</h2>
+      <div class="m-cluster__specs">
+        <div class="m-cluster__spec"><svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg> 45 m2</div>
+        <span class="m-cluster__spec-dot">&middot;</span>
+        <div class="m-cluster__spec"><svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg> 1 ch.</div>
+        <span class="m-cluster__spec-dot">&middot;</span>
+        <span class="m-cluster__dpe-badge">DPE E</span>
+      </div>
+      <div class="m-cluster__price-row"><span class="m-cluster__price-label">Prix</span><span class="m-cluster__price">165 000 &euro;</span></div>
+      <div class="m-cluster__bottom">
+        <div class="m-cluster__agencies">
+          <div class="m-cluster__avatars">
+            <div class="m-cluster__avatar m-cluster__avatar--z1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#1C1C1C"/><text x="24" y="17" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="#D4AF37" letter-spacing="0.5">CENTURY</text><text x="24" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#D4AF37">21</text><rect x="14" y="34" width="20" height="0.8" fill="#D4AF37"/></svg></div>
+          </div>
+          <span class="m-cluster__agency-name">Century 21 Bayonne</span>
+        </div>
+        <a href="page_bien_mono_gratuit.html" class="m-cluster__cta">Voir ce bien</a>
+      </div>
+    </div>
+  </article>
+
+  <!-- MONO SCRAPE — Orpi Anglet -->
+  <article class="m-cluster">
+    <div class="m-cluster__carousel">
+      <div class="m-cluster__slides">
+        <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=430&h=269&fit=crop" alt="Appartement T3 Anglet"></div>
+        <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=430&h=269&fit=crop" alt="Vue interieure"></div>
+      </div>
+      <div class="m-cluster__photo-count"><svg viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg> 6</div>
+      <div class="m-cluster__dots"><div class="m-cluster__dot m-cluster__dot--active"></div><div class="m-cluster__dot"></div></div>
+    </div>
+    <div class="m-cluster__data">
+      <div class="m-cluster__location"><svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg> Anglet (Chambre d'Amour)</div>
+      <h2 class="m-cluster__title">Appartement T3</h2>
+      <div class="m-cluster__specs">
+        <div class="m-cluster__spec"><svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg> 72 m2</div>
+        <span class="m-cluster__spec-dot">&middot;</span>
+        <div class="m-cluster__spec"><svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg> 2 ch.</div>
+        <span class="m-cluster__spec-dot">&middot;</span>
+        <span class="m-cluster__dpe-badge">DPE B</span>
+      </div>
+      <div class="m-cluster__price-row"><span class="m-cluster__price-label">Prix</span><span class="m-cluster__price">275 000 &euro;</span></div>
+      <div class="m-cluster__bottom">
+        <div class="m-cluster__agencies">
+          <div class="m-cluster__avatars">
+            <div class="m-cluster__avatar m-cluster__avatar--z1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#E30613"/><text x="24" y="29" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="white" letter-spacing="1">ORPI</text></svg></div>
+          </div>
+          <span class="m-cluster__agency-name">Orpi Anglet</span>
+        </div>
+        <a href="page_bien_mono_scrape.html" class="m-cluster__cta">Voir ce bien</a>
+      </div>
+    </div>
+  </article>
+
+</div><!-- /cluster-list-mobile -->
+
+<!-- ============================================================
+     MOBILE-ONLY: BACK TO TOP — sticky pill
+     ============================================================ -->
+<div class="m-back-to-top">
+  <a href="#top" class="m-back-to-top__link">
+    <svg viewBox="0 0 12 12"><path d="M6 10V2M2 6l4-4 4 4"/></svg>
+    Retour en haut
+  </a>
+</div>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="footer">
+  <div class="footer__inner">
+    <!-- Brand -->
+    <div class="footer__brand">
+      <div class="footer__brand-name">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L4 7v10l8 5 8-5V7l-8-5z" fill="#BACE27"/>
+          <path d="M8 12l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>TrackerImmo</span>
+      </div>
+      <p class="footer__brand-desc">Le comparateur intelligent pour l'immobilier.<br>Transparence, rapidité et économies.</p>
+    </div>
+
+    <!-- Links -->
+    <div class="footer__links">
+      <div>
+        <div class="footer__col-title">Société</div>
+        <a href="#" class="footer__link">À propos</a>
+        <a href="#" class="footer__link">Carrières</a>
+        <a href="#" class="footer__link">Presse</a>
+      </div>
+      <div>
+        <div class="footer__col-title">Légal</div>
+        <a href="#" class="footer__link">Mentions légales</a>
+        <a href="#" class="footer__link">Confidentialité</a>
+        <a href="#" class="footer__link">Cookies</a>
+      </div>
+    </div>
+
+    <!-- Social -->
+    <div class="footer__social">
+      <a href="#" class="footer__social-link" aria-label="Facebook">
+        <svg viewBox="0 0 12 12"><path d="M9 1H7.5A2.5 2.5 0 0 0 5 3.5V5H3.5v2H5v4h2V7h1.5L9 5H7V3.5a.5.5 0 0 1 .5-.5H9V1z"/></svg>
+      </a>
+      <a href="#" class="footer__social-link" aria-label="Twitter">
+        <svg viewBox="0 0 12 12"><path d="M11 1.5a5.08 5.08 0 0 1-1.5.75 2.28 2.28 0 0 0-4 1.5v.5A5.4 5.4 0 0 1 1 2s-2 4.5 2.5 6.5A5.84 5.84 0 0 1 0 10c4.5 2.5 10 0 10-5.75 0-.14 0-.28-.02-.42A3.63 3.63 0 0 0 11 1.5z"/></svg>
+      </a>
+      <a href="#" class="footer__social-link" aria-label="Instagram">
+        <svg viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10" rx="3" stroke="currentColor" fill="none" stroke-width="1"/><circle cx="6" cy="6" r="2" stroke="currentColor" fill="none" stroke-width="1"/><circle cx="9" cy="3" r="0.5" fill="currentColor"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- Bottom -->
+  <div class="footer__bottom">
+    <p class="footer__copyright">© 2025 TrackerImmo. Tous droits réservés.</p>
+  </div>
+</footer>
+
+<!-- ============================================================
+     CAROUSEL JS — prototype only
+     ============================================================ -->
+<script>
+(function () {
+  /* Each cluster card's photo set (main photo URLs for carousel) */
+  const photoSets = [
+    /* 1. Multi premium (4 agences) — page_bien.html */ [
+      'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&h=450&fit=crop',
+      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=450&fit=crop',
+      'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=600&h=450&fit=crop',
+      'https://images.unsplash.com/photo-1600573472592-401b489a3cdc?w=600&h=450&fit=crop'
+    ],
+    /* 2. Multi premium (3 agences, 2 premium) — page_bien_2premium.html */ [
+      'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&h=450&fit=crop',
+      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&h=450&fit=crop',
+      'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=600&h=450&fit=crop',
+      'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=600&h=450&fit=crop'
+    ],
+    /* 3. Mono premium — page_bien_mono_premium.html */ [
+      'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=600&h=450&fit=crop',
+      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=450&fit=crop',
+      'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=600&h=450&fit=crop'
+    ],
+    /* 4. Multi gratuit — page_bien_gratuit_scrape.html */ [
+      'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&h=450&fit=crop',
+      'https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=600&h=450&fit=crop',
+      'https://images.unsplash.com/photo-1600573472592-401b489a3cdc?w=600&h=450&fit=crop'
+    ],
+    /* 5. Multi scrapé (100%) — page_bien_full_scrape.html */ [
+      'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=600&h=450&fit=crop',
+      'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=600&h=450&fit=crop',
+      'https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=600&h=450&fit=crop'
+    ],
+    /* 6. Mono gratuit — page_bien_mono_gratuit.html */ [
+      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&h=450&fit=crop',
+      'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&h=450&fit=crop'
+    ],
+    /* 7. Mono scrapé — page_bien_mono_scrape.html */ [
+      'https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=600&h=450&fit=crop',
+      'https://images.unsplash.com/photo-1600573472592-401b489a3cdc?w=600&h=450&fit=crop',
+      'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&h=450&fit=crop'
+    ]
+  ];
+
+  var cards = document.querySelectorAll('.cluster-card');
+  cards.forEach(function (card, i) {
+    var photos = photoSets[i];
+    if (!photos || photos.length < 2) return;
+    var idx = 0;
+    var img = card.querySelector('.cluster-card__photo-main > img');
+    var prevBtn = card.querySelector('.cluster-card__arrow--prev');
+    var nextBtn = card.querySelector('.cluster-card__arrow--next');
+    if (!img || !prevBtn || !nextBtn) return;
+
+    prevBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      idx = (idx - 1 + photos.length) % photos.length;
+      img.src = photos[idx];
+    });
+    nextBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      idx = (idx + 1) % photos.length;
+      img.src = photos[idx];
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
