@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>TrackerImmo — Comparateur d'annonces immobilières</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -224,7 +224,7 @@ a:focus-visible {
 }
 
 /* ---- CLUSTER CARD ---- */
-.cluster-card {
+.cluster-card--hero {
   display: flex;
   background: var(--bg-section);
   border: 1px solid var(--border-default);
@@ -309,7 +309,7 @@ a:focus-visible {
   align-items: center;
   gap: var(--space-xs);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-tertiary);
 }
 .cluster-card__location svg {
@@ -722,7 +722,7 @@ a:focus-visible {
   }
 
   /* ---- CLUSTER CARD (vertical stack) ---- */
-  .cluster-card {
+  .cluster-card--hero {
     flex-direction: column;
   }
   .cluster-card__gallery {
@@ -823,7 +823,7 @@ a:focus-visible {
      ============================================================ -->
 <header class="top-bar">
   <div class="top-bar__inner">
-    <a href="landing.html"><img class="top-bar__logo" src="logo-trackerimmo.svg" alt="TrackerImmo"></a>
+    <a href="index.html"><img class="top-bar__logo" src="logo-trackerimmo.svg" alt="TrackerImmo"></a>
   </div>
 </header>
 
@@ -844,7 +844,7 @@ a:focus-visible {
         <!-- Location -->
         <div class="search-bar__field search-bar__field--location">
           <div class="search-bar__field-icon">
-            <svg viewBox="0 0 16 20"><path d="M8 1C4.13 1 1 4.13 1 8c0 5.25 7 11 7 11s7-5.75 7-11c0-3.87-3.13-7-7-7z"/><circle cx="8" cy="8" r="2.5"/></svg>
+            <svg aria-hidden="true" viewBox="0 0 16 20"><path d="M8 1C4.13 1 1 4.13 1 8c0 5.25 7 11 7 11s7-5.75 7-11c0-3.87-3.13-7-7-7z"/><circle cx="8" cy="8" r="2.5"/></svg>
           </div>
           <label for="search-location" class="sr-only">Localisation</label>
           <input class="search-bar__input" id="search-location" type="text" placeholder="Où cherchez-vous ?">
@@ -853,7 +853,7 @@ a:focus-visible {
         <!-- Type -->
         <div class="search-bar__field search-bar__field--type">
           <div class="search-bar__field-icon">
-            <svg viewBox="0 0 16 18"><path d="M1 17V7L8 1l7 6v10H11v-5H5v5H1z"/></svg>
+            <svg aria-hidden="true" viewBox="0 0 16 18"><path d="M1 17V7L8 1l7 6v10H11v-5H5v5H1z"/></svg>
           </div>
           <div class="search-bar__select-wrapper">
             <label for="search-type" class="sr-only">Type de bien</label>
@@ -863,7 +863,7 @@ a:focus-visible {
               <option>Maison</option>
             </select>
             <div class="search-bar__select-arrow">
-              <svg viewBox="0 0 20 20"><path d="M6 8l4 4 4-4"/></svg>
+              <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M6 8l4 4 4-4"/></svg>
             </div>
           </div>
         </div>
@@ -871,14 +871,14 @@ a:focus-visible {
         <!-- Budget -->
         <div class="search-bar__field search-bar__field--budget">
           <div class="search-bar__field-icon">
-            <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="8"/><path d="M9 4v10M6 6.5c0-1 1.3-1.5 3-1.5s3 .5 3 1.5-1.3 1.5-3 2-3 .8-3 1.8 1.3 1.7 3 1.7 3-.5 3-1.5"/></svg>
+            <svg aria-hidden="true" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="8"/><path d="M9 4v10M6 6.5c0-1 1.3-1.5 3-1.5s3 .5 3 1.5-1.3 1.5-3 2-3 .8-3 1.8 1.3 1.7 3 1.7 3-.5 3-1.5"/></svg>
           </div>
           <label for="search-budget" class="sr-only">Budget maximum</label>
           <input class="search-bar__input" id="search-budget" type="text" placeholder="Budget Max">
         </div>
         <!-- CTA Button -->
         <a href="search_results.html" class="search-bar__btn">
-          <svg viewBox="0 0 18 18"><circle cx="8" cy="8" r="6"/><path d="M13 13l4 4"/></svg>
+          <svg aria-hidden="true" viewBox="0 0 18 18"><circle cx="8" cy="8" r="6"/><path d="M13 13l4 4"/></svg>
           Comparer les prix
         </a>
       </div>
@@ -897,7 +897,7 @@ a:focus-visible {
     </div>
 
     <!-- Cluster Card -->
-    <div class="cluster-card">
+    <div class="cluster-card cluster-card--hero">
       <!-- Gallery Left (60%) -->
       <div class="cluster-card__gallery">
         <div class="cluster-card__photo-main">
@@ -920,7 +920,7 @@ a:focus-visible {
         <div class="cluster-card__info">
           <div class="cluster-card__location-row">
             <div class="cluster-card__location">
-              <svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg>
+              <svg aria-hidden="true" viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg>
               Biarritz (Beaurivage)
             </div>
             <div class="cluster-card__cluster-badge">Trouvé chez 4 agences</div>
@@ -928,12 +928,12 @@ a:focus-visible {
           <h3 class="cluster-card__title">Appartement T3</h3>
           <div class="cluster-card__specs">
             <div class="cluster-card__spec">
-              <svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg>
+              <svg aria-hidden="true" viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg>
               68 m²
             </div>
             <span class="cluster-card__spec-dot">•</span>
             <div class="cluster-card__spec">
-              <svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg>
+              <svg aria-hidden="true" viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg>
               2 ch.
             </div>
             <span class="cluster-card__spec-dot">•</span>
@@ -945,9 +945,9 @@ a:focus-visible {
           </div>
           <div class="cluster-card__agencies">
             <div class="cluster-card__avatars">
-              <div class="cluster-card__avatar cluster-card__avatar--1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#0E4E57"/><text x="24" y="18" text-anchor="middle" font-family="Inter,sans-serif" font-size="7.5" font-weight="700" fill="#BACE27" letter-spacing="0.3">PRESTIGE</text><text x="24" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="600" fill="white">IMMOBILIER</text><rect x="12" y="34" width="24" height="1.2" rx="0.6" fill="#BACE27"/></svg></div>
-              <div class="cluster-card__avatar cluster-card__avatar--2"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#1A1A2E"/><text x="24" y="22" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700" fill="white" letter-spacing="1.5">BARNES</text><rect x="10" y="27" width="28" height="0.8" fill="#C9A96E"/><text x="24" y="36" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="300" fill="#C9A96E" letter-spacing="0.8">IMMOBILIER</text></svg></div>
-              <div class="cluster-card__avatar cluster-card__avatar--3"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#003D6A"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="white" letter-spacing="0.5">SOTHEBY'S</text><rect x="10" y="24" width="28" height="0.6" fill="#C9A96E"/><text x="24" y="34" text-anchor="middle" font-family="Inter,sans-serif" font-size="5" font-weight="300" fill="#C9A96E" letter-spacing="1">REALTY</text></svg></div>
+              <div class="cluster-card__avatar cluster-card__avatar--1"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#0E4E57"/><text x="24" y="18" text-anchor="middle" font-family="Inter,sans-serif" font-size="7.5" font-weight="700" fill="#BACE27" letter-spacing="0.3">PRESTIGE</text><text x="24" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="600" fill="white">IMMOBILIER</text><rect x="12" y="34" width="24" height="1.2" rx="0.6" fill="#BACE27"/></svg></div>
+              <div class="cluster-card__avatar cluster-card__avatar--2"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#1A1A2E"/><text x="24" y="22" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700" fill="white" letter-spacing="1.5">BARNES</text><rect x="10" y="27" width="28" height="0.8" fill="#C9A96E"/><text x="24" y="36" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="300" fill="#C9A96E" letter-spacing="0.8">IMMOBILIER</text></svg></div>
+              <div class="cluster-card__avatar cluster-card__avatar--3"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#003D6A"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="white" letter-spacing="0.5">SOTHEBY'S</text><rect x="10" y="24" width="28" height="0.6" fill="#C9A96E"/><text x="24" y="34" text-anchor="middle" font-family="Inter,sans-serif" font-size="5" font-weight="300" fill="#C9A96E" letter-spacing="1">REALTY</text></svg></div>
               <div class="cluster-card__avatar cluster-card__avatar--overflow">+1</div>
             </div>
             <div class="cluster-card__agency-meta">
@@ -973,7 +973,7 @@ a:focus-visible {
     <!-- Feature 1: Prix plancher (exchange/dollar icon) -->
     <div class="feature-card">
       <div class="feature-card__icon">
-        <svg viewBox="0 0 24 24"><path d="M7 10h10M7 14h10" stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round"/><path d="M12 6v2M12 16v2" stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round"/><path d="M16 8l2 2-2 2" stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 12l-2 2 2 2" stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="1.5"/></svg>
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 10h10M7 14h10" stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round"/><path d="M12 6v2M12 16v2" stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round"/><path d="M16 8l2 2-2 2" stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 12l-2 2 2 2" stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="1.5"/></svg>
       </div>
       <h3 class="feature-card__title">Identifiez le prix plancher.</h3>
       <p class="feature-card__desc">Un même bien peut être affiché à des prix très différents selon l'agence. TrackerImmo détecte ces doublons et vous donne le pouvoir de négocier sur la base de l'offre la moins chère.</p>
@@ -982,7 +982,7 @@ a:focus-visible {
     <!-- Feature 2 -->
     <div class="feature-card">
       <div class="feature-card__icon">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="1.5"/><path d="M12 6v6l4 2" stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" fill="none" stroke-width="1.5"/><path d="M12 6v6l4 2" stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <h3 class="feature-card__title">1 bien = 1 annonce.</h3>
       <p class="feature-card__desc">Plus besoin de visiter 15 sites différents. Toutes les annonces sont centralisées, dédoublonnées et classées pour vous faire gagner des heures de recherche.</p>
@@ -991,7 +991,7 @@ a:focus-visible {
     <!-- Feature 3: Alerte (bell/notification icon) -->
     <div class="feature-card">
       <div class="feature-card__icon">
-        <svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7v4l-2 3h18l-2-3V9a7 7 0 0 0-7-7z" stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 19a3 3 0 0 0 6 0" stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round"/><circle cx="18" cy="5" r="3" fill="currentColor" stroke="none"/></svg>
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7v4l-2 3h18l-2-3V9a7 7 0 0 0-7-7z" stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 19a3 3 0 0 0 6 0" stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round"/><circle cx="18" cy="5" r="3" fill="currentColor" stroke="none"/></svg>
       </div>
       <h3 class="feature-card__title">Alerte baisse de prix.</h3>
       <p class="feature-card__desc">Soyez alerté dès qu'un bien correspondant à vos critères est mis en ligne ou baisse de prix. Soyez le premier à visiter.</p>
@@ -1036,7 +1036,7 @@ a:focus-visible {
     <!-- Brand -->
     <div class="footer__brand">
       <div class="footer__brand-name">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none">
           <path d="M12 2L4 7v10l8 5 8-5V7l-8-5z" fill="#BACE27"/>
           <path d="M8 12l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -1064,13 +1064,13 @@ a:focus-visible {
     <!-- Social -->
     <div class="footer__social">
       <a href="#" class="footer__social-link" aria-label="Facebook">
-        <svg viewBox="0 0 12 12"><path d="M9 1H7.5A2.5 2.5 0 0 0 5 3.5V5H3.5v2H5v4h2V7h1.5L9 5H7V3.5a.5.5 0 0 1 .5-.5H9V1z"/></svg>
+        <svg aria-hidden="true" viewBox="0 0 12 12"><path d="M9 1H7.5A2.5 2.5 0 0 0 5 3.5V5H3.5v2H5v4h2V7h1.5L9 5H7V3.5a.5.5 0 0 1 .5-.5H9V1z"/></svg>
       </a>
       <a href="#" class="footer__social-link" aria-label="Twitter">
-        <svg viewBox="0 0 12 12"><path d="M11 1.5a5.08 5.08 0 0 1-1.5.75 2.28 2.28 0 0 0-4 1.5v.5A5.4 5.4 0 0 1 1 2s-2 4.5 2.5 6.5A5.84 5.84 0 0 1 0 10c4.5 2.5 10 0 10-5.75 0-.14 0-.28-.02-.42A3.63 3.63 0 0 0 11 1.5z"/></svg>
+        <svg aria-hidden="true" viewBox="0 0 12 12"><path d="M11 1.5a5.08 5.08 0 0 1-1.5.75 2.28 2.28 0 0 0-4 1.5v.5A5.4 5.4 0 0 1 1 2s-2 4.5 2.5 6.5A5.84 5.84 0 0 1 0 10c4.5 2.5 10 0 10-5.75 0-.14 0-.28-.02-.42A3.63 3.63 0 0 0 11 1.5z"/></svg>
       </a>
       <a href="#" class="footer__social-link" aria-label="Instagram">
-        <svg viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10" rx="3" stroke="currentColor" fill="none" stroke-width="1"/><circle cx="6" cy="6" r="2" stroke="currentColor" fill="none" stroke-width="1"/><circle cx="9" cy="3" r="0.5" fill="currentColor"/></svg>
+        <svg aria-hidden="true" viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10" rx="3" stroke="currentColor" fill="none" stroke-width="1"/><circle cx="6" cy="6" r="2" stroke="currentColor" fill="none" stroke-width="1"/><circle cx="9" cy="3" r="0.5" fill="currentColor"/></svg>
       </a>
     </div>
   </div>

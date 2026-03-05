@@ -37,7 +37,7 @@ select:focus-visible {
   /* Container stops at ~half the search bar height (67/2 ≈ 34px).
      Top padding for context text + gap, then only half the bar fits inside. */
   padding: var(--space-lg) var(--gutter) 0;
-  margin-bottom: 34px; /* reserve space for the overflowing half */
+  margin-bottom: var(--search-bar-overflow); /* reserve space for the overflowing half */
 }
 .search-bar-compact__inner {
   max-width: var(--content-narrow);
@@ -56,7 +56,7 @@ select:focus-visible {
 .search-bar-compact__form {
   background: var(--bg-section);
   border: 1px solid var(--border-default);
-  border-radius: 12px;
+  border-radius: var(--radius-searchbar);
   box-shadow: var(--shadow-lg);
   padding: 1px;
   display: flex;
@@ -67,7 +67,7 @@ select:focus-visible {
      bottom half overflows below into the bg-page area */
   position: relative;
   top: 0;
-  margin-bottom: -34px;
+  margin-bottom: calc(-1 * var(--search-bar-overflow));
 }
 .search-bar-compact__section {
   flex: 1;
@@ -75,7 +75,7 @@ select:focus-visible {
   align-items: center;
   padding: 12px var(--space-md);
   height: 100%;
-  border-right: 1px solid #F1F5F9;
+  border-right: 1px solid var(--bg-notify);
 }
 .search-bar-compact__section:last-of-type {
   border-right: none;
@@ -122,7 +122,7 @@ select:focus-visible {
   line-height: 20px;
 }
 .search-bar-compact__input::placeholder {
-  color: #CBD5E1;
+  color: var(--border-hover-subtle);
   font-weight: 600;
 }
 .search-bar-compact__select {
@@ -185,15 +185,15 @@ select:focus-visible {
   gap: var(--space-sm);
   width: 100%;
   height: 100%;
-  background: #B1CC28;
+  background: var(--primary-accent);
   border-radius: var(--radius-card-lg);
   font-size: 16px;
   font-weight: 700;
-  color: #1E2012;
+  color: var(--text-cta);
   border: none;
   cursor: pointer;
   transition: background 0.15s;
-  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-lg);
 }
 .search-bar-compact__btn:hover {
   background: var(--btn-hover-premium);
@@ -368,7 +368,7 @@ select:focus-visible {
   line-height: 16px;
 }
 .sidebar-stats__trend--up { color: #15803D; }
-.sidebar-stats__trend--down { color: #DC2626; }
+.sidebar-stats__trend--down { color: var(--color-negative); }
 .sidebar-stats__source {
   font-size: 10px;
   font-weight: 400;
@@ -489,7 +489,7 @@ select:focus-visible {
   line-height: 20px;
 }
 .results-info__sort-value {
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-body);
 }
 
@@ -509,6 +509,9 @@ select:focus-visible {
   box-shadow: var(--shadow-sm);
   overflow: hidden;
   width: 100%;
+}
+.cluster-card--list {
+  /* Variante liste : comportement déjà défini par .cluster-card dans ce contexte */
 }
 
 /* --- MONO variant: compact, single photo --- */
@@ -680,7 +683,7 @@ select:focus-visible {
   align-items: center;
   gap: var(--space-xs);
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-tertiary);
 }
 .cluster-card__location svg {
@@ -719,6 +722,14 @@ select:focus-visible {
   color: var(--text-heading);
   line-height: 24px;
   letter-spacing: -0.3px;
+}
+.cluster-card__title a {
+  color: inherit;
+  text-decoration: none;
+}
+.cluster-card__title a:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 .cluster-card__specs {
   display: flex;
@@ -966,36 +977,59 @@ select:focus-visible {
   color: var(--text-placeholder);
   font-weight: 400;
 }
-.search-bar-mobile__field--budget {
-  flex: 0.7;
-}
 .search-bar-mobile__divider {
   width: 1px;
   height: 24px;
   background: var(--border-divider);
   flex-shrink: 0;
 }
-.search-bar-mobile__btn {
+.search-bar-mobile__filters-btn {
   flex-shrink: 0;
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-card-lg);
-  background: var(--primary-accent);
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: var(--space-xs);
+  padding: 0 var(--space-md);
+  height: 36px;
+  border-radius: var(--radius-card-lg);
+  background: var(--primary-dark);
   border: none;
   cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bg-section);
+  white-space: nowrap;
+  transition: background 0.15s;
 }
-.search-bar-mobile__btn svg {
-  width: 16px;
-  height: 16px;
-  stroke: var(--primary-dark);
+.search-bar-mobile__filters-btn:active { background: var(--btn-hover-gratuit); }
+.search-bar-mobile__filters-btn svg {
+  width: 14px;
+  height: 14px;
+  stroke: var(--bg-section);
   fill: none;
-  stroke-width: 2;
+  stroke-width: 1.5;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+.search-bar-mobile__filters-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  background: var(--primary-accent);
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--primary-dark);
+  line-height: 1;
+}
+.search-bar-mobile__filters-count[data-count="0"] { display: none; }
+
+/* ---- FILTRE BOTTOM SHEET (search results) — hidden by default, shown only in mobile @media ---- */
+.filters-overlay { display: none; }
+.filters-sheet { display: none; }
 
 /* ---- RESULTS INFO MOBILE ---- */
 .results-info-mobile {
@@ -1141,7 +1175,7 @@ select:focus-visible {
   align-items: center;
   gap: var(--space-xs);
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-tertiary);
   line-height: 16px;
 }
@@ -1156,6 +1190,14 @@ select:focus-visible {
   color: var(--text-heading);
   line-height: 22px;
   letter-spacing: -0.3px;
+}
+.m-cluster__title a {
+  color: inherit;
+  text-decoration: none;
+}
+.m-cluster__title a:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 .m-cluster__specs {
   display: flex;
@@ -1263,7 +1305,7 @@ select:focus-visible {
 }
 .m-cluster__agency-name {
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-secondary);
   line-height: 16px;
   white-space: nowrap;
@@ -1350,6 +1392,136 @@ select:focus-visible {
 
   /* Header: logo left-aligned (shared.css handles 48px height) */
   .top-bar__inner { justify-content: flex-start; }
+
+  /* ---- FILTRE BOTTOM SHEET ---- */
+  .filters-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: var(--overlay-backdrop);
+  }
+  .filters-overlay.open { display: block; }
+  .filters-sheet {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 201;
+    background: var(--bg-section);
+    border-radius: var(--radius-card-lg) var(--radius-card-lg) 0 0;
+    padding: var(--space-md);
+    padding-bottom: max(var(--space-lg), env(safe-area-inset-bottom));
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+  .filters-sheet.open { transform: translateY(0); }
+  .filters-sheet__handle {
+    width: 36px;
+    height: 4px;
+    background: var(--border-divider);
+    border-radius: 2px;
+    margin: 0 auto var(--space-md);
+  }
+  .filters-sheet__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-lg);
+  }
+  .filters-sheet__title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-heading);
+  }
+  .filters-sheet__reset {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-btn);
+    transition: background 0.15s;
+  }
+  .filters-sheet__reset:active { background: var(--bg-input); }
+  .filters-sheet__group { margin-bottom: var(--space-lg); }
+  .filters-sheet__group-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-label);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: var(--space-sm);
+  }
+  .filters-sheet__pills {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+  .filters-sheet__pill {
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-full);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-body);
+    background: var(--bg-section);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, color 0.15s;
+    user-select: none;
+  }
+  .filters-sheet__pill.active {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+    color: var(--bg-section);
+  }
+  .filters-sheet__row {
+    display: flex;
+    gap: var(--space-sm);
+  }
+  .filters-sheet__input-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+  .filters-sheet__input-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-tertiary);
+  }
+  .filters-sheet__input {
+    width: 100%;
+    padding: var(--space-md);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-btn-sm);
+    font-size: 14px;
+    font-family: inherit;
+    background: var(--bg-section);
+    color: var(--text-body);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .filters-sheet__input:focus-visible { border-color: var(--primary-dark); }
+  .filters-sheet__apply {
+    width: 100%;
+    padding: var(--space-md);
+    background: var(--primary-accent);
+    border-radius: var(--radius-btn-sm);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--primary-dark);
+    border: none;
+    cursor: pointer;
+    margin-top: var(--space-md);
+    transition: background 0.15s;
+  }
+  .filters-sheet__apply:active { background: var(--btn-hover-premium); }
 }
 
 /* Desktop: ensure mobile components stay hidden */
@@ -1368,7 +1540,7 @@ select:focus-visible {
      ============================================================ -->
 <header class="top-bar">
   <div class="top-bar__inner">
-    <a href="landing.html"><img class="top-bar__logo" src="logo-trackerimmo.svg" alt="TrackerImmo"></a>
+    <a href="index.html"><img class="top-bar__logo" src="logo-trackerimmo.svg" alt="TrackerImmo"></a>
   </div>
 </header>
 
@@ -1382,7 +1554,7 @@ select:focus-visible {
       <!-- Location -->
       <div class="search-bar-compact__section">
         <div class="search-bar-compact__section-icon">
-          <svg viewBox="0 0 16 20"><path d="M8 1C4.13 1 1 4.13 1 8c0 5.25 7 11 7 11s7-5.75 7-11c0-3.87-3.13-7-7-7z"/><circle cx="8" cy="8" r="2.5"/></svg>
+          <svg aria-hidden="true" viewBox="0 0 16 20"><path d="M8 1C4.13 1 1 4.13 1 8c0 5.25 7 11 7 11s7-5.75 7-11c0-3.87-3.13-7-7-7z"/><circle cx="8" cy="8" r="2.5"/></svg>
         </div>
         <div class="search-bar-compact__section-content">
           <div class="search-bar-compact__label">Localisation</div>
@@ -1393,7 +1565,7 @@ select:focus-visible {
       <!-- Type -->
       <div class="search-bar-compact__section">
         <div class="search-bar-compact__section-icon">
-          <svg viewBox="0 0 16 18"><path d="M1 17V7L8 1l7 6v10H11v-5H5v5H1z"/></svg>
+          <svg aria-hidden="true" viewBox="0 0 16 18"><path d="M1 17V7L8 1l7 6v10H11v-5H5v5H1z"/></svg>
         </div>
         <div class="search-bar-compact__section-content">
           <div class="search-bar-compact__label">Type de bien</div>
@@ -1405,27 +1577,61 @@ select:focus-visible {
               <option>Maison</option>
             </select>
             <div class="search-bar-compact__select-arrow">
-              <svg viewBox="0 0 20 20"><path d="M6 8l4 4 4-4"/></svg>
+              <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M6 8l4 4 4-4"/></svg>
             </div>
           </div>
+        </div>
+      </div>
+      <!-- Pièces -->
+      <div class="search-bar-compact__section">
+        <div class="search-bar-compact__section-icon">
+          <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+        </div>
+        <div class="search-bar-compact__section-content">
+          <div class="search-bar-compact__label">Pièces</div>
+          <div class="search-bar-compact__select-wrapper">
+            <label for="compact-rooms" class="sr-only">Nombre de pièces minimum</label>
+            <select class="search-bar-compact__select" id="compact-rooms">
+              <option value="">Toutes</option>
+              <option value="1">1+</option>
+              <option value="2">2+</option>
+              <option value="3">3+</option>
+              <option value="4">4+</option>
+              <option value="5">5+</option>
+            </select>
+            <div class="search-bar-compact__select-arrow">
+              <svg aria-hidden="true" viewBox="0 0 20 20"><path d="M6 8l4 4 4-4"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Surface min -->
+      <div class="search-bar-compact__section">
+        <div class="search-bar-compact__section-icon">
+          <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="14" height="14" rx="1"/><path d="M1 5h14M5 1v14"/></svg>
+        </div>
+        <div class="search-bar-compact__section-content">
+          <div class="search-bar-compact__label">Surface min (m²)</div>
+          <label for="compact-surface" class="sr-only">Surface minimum en m²</label>
+          <input class="search-bar-compact__input" id="compact-surface" type="text" inputmode="numeric" placeholder="Ex : 50">
         </div>
       </div>
       <!-- Budget -->
       <div class="search-bar-compact__section">
         <div class="search-bar-compact__section-icon">
-          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="8"/><path d="M9 4v10M6 6.5c0-1 1.3-1.5 3-1.5s3 .5 3 1.5-1.3 1.5-3 2-3 .8-3 1.8 1.3 1.7 3 1.7 3-.5 3-1.5"/></svg>
+          <svg aria-hidden="true" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="8"/><path d="M9 4v10M6 6.5c0-1 1.3-1.5 3-1.5s3 .5 3 1.5-1.3 1.5-3 2-3 .8-3 1.8 1.3 1.7 3 1.7 3-.5 3-1.5"/></svg>
         </div>
         <div class="search-bar-compact__section-content">
           <div class="search-bar-compact__budget-row">
             <div class="search-bar-compact__budget-col">
               <div class="search-bar-compact__label">Budget Min (€)</div>
               <label for="compact-budget-min" class="sr-only">Budget minimum</label>
-              <input class="search-bar-compact__input" id="compact-budget-min" type="text" placeholder="0" value="0">
+              <input class="search-bar-compact__input" id="compact-budget-min" type="text" inputmode="numeric" placeholder="0" value="0">
             </div>
             <div class="search-bar-compact__budget-col">
               <div class="search-bar-compact__label">Budget Max (€)</div>
               <label for="compact-budget-max" class="sr-only">Budget maximum</label>
-              <input class="search-bar-compact__input" id="compact-budget-max" type="text" placeholder="Max">
+              <input class="search-bar-compact__input" id="compact-budget-max" type="text" inputmode="numeric" placeholder="Max">
             </div>
           </div>
         </div>
@@ -1433,7 +1639,7 @@ select:focus-visible {
       <!-- Search Button -->
       <div class="search-bar-compact__btn-section">
         <button class="search-bar-compact__btn" aria-label="Rechercher">
-          <svg viewBox="0 0 18 18"><circle cx="8" cy="8" r="6"/><path d="M13 13l4 4"/></svg>
+          <svg aria-hidden="true" viewBox="0 0 18 18"><circle cx="8" cy="8" r="6"/><path d="M13 13l4 4"/></svg>
           Rechercher
         </button>
       </div>
@@ -1460,13 +1666,13 @@ select:focus-visible {
       <!-- ==============================
            MULTI PREMIUM — 4 agences (Prestige + Barnes + Sotheby's + 1)
            ============================== -->
-      <article>
-        <div class="cluster-card cluster-card--multi">
+      <article data-cluster-id="0">
+        <div class="cluster-card cluster-card--list cluster-card--multi" data-cluster-id="0">
           <div class="cluster-card__gallery">
             <div class="cluster-card__photo-main">
               <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&h=450&fit=crop" alt="Appartement T3 Beaurivage — salon lumineux">
-              <button class="cluster-card__arrow cluster-card__arrow--prev" aria-label="Photo précédente"><svg viewBox="0 0 14 14"><path d="M9 2L4 7l5 5"/></svg></button>
-              <button class="cluster-card__arrow cluster-card__arrow--next" aria-label="Photo suivante"><svg viewBox="0 0 14 14"><path d="M5 2l5 5-5 5"/></svg></button>
+              <button class="cluster-card__arrow cluster-card__arrow--prev" aria-label="Photo précédente"><svg aria-hidden="true" viewBox="0 0 14 14"><path d="M9 2L4 7l5 5"/></svg></button>
+              <button class="cluster-card__arrow cluster-card__arrow--next" aria-label="Photo suivante"><svg aria-hidden="true" viewBox="0 0 14 14"><path d="M5 2l5 5-5 5"/></svg></button>
             </div>
             <div class="cluster-card__thumbs">
               <div class="cluster-card__thumb">
@@ -1482,20 +1688,20 @@ select:focus-visible {
             <div class="cluster-card__info">
               <div class="cluster-card__location-row">
                 <div class="cluster-card__location">
-                  <svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg>
+                  <svg aria-hidden="true" viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg>
                   Biarritz (Beaurivage)
                 </div>
                 <div class="cluster-card__cluster-badge">Trouvé chez 4 agences</div>
               </div>
-              <h2 class="cluster-card__title">Appartement T3</h2>
+              <h2 class="cluster-card__title"><a href="page_bien.html">Appartement T3</a></h2>
               <div class="cluster-card__specs">
                 <div class="cluster-card__spec">
-                  <svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg>
+                  <svg aria-hidden="true" viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg>
                   68 m²
                 </div>
                 <span class="cluster-card__spec-dot">•</span>
                 <div class="cluster-card__spec">
-                  <svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg>
+                  <svg aria-hidden="true" viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg>
                   2 ch.
                 </div>
                 <span class="cluster-card__spec-dot">•</span>
@@ -1509,9 +1715,9 @@ select:focus-visible {
             <div class="cluster-card__bottom">
               <div class="cluster-card__agencies">
                 <div class="cluster-card__avatars">
-                  <div class="cluster-card__avatar cluster-card__avatar--1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#0E4E57"/><text x="24" y="18" text-anchor="middle" font-family="Inter,sans-serif" font-size="7.5" font-weight="700" fill="#BACE27" letter-spacing="0.3">PRESTIGE</text><text x="24" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="600" fill="white">IMMOBILIER</text><rect x="12" y="34" width="24" height="1.2" rx="0.6" fill="#BACE27"/></svg></div>
-                  <div class="cluster-card__avatar cluster-card__avatar--2"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#1A1A2E"/><text x="24" y="22" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700" fill="white" letter-spacing="1.5">BARNES</text><rect x="10" y="27" width="28" height="0.8" fill="#C9A96E"/><text x="24" y="36" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="300" fill="#C9A96E" letter-spacing="0.8">IMMOBILIER</text></svg></div>
-                  <div class="cluster-card__avatar cluster-card__avatar--3"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#003D6A"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="white" letter-spacing="0.5">SOTHEBY'S</text><rect x="10" y="24" width="28" height="0.6" fill="#C9A96E"/><text x="24" y="34" text-anchor="middle" font-family="Inter,sans-serif" font-size="5" font-weight="300" fill="#C9A96E" letter-spacing="1">REALTY</text></svg></div>
+                  <div class="cluster-card__avatar cluster-card__avatar--1"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#0E4E57"/><text x="24" y="18" text-anchor="middle" font-family="Inter,sans-serif" font-size="7.5" font-weight="700" fill="#BACE27" letter-spacing="0.3">PRESTIGE</text><text x="24" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="600" fill="white">IMMOBILIER</text><rect x="12" y="34" width="24" height="1.2" rx="0.6" fill="#BACE27"/></svg></div>
+                  <div class="cluster-card__avatar cluster-card__avatar--2"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#1A1A2E"/><text x="24" y="22" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700" fill="white" letter-spacing="1.5">BARNES</text><rect x="10" y="27" width="28" height="0.8" fill="#C9A96E"/><text x="24" y="36" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="300" fill="#C9A96E" letter-spacing="0.8">IMMOBILIER</text></svg></div>
+                  <div class="cluster-card__avatar cluster-card__avatar--3"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#003D6A"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="white" letter-spacing="0.5">SOTHEBY'S</text><rect x="10" y="24" width="28" height="0.6" fill="#C9A96E"/><text x="24" y="34" text-anchor="middle" font-family="Inter,sans-serif" font-size="5" font-weight="300" fill="#C9A96E" letter-spacing="1">REALTY</text></svg></div>
                   <div class="cluster-card__avatar cluster-card__avatar--overflow">+1</div>
                 </div>
                 <div class="cluster-card__agency-meta">
@@ -1528,13 +1734,13 @@ select:focus-visible {
       <!-- ==============================
            MULTI PREMIUM — 3 agences (Laforêt + Orpi + Century 21, 2 premium)
            ============================== -->
-      <article>
-        <div class="cluster-card cluster-card--multi">
+      <article data-cluster-id="1">
+        <div class="cluster-card cluster-card--list cluster-card--multi" data-cluster-id="1">
           <div class="cluster-card__gallery">
             <div class="cluster-card__photo-main">
               <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&h=450&fit=crop" alt="Maison T5 Anglet — façade">
-              <button class="cluster-card__arrow cluster-card__arrow--prev" aria-label="Photo précédente"><svg viewBox="0 0 14 14"><path d="M9 2L4 7l5 5"/></svg></button>
-              <button class="cluster-card__arrow cluster-card__arrow--next" aria-label="Photo suivante"><svg viewBox="0 0 14 14"><path d="M5 2l5 5-5 5"/></svg></button>
+              <button class="cluster-card__arrow cluster-card__arrow--prev" aria-label="Photo précédente"><svg aria-hidden="true" viewBox="0 0 14 14"><path d="M9 2L4 7l5 5"/></svg></button>
+              <button class="cluster-card__arrow cluster-card__arrow--next" aria-label="Photo suivante"><svg aria-hidden="true" viewBox="0 0 14 14"><path d="M5 2l5 5-5 5"/></svg></button>
             </div>
             <div class="cluster-card__thumbs">
               <div class="cluster-card__thumb">
@@ -1550,20 +1756,20 @@ select:focus-visible {
             <div class="cluster-card__info">
               <div class="cluster-card__location-row">
                 <div class="cluster-card__location">
-                  <svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg>
+                  <svg aria-hidden="true" viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg>
                   Anglet (Montbrun)
                 </div>
                 <div class="cluster-card__cluster-badge">Trouvé chez 3 agences</div>
               </div>
-              <h2 class="cluster-card__title">Maison T5</h2>
+              <h2 class="cluster-card__title"><a href="page_bien_2premium.html">Maison T5</a></h2>
               <div class="cluster-card__specs">
                 <div class="cluster-card__spec">
-                  <svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg>
+                  <svg aria-hidden="true" viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg>
                   142 m²
                 </div>
                 <span class="cluster-card__spec-dot">•</span>
                 <div class="cluster-card__spec">
-                  <svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg>
+                  <svg aria-hidden="true" viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg>
                   4 ch.
                 </div>
                 <span class="cluster-card__spec-dot">•</span>
@@ -1577,9 +1783,9 @@ select:focus-visible {
             <div class="cluster-card__bottom">
               <div class="cluster-card__agencies">
                 <div class="cluster-card__avatars">
-                  <div class="cluster-card__avatar cluster-card__avatar--1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#FFD700"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#2D5016" letter-spacing="0.3">LAFORET</text><path d="M20 36 L24 25 L28 36" stroke="#2D5016" stroke-width="1.5" fill="none"/><path d="M18 36 L24 28 L30 36" stroke="#2D5016" stroke-width="1.2" fill="none" opacity="0.5"/></svg></div>
-                  <div class="cluster-card__avatar cluster-card__avatar--2"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#E30613"/><text x="24" y="29" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="white" letter-spacing="1">ORPI</text></svg></div>
-                  <div class="cluster-card__avatar cluster-card__avatar--3"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#1C1C1C"/><text x="24" y="17" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="#D4AF37" letter-spacing="0.5">CENTURY</text><text x="24" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#D4AF37">21</text><rect x="14" y="34" width="20" height="0.8" fill="#D4AF37"/></svg></div>
+                  <div class="cluster-card__avatar cluster-card__avatar--1"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#FFD700"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#2D5016" letter-spacing="0.3">LAFORET</text><path d="M20 36 L24 25 L28 36" stroke="#2D5016" stroke-width="1.5" fill="none"/><path d="M18 36 L24 28 L30 36" stroke="#2D5016" stroke-width="1.2" fill="none" opacity="0.5"/></svg></div>
+                  <div class="cluster-card__avatar cluster-card__avatar--2"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#E30613"/><text x="24" y="29" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="white" letter-spacing="1">ORPI</text></svg></div>
+                  <div class="cluster-card__avatar cluster-card__avatar--3"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#1C1C1C"/><text x="24" y="17" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="#D4AF37" letter-spacing="0.5">CENTURY</text><text x="24" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#D4AF37">21</text><rect x="14" y="34" width="20" height="0.8" fill="#D4AF37"/></svg></div>
                 </div>
                 <div class="cluster-card__agency-meta">
                   <span class="cluster-card__agency-meta-label">Diffusé par</span>
@@ -1595,33 +1801,33 @@ select:focus-visible {
       <!-- ==============================
            MONO PREMIUM — Laforêt Biarritz (Milady)
            ============================== -->
-      <article>
-        <div class="cluster-card cluster-card--mono">
+      <article data-cluster-id="2">
+        <div class="cluster-card cluster-card--list cluster-card--mono" data-cluster-id="2">
           <div class="cluster-card__gallery">
             <div class="cluster-card__photo-main">
               <img src="https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=600&h=450&fit=crop" alt="Maison T4 Biarritz — vue extérieure">
-              <button class="cluster-card__arrow cluster-card__arrow--prev" aria-label="Photo précédente"><svg viewBox="0 0 14 14"><path d="M9 2L4 7l5 5"/></svg></button>
-              <button class="cluster-card__arrow cluster-card__arrow--next" aria-label="Photo suivante"><svg viewBox="0 0 14 14"><path d="M5 2l5 5-5 5"/></svg></button>
-              <div class="cluster-card__photo-count"><svg viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg>8</div>
+              <button class="cluster-card__arrow cluster-card__arrow--prev" aria-label="Photo précédente"><svg aria-hidden="true" viewBox="0 0 14 14"><path d="M9 2L4 7l5 5"/></svg></button>
+              <button class="cluster-card__arrow cluster-card__arrow--next" aria-label="Photo suivante"><svg aria-hidden="true" viewBox="0 0 14 14"><path d="M5 2l5 5-5 5"/></svg></button>
+              <div class="cluster-card__photo-count"><svg aria-hidden="true" viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg>8</div>
             </div>
           </div>
           <div class="cluster-card__data">
             <div class="cluster-card__info">
               <div class="cluster-card__location-row">
                 <div class="cluster-card__location">
-                  <svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg>
+                  <svg aria-hidden="true" viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg>
                   Biarritz (Milady)
                 </div>
               </div>
-              <h2 class="cluster-card__title">Maison T4</h2>
+              <h2 class="cluster-card__title"><a href="page_bien_mono_premium.html">Maison T4</a></h2>
               <div class="cluster-card__specs">
                 <div class="cluster-card__spec">
-                  <svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg>
+                  <svg aria-hidden="true" viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg>
                   110 m²
                 </div>
                 <span class="cluster-card__spec-dot">•</span>
                 <div class="cluster-card__spec">
-                  <svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg>
+                  <svg aria-hidden="true" viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg>
                   3 ch.
                 </div>
                 <span class="cluster-card__spec-dot">•</span>
@@ -1635,7 +1841,7 @@ select:focus-visible {
             <div class="cluster-card__bottom">
               <div class="cluster-card__agencies">
                 <div class="cluster-card__avatars">
-                  <div class="cluster-card__avatar cluster-card__avatar--1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#FFD700"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#2D5016" letter-spacing="0.3">LAFORET</text><path d="M20 36 L24 25 L28 36" stroke="#2D5016" stroke-width="1.5" fill="none"/><path d="M18 36 L24 28 L30 36" stroke="#2D5016" stroke-width="1.2" fill="none" opacity="0.5"/></svg></div>
+                  <div class="cluster-card__avatar cluster-card__avatar--1"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#FFD700"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#2D5016" letter-spacing="0.3">LAFORET</text><path d="M20 36 L24 25 L28 36" stroke="#2D5016" stroke-width="1.5" fill="none"/><path d="M18 36 L24 28 L30 36" stroke="#2D5016" stroke-width="1.2" fill="none" opacity="0.5"/></svg></div>
                 </div>
                 <div class="cluster-card__agency-meta">
                   <span class="cluster-card__agency-meta-label">Diffusé par</span>
@@ -1651,13 +1857,13 @@ select:focus-visible {
       <!-- ==============================
            MULTI GRATUIT — Stéphane Plaza + AB Immobilier (2 agences)
            ============================== -->
-      <article>
-        <div class="cluster-card cluster-card--multi">
+      <article data-cluster-id="3">
+        <div class="cluster-card cluster-card--list cluster-card--multi" data-cluster-id="3">
           <div class="cluster-card__gallery">
             <div class="cluster-card__photo-main">
               <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&h=450&fit=crop" alt="Appartement T4 Bayonne — séjour">
-              <button class="cluster-card__arrow cluster-card__arrow--prev" aria-label="Photo précédente"><svg viewBox="0 0 14 14"><path d="M9 2L4 7l5 5"/></svg></button>
-              <button class="cluster-card__arrow cluster-card__arrow--next" aria-label="Photo suivante"><svg viewBox="0 0 14 14"><path d="M5 2l5 5-5 5"/></svg></button>
+              <button class="cluster-card__arrow cluster-card__arrow--prev" aria-label="Photo précédente"><svg aria-hidden="true" viewBox="0 0 14 14"><path d="M9 2L4 7l5 5"/></svg></button>
+              <button class="cluster-card__arrow cluster-card__arrow--next" aria-label="Photo suivante"><svg aria-hidden="true" viewBox="0 0 14 14"><path d="M5 2l5 5-5 5"/></svg></button>
             </div>
             <div class="cluster-card__thumbs">
               <div class="cluster-card__thumb">
@@ -1673,20 +1879,20 @@ select:focus-visible {
             <div class="cluster-card__info">
               <div class="cluster-card__location-row">
                 <div class="cluster-card__location">
-                  <svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg>
+                  <svg aria-hidden="true" viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg>
                   Bayonne (Saint-Esprit)
                 </div>
                 <div class="cluster-card__cluster-badge">Trouvé chez 2 agences</div>
               </div>
-              <h2 class="cluster-card__title">Appartement T4</h2>
+              <h2 class="cluster-card__title"><a href="page_bien_gratuit_scrape.html">Appartement T4</a></h2>
               <div class="cluster-card__specs">
                 <div class="cluster-card__spec">
-                  <svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg>
+                  <svg aria-hidden="true" viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg>
                   92 m²
                 </div>
                 <span class="cluster-card__spec-dot">•</span>
                 <div class="cluster-card__spec">
-                  <svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg>
+                  <svg aria-hidden="true" viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg>
                   3 ch.
                 </div>
                 <span class="cluster-card__spec-dot">•</span>
@@ -1700,8 +1906,8 @@ select:focus-visible {
             <div class="cluster-card__bottom">
               <div class="cluster-card__agencies">
                 <div class="cluster-card__avatars">
-                  <div class="cluster-card__avatar cluster-card__avatar--1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#8B1A4A"/><text x="24" y="18" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="white" letter-spacing="0.3">STEPHANE</text><text x="24" y="28" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" font-weight="700" fill="white" letter-spacing="0.5">PLAZA</text><rect x="14" y="33" width="20" height="0.8" fill="rgba(255,255,255,0.4)"/></svg></div>
-                  <div class="cluster-card__avatar cluster-card__avatar--2"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#2563EB"/><text x="24" y="22" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="700" fill="white">AB</text><text x="24" y="34" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="400" fill="rgba(255,255,255,0.8)" letter-spacing="0.5">IMMOBILIER</text></svg></div>
+                  <div class="cluster-card__avatar cluster-card__avatar--1"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#8B1A4A"/><text x="24" y="18" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="white" letter-spacing="0.3">STEPHANE</text><text x="24" y="28" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" font-weight="700" fill="white" letter-spacing="0.5">PLAZA</text><rect x="14" y="33" width="20" height="0.8" fill="rgba(255,255,255,0.4)"/></svg></div>
+                  <div class="cluster-card__avatar cluster-card__avatar--2"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#2563EB"/><text x="24" y="22" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="700" fill="white">AB</text><text x="24" y="34" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="400" fill="rgba(255,255,255,0.8)" letter-spacing="0.5">IMMOBILIER</text></svg></div>
                 </div>
                 <div class="cluster-card__agency-meta">
                   <span class="cluster-card__agency-meta-label">Diffusé par</span>
@@ -1717,13 +1923,13 @@ select:focus-visible {
       <!-- ==============================
            MULTI SCRAPÉ — 3 agences, 100% scrapé (Biarritz Saint-Charles)
            ============================== -->
-      <article>
-        <div class="cluster-card cluster-card--multi">
+      <article data-cluster-id="4">
+        <div class="cluster-card cluster-card--list cluster-card--multi" data-cluster-id="4">
           <div class="cluster-card__gallery">
             <div class="cluster-card__photo-main">
               <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?w=600&h=450&fit=crop" alt="Appartement T3 Biarritz — cuisine">
-              <button class="cluster-card__arrow cluster-card__arrow--prev" aria-label="Photo précédente"><svg viewBox="0 0 14 14"><path d="M9 2L4 7l5 5"/></svg></button>
-              <button class="cluster-card__arrow cluster-card__arrow--next" aria-label="Photo suivante"><svg viewBox="0 0 14 14"><path d="M5 2l5 5-5 5"/></svg></button>
+              <button class="cluster-card__arrow cluster-card__arrow--prev" aria-label="Photo précédente"><svg aria-hidden="true" viewBox="0 0 14 14"><path d="M9 2L4 7l5 5"/></svg></button>
+              <button class="cluster-card__arrow cluster-card__arrow--next" aria-label="Photo suivante"><svg aria-hidden="true" viewBox="0 0 14 14"><path d="M5 2l5 5-5 5"/></svg></button>
             </div>
             <div class="cluster-card__thumbs">
               <div class="cluster-card__thumb">
@@ -1739,20 +1945,20 @@ select:focus-visible {
             <div class="cluster-card__info">
               <div class="cluster-card__location-row">
                 <div class="cluster-card__location">
-                  <svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg>
+                  <svg aria-hidden="true" viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg>
                   Biarritz (Saint-Charles)
                 </div>
                 <div class="cluster-card__cluster-badge">Trouvé chez 3 agences</div>
               </div>
-              <h2 class="cluster-card__title">Appartement T3</h2>
+              <h2 class="cluster-card__title"><a href="page_bien_full_scrape.html">Appartement T3</a></h2>
               <div class="cluster-card__specs">
                 <div class="cluster-card__spec">
-                  <svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg>
+                  <svg aria-hidden="true" viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg>
                   65 m²
                 </div>
                 <span class="cluster-card__spec-dot">•</span>
                 <div class="cluster-card__spec">
-                  <svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg>
+                  <svg aria-hidden="true" viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg>
                   2 ch.
                 </div>
                 <span class="cluster-card__spec-dot">•</span>
@@ -1766,9 +1972,9 @@ select:focus-visible {
             <div class="cluster-card__bottom">
               <div class="cluster-card__agencies">
                 <div class="cluster-card__avatars">
-                  <div class="cluster-card__avatar cluster-card__avatar--1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#FFD700"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#2D5016" letter-spacing="0.3">LAFORET</text><path d="M20 36 L24 25 L28 36" stroke="#2D5016" stroke-width="1.5" fill="none"/><path d="M18 36 L24 28 L30 36" stroke="#2D5016" stroke-width="1.2" fill="none" opacity="0.5"/></svg></div>
-                  <div class="cluster-card__avatar cluster-card__avatar--2"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#E30613"/><text x="24" y="29" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="white" letter-spacing="1">ORPI</text></svg></div>
-                  <div class="cluster-card__avatar cluster-card__avatar--3"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#0072BC"/><text x="24" y="18" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="700" fill="white" letter-spacing="0.3">GUY</text><text x="24" y="28" text-anchor="middle" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="white" letter-spacing="0.5">HOQUET</text><rect x="14" y="33" width="20" height="0.8" fill="rgba(255,255,255,0.5)"/></svg></div>
+                  <div class="cluster-card__avatar cluster-card__avatar--1"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#FFD700"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#2D5016" letter-spacing="0.3">LAFORET</text><path d="M20 36 L24 25 L28 36" stroke="#2D5016" stroke-width="1.5" fill="none"/><path d="M18 36 L24 28 L30 36" stroke="#2D5016" stroke-width="1.2" fill="none" opacity="0.5"/></svg></div>
+                  <div class="cluster-card__avatar cluster-card__avatar--2"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#E30613"/><text x="24" y="29" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="white" letter-spacing="1">ORPI</text></svg></div>
+                  <div class="cluster-card__avatar cluster-card__avatar--3"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#0072BC"/><text x="24" y="18" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="700" fill="white" letter-spacing="0.3">GUY</text><text x="24" y="28" text-anchor="middle" font-family="Inter,sans-serif" font-size="7" font-weight="700" fill="white" letter-spacing="0.5">HOQUET</text><rect x="14" y="33" width="20" height="0.8" fill="rgba(255,255,255,0.5)"/></svg></div>
                 </div>
                 <div class="cluster-card__agency-meta">
                   <span class="cluster-card__agency-meta-label">Diffusé par</span>
@@ -1784,33 +1990,33 @@ select:focus-visible {
       <!-- ==============================
            MONO GRATUIT — Century 21 Bayonne
            ============================== -->
-      <article>
-        <div class="cluster-card cluster-card--mono">
+      <article data-cluster-id="5">
+        <div class="cluster-card cluster-card--list cluster-card--mono" data-cluster-id="5">
           <div class="cluster-card__gallery">
             <div class="cluster-card__photo-main">
               <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&h=450&fit=crop" alt="Appartement T2 Bayonne — vue">
-              <button class="cluster-card__arrow cluster-card__arrow--prev" aria-label="Photo précédente"><svg viewBox="0 0 14 14"><path d="M9 2L4 7l5 5"/></svg></button>
-              <button class="cluster-card__arrow cluster-card__arrow--next" aria-label="Photo suivante"><svg viewBox="0 0 14 14"><path d="M5 2l5 5-5 5"/></svg></button>
-              <div class="cluster-card__photo-count"><svg viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg>2</div>
+              <button class="cluster-card__arrow cluster-card__arrow--prev" aria-label="Photo précédente"><svg aria-hidden="true" viewBox="0 0 14 14"><path d="M9 2L4 7l5 5"/></svg></button>
+              <button class="cluster-card__arrow cluster-card__arrow--next" aria-label="Photo suivante"><svg aria-hidden="true" viewBox="0 0 14 14"><path d="M5 2l5 5-5 5"/></svg></button>
+              <div class="cluster-card__photo-count"><svg aria-hidden="true" viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg>2</div>
             </div>
           </div>
           <div class="cluster-card__data">
             <div class="cluster-card__info">
               <div class="cluster-card__location-row">
                 <div class="cluster-card__location">
-                  <svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg>
+                  <svg aria-hidden="true" viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg>
                   Bayonne (Centre)
                 </div>
               </div>
-              <h2 class="cluster-card__title">Appartement T2</h2>
+              <h2 class="cluster-card__title"><a href="page_bien_mono_gratuit.html">Appartement T2</a></h2>
               <div class="cluster-card__specs">
                 <div class="cluster-card__spec">
-                  <svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg>
+                  <svg aria-hidden="true" viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg>
                   45 m²
                 </div>
                 <span class="cluster-card__spec-dot">•</span>
                 <div class="cluster-card__spec">
-                  <svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg>
+                  <svg aria-hidden="true" viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg>
                   1 ch.
                 </div>
                 <span class="cluster-card__spec-dot">•</span>
@@ -1824,7 +2030,7 @@ select:focus-visible {
             <div class="cluster-card__bottom">
               <div class="cluster-card__agencies">
                 <div class="cluster-card__avatars">
-                  <div class="cluster-card__avatar cluster-card__avatar--1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#1C1C1C"/><text x="24" y="17" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="#D4AF37" letter-spacing="0.5">CENTURY</text><text x="24" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#D4AF37">21</text><rect x="14" y="34" width="20" height="0.8" fill="#D4AF37"/></svg></div>
+                  <div class="cluster-card__avatar cluster-card__avatar--1"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#1C1C1C"/><text x="24" y="17" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="#D4AF37" letter-spacing="0.5">CENTURY</text><text x="24" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#D4AF37">21</text><rect x="14" y="34" width="20" height="0.8" fill="#D4AF37"/></svg></div>
                 </div>
                 <div class="cluster-card__agency-meta">
                   <span class="cluster-card__agency-meta-label">Diffusé par</span>
@@ -1840,33 +2046,33 @@ select:focus-visible {
       <!-- ==============================
            MONO SCRAPÉ — Orpi Anglet
            ============================== -->
-      <article>
-        <div class="cluster-card cluster-card--mono">
+      <article data-cluster-id="6">
+        <div class="cluster-card cluster-card--list cluster-card--mono" data-cluster-id="6">
           <div class="cluster-card__gallery">
             <div class="cluster-card__photo-main">
               <img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=600&h=450&fit=crop" alt="Appartement T3 Anglet — intérieur">
-              <button class="cluster-card__arrow cluster-card__arrow--prev" aria-label="Photo précédente"><svg viewBox="0 0 14 14"><path d="M9 2L4 7l5 5"/></svg></button>
-              <button class="cluster-card__arrow cluster-card__arrow--next" aria-label="Photo suivante"><svg viewBox="0 0 14 14"><path d="M5 2l5 5-5 5"/></svg></button>
-              <div class="cluster-card__photo-count"><svg viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg>6</div>
+              <button class="cluster-card__arrow cluster-card__arrow--prev" aria-label="Photo précédente"><svg aria-hidden="true" viewBox="0 0 14 14"><path d="M9 2L4 7l5 5"/></svg></button>
+              <button class="cluster-card__arrow cluster-card__arrow--next" aria-label="Photo suivante"><svg aria-hidden="true" viewBox="0 0 14 14"><path d="M5 2l5 5-5 5"/></svg></button>
+              <div class="cluster-card__photo-count"><svg aria-hidden="true" viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg>6</div>
             </div>
           </div>
           <div class="cluster-card__data">
             <div class="cluster-card__info">
               <div class="cluster-card__location-row">
                 <div class="cluster-card__location">
-                  <svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg>
+                  <svg aria-hidden="true" viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg>
                   Anglet (Chambre d'Amour)
                 </div>
               </div>
-              <h2 class="cluster-card__title">Appartement T3</h2>
+              <h2 class="cluster-card__title"><a href="page_bien_mono_scrape.html">Appartement T3</a></h2>
               <div class="cluster-card__specs">
                 <div class="cluster-card__spec">
-                  <svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg>
+                  <svg aria-hidden="true" viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg>
                   72 m²
                 </div>
                 <span class="cluster-card__spec-dot">•</span>
                 <div class="cluster-card__spec">
-                  <svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg>
+                  <svg aria-hidden="true" viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg>
                   2 ch.
                 </div>
                 <span class="cluster-card__spec-dot">•</span>
@@ -1880,7 +2086,7 @@ select:focus-visible {
             <div class="cluster-card__bottom">
               <div class="cluster-card__agencies">
                 <div class="cluster-card__avatars">
-                  <div class="cluster-card__avatar cluster-card__avatar--1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#E30613"/><text x="24" y="29" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="white" letter-spacing="1">ORPI</text></svg></div>
+                  <div class="cluster-card__avatar cluster-card__avatar--1"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#E30613"/><text x="24" y="29" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="white" letter-spacing="1">ORPI</text></svg></div>
                 </div>
                 <div class="cluster-card__agency-meta">
                   <span class="cluster-card__agency-meta-label">Diffusé par</span>
@@ -1941,7 +2147,7 @@ select:focus-visible {
           <div class="sidebar-agencies__list">
             <div class="sidebar-agencies__item">
               <div class="sidebar-agencies__rank">1</div>
-              <div class="sidebar-agencies__avatar"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#0E4E57"/><text x="24" y="18" text-anchor="middle" font-family="Inter,sans-serif" font-size="7.5" font-weight="700" fill="#BACE27" letter-spacing="0.3">PRESTIGE</text><text x="24" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="600" fill="white">IMMOBILIER</text><rect x="12" y="34" width="24" height="1.2" rx="0.6" fill="#BACE27"/></svg></div>
+              <div class="sidebar-agencies__avatar"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#0E4E57"/><text x="24" y="18" text-anchor="middle" font-family="Inter,sans-serif" font-size="7.5" font-weight="700" fill="#BACE27" letter-spacing="0.3">PRESTIGE</text><text x="24" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="600" fill="white">IMMOBILIER</text><rect x="12" y="34" width="24" height="1.2" rx="0.6" fill="#BACE27"/></svg></div>
               <div class="sidebar-agencies__info">
                 <div class="sidebar-agencies__name">Prestige Immobilier</div>
                 <div class="sidebar-agencies__count">14 biens à Biarritz</div>
@@ -1950,7 +2156,7 @@ select:focus-visible {
             </div>
             <div class="sidebar-agencies__item">
               <div class="sidebar-agencies__rank">2</div>
-              <div class="sidebar-agencies__avatar"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#1A1A2E"/><text x="24" y="22" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700" fill="white" letter-spacing="1.5">BARNES</text><rect x="10" y="27" width="28" height="0.8" fill="#C9A96E"/><text x="24" y="36" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="300" fill="#C9A96E" letter-spacing="0.8">IMMOBILIER</text></svg></div>
+              <div class="sidebar-agencies__avatar"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#1A1A2E"/><text x="24" y="22" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700" fill="white" letter-spacing="1.5">BARNES</text><rect x="10" y="27" width="28" height="0.8" fill="#C9A96E"/><text x="24" y="36" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="300" fill="#C9A96E" letter-spacing="0.8">IMMOBILIER</text></svg></div>
               <div class="sidebar-agencies__info">
                 <div class="sidebar-agencies__name">Barnes Biarritz</div>
                 <div class="sidebar-agencies__count">11 biens à Biarritz</div>
@@ -1959,7 +2165,7 @@ select:focus-visible {
             </div>
             <div class="sidebar-agencies__item">
               <div class="sidebar-agencies__rank">3</div>
-              <div class="sidebar-agencies__avatar"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#003D6A"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="white" letter-spacing="0.5">SOTHEBY'S</text><rect x="10" y="24" width="28" height="0.6" fill="#C9A96E"/><text x="24" y="34" text-anchor="middle" font-family="Inter,sans-serif" font-size="5" font-weight="300" fill="#C9A96E" letter-spacing="1">REALTY</text></svg></div>
+              <div class="sidebar-agencies__avatar"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#003D6A"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="white" letter-spacing="0.5">SOTHEBY'S</text><rect x="10" y="24" width="28" height="0.6" fill="#C9A96E"/><text x="24" y="34" text-anchor="middle" font-family="Inter,sans-serif" font-size="5" font-weight="300" fill="#C9A96E" letter-spacing="1">REALTY</text></svg></div>
               <div class="sidebar-agencies__info">
                 <div class="sidebar-agencies__name">Sotheby's Realty</div>
                 <div class="sidebar-agencies__count">8 biens à Biarritz</div>
@@ -1968,7 +2174,7 @@ select:focus-visible {
             </div>
             <div class="sidebar-agencies__item">
               <div class="sidebar-agencies__rank">4</div>
-              <div class="sidebar-agencies__avatar"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#FFD700"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#2D5016" letter-spacing="0.3">LAFORET</text><path d="M20 36 L24 25 L28 36" stroke="#2D5016" stroke-width="1.5" fill="none"/><path d="M18 36 L24 28 L30 36" stroke="#2D5016" stroke-width="1.2" fill="none" opacity="0.5"/></svg></div>
+              <div class="sidebar-agencies__avatar"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#FFD700"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#2D5016" letter-spacing="0.3">LAFORET</text><path d="M20 36 L24 25 L28 36" stroke="#2D5016" stroke-width="1.5" fill="none"/><path d="M18 36 L24 28 L30 36" stroke="#2D5016" stroke-width="1.2" fill="none" opacity="0.5"/></svg></div>
               <div class="sidebar-agencies__info">
                 <div class="sidebar-agencies__name">Laforêt Biarritz</div>
                 <div class="sidebar-agencies__count">12 biens à Biarritz</div>
@@ -1985,25 +2191,85 @@ select:focus-visible {
 </main>
 
 <!-- ============================================================
-     MOBILE-ONLY: SEARCH BAR (static, 2 fields)
+     MOBILE-ONLY: SEARCH BAR (localisation + bouton filtres)
      ============================================================ -->
 <div class="search-bar-mobile">
   <div class="search-bar-mobile__form">
     <div class="search-bar-mobile__field">
-      <svg viewBox="0 0 16 20"><path d="M8 1C4.13 1 1 4.13 1 8c0 5.25 7 11 7 11s7-5.75 7-11c0-3.87-3.13-7-7-7z"/><circle cx="8" cy="8" r="2.5"/></svg>
+      <svg aria-hidden="true" viewBox="0 0 16 20"><path d="M8 1C4.13 1 1 4.13 1 8c0 5.25 7 11 7 11s7-5.75 7-11c0-3.87-3.13-7-7-7z"/><circle cx="8" cy="8" r="2.5"/></svg>
       <label for="m-location" class="sr-only">Localisation</label>
       <input class="search-bar-mobile__input" id="m-location" type="text" placeholder="Ville, quartier..." value="Biarritz">
     </div>
     <div class="search-bar-mobile__divider"></div>
-    <div class="search-bar-mobile__field search-bar-mobile__field--budget">
-      <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="8"/><path d="M9 4v10M6 6.5c0-1 1.3-1.5 3-1.5s3 .5 3 1.5-1.3 1.5-3 2-3 .8-3 1.8 1.3 1.7 3 1.7 3-.5 3-1.5"/></svg>
-      <label for="m-budget" class="sr-only">Budget maximum</label>
-      <input class="search-bar-mobile__input" id="m-budget" type="text" placeholder="Budget max" value="">
-    </div>
-    <button class="search-bar-mobile__btn" aria-label="Rechercher">
-      <svg viewBox="0 0 18 18"><circle cx="8" cy="8" r="6"/><path d="M13 13l4 4"/></svg>
+    <button class="search-bar-mobile__filters-btn" id="m-filters-open" aria-label="Ouvrir les filtres" onclick="openFiltersSheet()">
+      <svg aria-hidden="true" viewBox="0 0 16 16"><path d="M2 4h12M4 8h8M6 12h4"/></svg>
+      Filtres
+      <span class="search-bar-mobile__filters-count" id="m-filters-count" data-count="0"></span>
     </button>
   </div>
+</div>
+
+<!-- ============================================================
+     MOBILE-ONLY: BOTTOM SHEET FILTRES
+     ============================================================ -->
+<div class="filters-overlay" id="filters-overlay" onclick="closeFiltersSheet()"></div>
+<div class="filters-sheet" id="filters-sheet" role="dialog" aria-modal="true" aria-label="Filtres de recherche">
+  <div class="filters-sheet__handle"></div>
+  <div class="filters-sheet__header">
+    <span class="filters-sheet__title">Filtres</span>
+    <button class="filters-sheet__reset" onclick="resetFilters()">Réinitialiser</button>
+  </div>
+
+  <!-- Type de bien -->
+  <div class="filters-sheet__group">
+    <div class="filters-sheet__group-label">Type de bien</div>
+    <div class="filters-sheet__pills" role="group" aria-label="Type de bien">
+      <button class="filters-sheet__pill active" data-group="type" data-value="">Tous</button>
+      <button class="filters-sheet__pill" data-group="type" data-value="appartement">Appartement</button>
+      <button class="filters-sheet__pill" data-group="type" data-value="maison">Maison</button>
+    </div>
+  </div>
+
+  <!-- Pièces -->
+  <div class="filters-sheet__group">
+    <div class="filters-sheet__group-label">Pièces minimum</div>
+    <div class="filters-sheet__pills" role="group" aria-label="Nombre de pièces minimum">
+      <button class="filters-sheet__pill active" data-group="rooms" data-value="">Toutes</button>
+      <button class="filters-sheet__pill" data-group="rooms" data-value="1">1+</button>
+      <button class="filters-sheet__pill" data-group="rooms" data-value="2">2+</button>
+      <button class="filters-sheet__pill" data-group="rooms" data-value="3">3+</button>
+      <button class="filters-sheet__pill" data-group="rooms" data-value="4">4+</button>
+      <button class="filters-sheet__pill" data-group="rooms" data-value="5">5+</button>
+    </div>
+  </div>
+
+  <!-- Surface -->
+  <div class="filters-sheet__group">
+    <div class="filters-sheet__group-label">Surface</div>
+    <div class="filters-sheet__row">
+      <div class="filters-sheet__input-group">
+        <label class="filters-sheet__input-label" for="f-surface-min">Min (m²)</label>
+        <input class="filters-sheet__input" id="f-surface-min" type="text" inputmode="numeric" placeholder="Ex : 50">
+      </div>
+    </div>
+  </div>
+
+  <!-- Budget -->
+  <div class="filters-sheet__group">
+    <div class="filters-sheet__group-label">Budget</div>
+    <div class="filters-sheet__row">
+      <div class="filters-sheet__input-group">
+        <label class="filters-sheet__input-label" for="f-budget-min">Min (€)</label>
+        <input class="filters-sheet__input" id="f-budget-min" type="text" inputmode="numeric" placeholder="0">
+      </div>
+      <div class="filters-sheet__input-group">
+        <label class="filters-sheet__input-label" for="f-budget-max">Max (€)</label>
+        <input class="filters-sheet__input" id="f-budget-max" type="text" inputmode="numeric" placeholder="Max">
+      </div>
+    </div>
+  </div>
+
+  <button class="filters-sheet__apply" onclick="applyFilters()">Appliquer les filtres</button>
 </div>
 
 <!-- ============================================================
@@ -2020,7 +2286,7 @@ select:focus-visible {
 <div class="cluster-list-mobile">
 
   <!-- MULTI PREMIUM — 4 agences -->
-  <article class="m-cluster">
+  <article class="m-cluster" data-cluster-id="0">
     <div class="m-cluster__carousel">
       <div class="m-cluster__slides">
         <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=430&h=269&fit=crop" alt="Appartement T3 Beaurivage — salon lumineux"></div>
@@ -2028,16 +2294,16 @@ select:focus-visible {
         <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=430&h=269&fit=crop" alt="Vue chambre"></div>
       </div>
       <div class="m-cluster__badge-wow">Trouve chez 4 agences</div>
-      <div class="m-cluster__photo-count"><svg viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg> 14</div>
+      <div class="m-cluster__photo-count"><svg aria-hidden="true" viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg> 14</div>
       <div class="m-cluster__dots"><div class="m-cluster__dot m-cluster__dot--active"></div><div class="m-cluster__dot"></div><div class="m-cluster__dot"></div></div>
     </div>
     <div class="m-cluster__data">
-      <div class="m-cluster__location"><svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg> Biarritz (Beaurivage)</div>
-      <h2 class="m-cluster__title">Appartement T3</h2>
+      <div class="m-cluster__location"><svg aria-hidden="true" viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg> Biarritz (Beaurivage)</div>
+      <h2 class="m-cluster__title"><a href="page_bien.html">Appartement T3</a></h2>
       <div class="m-cluster__specs">
-        <div class="m-cluster__spec"><svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg> 68 m2</div>
+        <div class="m-cluster__spec"><svg aria-hidden="true" viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg> 68 m2</div>
         <span class="m-cluster__spec-dot">&middot;</span>
-        <div class="m-cluster__spec"><svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg> 2 ch.</div>
+        <div class="m-cluster__spec"><svg aria-hidden="true" viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg> 2 ch.</div>
         <span class="m-cluster__spec-dot">&middot;</span>
         <span class="m-cluster__dpe-badge">DPE B</span>
       </div>
@@ -2045,8 +2311,8 @@ select:focus-visible {
       <div class="m-cluster__bottom">
         <div class="m-cluster__agencies">
           <div class="m-cluster__avatars">
-            <div class="m-cluster__avatar m-cluster__avatar--z1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#0E4E57"/><text x="24" y="18" text-anchor="middle" font-family="Inter,sans-serif" font-size="7.5" font-weight="700" fill="#BACE27" letter-spacing="0.3">PRESTIGE</text><text x="24" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="600" fill="white">IMMOBILIER</text><rect x="12" y="34" width="24" height="1.2" rx="0.6" fill="#BACE27"/></svg></div>
-            <div class="m-cluster__avatar m-cluster__avatar--z2"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#1A1A2E"/><text x="24" y="22" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700" fill="white" letter-spacing="1.5">BARNES</text><rect x="10" y="27" width="28" height="0.8" fill="#C9A96E"/><text x="24" y="36" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="300" fill="#C9A96E" letter-spacing="0.8">IMMOBILIER</text></svg></div>
+            <div class="m-cluster__avatar m-cluster__avatar--z1"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#0E4E57"/><text x="24" y="18" text-anchor="middle" font-family="Inter,sans-serif" font-size="7.5" font-weight="700" fill="#BACE27" letter-spacing="0.3">PRESTIGE</text><text x="24" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="600" fill="white">IMMOBILIER</text><rect x="12" y="34" width="24" height="1.2" rx="0.6" fill="#BACE27"/></svg></div>
+            <div class="m-cluster__avatar m-cluster__avatar--z2"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#1A1A2E"/><text x="24" y="22" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700" fill="white" letter-spacing="1.5">BARNES</text><rect x="10" y="27" width="28" height="0.8" fill="#C9A96E"/><text x="24" y="36" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="300" fill="#C9A96E" letter-spacing="0.8">IMMOBILIER</text></svg></div>
             <div class="m-cluster__avatar m-cluster__avatar--overflow">+2</div>
           </div>
         </div>
@@ -2056,7 +2322,7 @@ select:focus-visible {
   </article>
 
   <!-- MULTI PREMIUM — 3 agences -->
-  <article class="m-cluster">
+  <article class="m-cluster" data-cluster-id="1">
     <div class="m-cluster__carousel">
       <div class="m-cluster__slides">
         <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=430&h=269&fit=crop" alt="Maison T5 Anglet — facade"></div>
@@ -2065,16 +2331,16 @@ select:focus-visible {
         <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=430&h=269&fit=crop" alt="Vue terrasse"></div>
       </div>
       <div class="m-cluster__badge-wow">Trouve chez 3 agences</div>
-      <div class="m-cluster__photo-count"><svg viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg> 10</div>
+      <div class="m-cluster__photo-count"><svg aria-hidden="true" viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg> 10</div>
       <div class="m-cluster__dots"><div class="m-cluster__dot m-cluster__dot--active"></div><div class="m-cluster__dot"></div><div class="m-cluster__dot"></div></div>
     </div>
     <div class="m-cluster__data">
-      <div class="m-cluster__location"><svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg> Anglet (Montbrun)</div>
-      <h2 class="m-cluster__title">Maison T5</h2>
+      <div class="m-cluster__location"><svg aria-hidden="true" viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg> Anglet (Montbrun)</div>
+      <h2 class="m-cluster__title"><a href="page_bien_2premium.html">Maison T5</a></h2>
       <div class="m-cluster__specs">
-        <div class="m-cluster__spec"><svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg> 142 m2</div>
+        <div class="m-cluster__spec"><svg aria-hidden="true" viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg> 142 m2</div>
         <span class="m-cluster__spec-dot">&middot;</span>
-        <div class="m-cluster__spec"><svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg> 4 ch.</div>
+        <div class="m-cluster__spec"><svg aria-hidden="true" viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg> 4 ch.</div>
         <span class="m-cluster__spec-dot">&middot;</span>
         <span class="m-cluster__dpe-badge">DPE C</span>
       </div>
@@ -2082,8 +2348,8 @@ select:focus-visible {
       <div class="m-cluster__bottom">
         <div class="m-cluster__agencies">
           <div class="m-cluster__avatars">
-            <div class="m-cluster__avatar m-cluster__avatar--z1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#FFD700"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#2D5016" letter-spacing="0.3">LAFORET</text><path d="M20 36 L24 25 L28 36" stroke="#2D5016" stroke-width="1.5" fill="none"/><path d="M18 36 L24 28 L30 36" stroke="#2D5016" stroke-width="1.2" fill="none" opacity="0.5"/></svg></div>
-            <div class="m-cluster__avatar m-cluster__avatar--z2"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#E30613"/><text x="24" y="29" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="white" letter-spacing="1">ORPI</text></svg></div>
+            <div class="m-cluster__avatar m-cluster__avatar--z1"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#FFD700"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#2D5016" letter-spacing="0.3">LAFORET</text><path d="M20 36 L24 25 L28 36" stroke="#2D5016" stroke-width="1.5" fill="none"/><path d="M18 36 L24 28 L30 36" stroke="#2D5016" stroke-width="1.2" fill="none" opacity="0.5"/></svg></div>
+            <div class="m-cluster__avatar m-cluster__avatar--z2"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#E30613"/><text x="24" y="29" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="white" letter-spacing="1">ORPI</text></svg></div>
             <div class="m-cluster__avatar m-cluster__avatar--overflow">+1</div>
           </div>
         </div>
@@ -2093,22 +2359,22 @@ select:focus-visible {
   </article>
 
   <!-- MONO PREMIUM — Laforet Biarritz -->
-  <article class="m-cluster">
+  <article class="m-cluster" data-cluster-id="2">
     <div class="m-cluster__carousel">
       <div class="m-cluster__slides">
         <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=430&h=269&fit=crop" alt="Maison T4 Biarritz"></div>
         <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=430&h=269&fit=crop" alt="Vue interieure"></div>
       </div>
-      <div class="m-cluster__photo-count"><svg viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg> 8</div>
+      <div class="m-cluster__photo-count"><svg aria-hidden="true" viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg> 8</div>
       <div class="m-cluster__dots"><div class="m-cluster__dot m-cluster__dot--active"></div><div class="m-cluster__dot"></div></div>
     </div>
     <div class="m-cluster__data">
-      <div class="m-cluster__location"><svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg> Biarritz (Milady)</div>
-      <h2 class="m-cluster__title">Maison T4</h2>
+      <div class="m-cluster__location"><svg aria-hidden="true" viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg> Biarritz (Milady)</div>
+      <h2 class="m-cluster__title"><a href="page_bien_mono_premium.html">Maison T4</a></h2>
       <div class="m-cluster__specs">
-        <div class="m-cluster__spec"><svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg> 110 m2</div>
+        <div class="m-cluster__spec"><svg aria-hidden="true" viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg> 110 m2</div>
         <span class="m-cluster__spec-dot">&middot;</span>
-        <div class="m-cluster__spec"><svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg> 3 ch.</div>
+        <div class="m-cluster__spec"><svg aria-hidden="true" viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg> 3 ch.</div>
         <span class="m-cluster__spec-dot">&middot;</span>
         <span class="m-cluster__dpe-badge">DPE C</span>
       </div>
@@ -2116,7 +2382,7 @@ select:focus-visible {
       <div class="m-cluster__bottom">
         <div class="m-cluster__agencies">
           <div class="m-cluster__avatars">
-            <div class="m-cluster__avatar m-cluster__avatar--z1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#FFD700"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#2D5016" letter-spacing="0.3">LAFORET</text><path d="M20 36 L24 25 L28 36" stroke="#2D5016" stroke-width="1.5" fill="none"/><path d="M18 36 L24 28 L30 36" stroke="#2D5016" stroke-width="1.2" fill="none" opacity="0.5"/></svg></div>
+            <div class="m-cluster__avatar m-cluster__avatar--z1"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#FFD700"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#2D5016" letter-spacing="0.3">LAFORET</text><path d="M20 36 L24 25 L28 36" stroke="#2D5016" stroke-width="1.5" fill="none"/><path d="M18 36 L24 28 L30 36" stroke="#2D5016" stroke-width="1.2" fill="none" opacity="0.5"/></svg></div>
           </div>
           <span class="m-cluster__agency-name">Laforet Biarritz</span>
         </div>
@@ -2126,7 +2392,7 @@ select:focus-visible {
   </article>
 
   <!-- MULTI GRATUIT — 2 agences -->
-  <article class="m-cluster">
+  <article class="m-cluster" data-cluster-id="3">
     <div class="m-cluster__carousel">
       <div class="m-cluster__slides">
         <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=430&h=269&fit=crop" alt="Appartement T4 Bayonne — sejour"></div>
@@ -2134,16 +2400,16 @@ select:focus-visible {
         <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1600573472592-401b489a3cdc?w=430&h=269&fit=crop" alt="Vue salle de bain"></div>
       </div>
       <div class="m-cluster__badge-wow">Trouve chez 2 agences</div>
-      <div class="m-cluster__photo-count"><svg viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg> 7</div>
+      <div class="m-cluster__photo-count"><svg aria-hidden="true" viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg> 7</div>
       <div class="m-cluster__dots"><div class="m-cluster__dot m-cluster__dot--active"></div><div class="m-cluster__dot"></div><div class="m-cluster__dot"></div></div>
     </div>
     <div class="m-cluster__data">
-      <div class="m-cluster__location"><svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg> Bayonne (Saint-Esprit)</div>
-      <h2 class="m-cluster__title">Appartement T4</h2>
+      <div class="m-cluster__location"><svg aria-hidden="true" viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg> Bayonne (Saint-Esprit)</div>
+      <h2 class="m-cluster__title"><a href="page_bien_gratuit_scrape.html">Appartement T4</a></h2>
       <div class="m-cluster__specs">
-        <div class="m-cluster__spec"><svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg> 92 m2</div>
+        <div class="m-cluster__spec"><svg aria-hidden="true" viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg> 92 m2</div>
         <span class="m-cluster__spec-dot">&middot;</span>
-        <div class="m-cluster__spec"><svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg> 3 ch.</div>
+        <div class="m-cluster__spec"><svg aria-hidden="true" viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg> 3 ch.</div>
         <span class="m-cluster__spec-dot">&middot;</span>
         <span class="m-cluster__dpe-badge">DPE D</span>
       </div>
@@ -2151,8 +2417,8 @@ select:focus-visible {
       <div class="m-cluster__bottom">
         <div class="m-cluster__agencies">
           <div class="m-cluster__avatars">
-            <div class="m-cluster__avatar m-cluster__avatar--z1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#8B1A4A"/><text x="24" y="18" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="white" letter-spacing="0.3">STEPHANE</text><text x="24" y="28" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" font-weight="700" fill="white" letter-spacing="0.5">PLAZA</text><rect x="14" y="33" width="20" height="0.8" fill="rgba(255,255,255,0.4)"/></svg></div>
-            <div class="m-cluster__avatar m-cluster__avatar--z2"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#2563EB"/><text x="24" y="22" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="700" fill="white">AB</text><text x="24" y="34" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="400" fill="rgba(255,255,255,0.8)" letter-spacing="0.5">IMMOBILIER</text></svg></div>
+            <div class="m-cluster__avatar m-cluster__avatar--z1"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#8B1A4A"/><text x="24" y="18" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="white" letter-spacing="0.3">STEPHANE</text><text x="24" y="28" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" font-weight="700" fill="white" letter-spacing="0.5">PLAZA</text><rect x="14" y="33" width="20" height="0.8" fill="rgba(255,255,255,0.4)"/></svg></div>
+            <div class="m-cluster__avatar m-cluster__avatar--z2"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#2563EB"/><text x="24" y="22" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="700" fill="white">AB</text><text x="24" y="34" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" font-weight="400" fill="rgba(255,255,255,0.8)" letter-spacing="0.5">IMMOBILIER</text></svg></div>
           </div>
         </div>
         <a href="page_bien_gratuit_scrape.html" class="m-cluster__cta">Comparer les offres</a>
@@ -2161,7 +2427,7 @@ select:focus-visible {
   </article>
 
   <!-- MULTI SCRAPE — 3 agences (100% scrape) -->
-  <article class="m-cluster">
+  <article class="m-cluster" data-cluster-id="4">
     <div class="m-cluster__carousel">
       <div class="m-cluster__slides">
         <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?w=430&h=269&fit=crop" alt="Appartement T3 Biarritz — cuisine"></div>
@@ -2169,16 +2435,16 @@ select:focus-visible {
         <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=430&h=269&fit=crop" alt="Vue chambre"></div>
       </div>
       <div class="m-cluster__badge-wow">Trouve chez 3 agences</div>
-      <div class="m-cluster__photo-count"><svg viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg> 8</div>
+      <div class="m-cluster__photo-count"><svg aria-hidden="true" viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg> 8</div>
       <div class="m-cluster__dots"><div class="m-cluster__dot m-cluster__dot--active"></div><div class="m-cluster__dot"></div><div class="m-cluster__dot"></div></div>
     </div>
     <div class="m-cluster__data">
-      <div class="m-cluster__location"><svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg> Biarritz (Saint-Charles)</div>
-      <h2 class="m-cluster__title">Appartement T3</h2>
+      <div class="m-cluster__location"><svg aria-hidden="true" viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg> Biarritz (Saint-Charles)</div>
+      <h2 class="m-cluster__title"><a href="page_bien_full_scrape.html">Appartement T3</a></h2>
       <div class="m-cluster__specs">
-        <div class="m-cluster__spec"><svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg> 65 m2</div>
+        <div class="m-cluster__spec"><svg aria-hidden="true" viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg> 65 m2</div>
         <span class="m-cluster__spec-dot">&middot;</span>
-        <div class="m-cluster__spec"><svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg> 2 ch.</div>
+        <div class="m-cluster__spec"><svg aria-hidden="true" viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg> 2 ch.</div>
         <span class="m-cluster__spec-dot">&middot;</span>
         <span class="m-cluster__dpe-badge">DPE E</span>
       </div>
@@ -2186,8 +2452,8 @@ select:focus-visible {
       <div class="m-cluster__bottom">
         <div class="m-cluster__agencies">
           <div class="m-cluster__avatars">
-            <div class="m-cluster__avatar m-cluster__avatar--z1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#FFD700"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#2D5016" letter-spacing="0.3">LAFORET</text><path d="M20 36 L24 25 L28 36" stroke="#2D5016" stroke-width="1.5" fill="none"/><path d="M18 36 L24 28 L30 36" stroke="#2D5016" stroke-width="1.2" fill="none" opacity="0.5"/></svg></div>
-            <div class="m-cluster__avatar m-cluster__avatar--z2"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#E30613"/><text x="24" y="29" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="white" letter-spacing="1">ORPI</text></svg></div>
+            <div class="m-cluster__avatar m-cluster__avatar--z1"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#FFD700"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#2D5016" letter-spacing="0.3">LAFORET</text><path d="M20 36 L24 25 L28 36" stroke="#2D5016" stroke-width="1.5" fill="none"/><path d="M18 36 L24 28 L30 36" stroke="#2D5016" stroke-width="1.2" fill="none" opacity="0.5"/></svg></div>
+            <div class="m-cluster__avatar m-cluster__avatar--z2"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#E30613"/><text x="24" y="29" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="white" letter-spacing="1">ORPI</text></svg></div>
             <div class="m-cluster__avatar m-cluster__avatar--overflow">+1</div>
           </div>
         </div>
@@ -2197,22 +2463,22 @@ select:focus-visible {
   </article>
 
   <!-- MONO GRATUIT — Century 21 Bayonne -->
-  <article class="m-cluster">
+  <article class="m-cluster" data-cluster-id="5">
     <div class="m-cluster__carousel">
       <div class="m-cluster__slides">
         <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=430&h=269&fit=crop" alt="Appartement T2 Bayonne"></div>
         <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=430&h=269&fit=crop" alt="Vue salon"></div>
       </div>
-      <div class="m-cluster__photo-count"><svg viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg> 2</div>
+      <div class="m-cluster__photo-count"><svg aria-hidden="true" viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg> 2</div>
       <div class="m-cluster__dots"><div class="m-cluster__dot m-cluster__dot--active"></div><div class="m-cluster__dot"></div></div>
     </div>
     <div class="m-cluster__data">
-      <div class="m-cluster__location"><svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg> Bayonne (Centre)</div>
-      <h2 class="m-cluster__title">Appartement T2</h2>
+      <div class="m-cluster__location"><svg aria-hidden="true" viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg> Bayonne (Centre)</div>
+      <h2 class="m-cluster__title"><a href="page_bien_mono_gratuit.html">Appartement T2</a></h2>
       <div class="m-cluster__specs">
-        <div class="m-cluster__spec"><svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg> 45 m2</div>
+        <div class="m-cluster__spec"><svg aria-hidden="true" viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg> 45 m2</div>
         <span class="m-cluster__spec-dot">&middot;</span>
-        <div class="m-cluster__spec"><svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg> 1 ch.</div>
+        <div class="m-cluster__spec"><svg aria-hidden="true" viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg> 1 ch.</div>
         <span class="m-cluster__spec-dot">&middot;</span>
         <span class="m-cluster__dpe-badge">DPE E</span>
       </div>
@@ -2220,7 +2486,7 @@ select:focus-visible {
       <div class="m-cluster__bottom">
         <div class="m-cluster__agencies">
           <div class="m-cluster__avatars">
-            <div class="m-cluster__avatar m-cluster__avatar--z1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#1C1C1C"/><text x="24" y="17" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="#D4AF37" letter-spacing="0.5">CENTURY</text><text x="24" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#D4AF37">21</text><rect x="14" y="34" width="20" height="0.8" fill="#D4AF37"/></svg></div>
+            <div class="m-cluster__avatar m-cluster__avatar--z1"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#1C1C1C"/><text x="24" y="17" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="#D4AF37" letter-spacing="0.5">CENTURY</text><text x="24" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#D4AF37">21</text><rect x="14" y="34" width="20" height="0.8" fill="#D4AF37"/></svg></div>
           </div>
           <span class="m-cluster__agency-name">Century 21 Bayonne</span>
         </div>
@@ -2230,22 +2496,22 @@ select:focus-visible {
   </article>
 
   <!-- MONO SCRAPE — Orpi Anglet -->
-  <article class="m-cluster">
+  <article class="m-cluster" data-cluster-id="6">
     <div class="m-cluster__carousel">
       <div class="m-cluster__slides">
         <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=430&h=269&fit=crop" alt="Appartement T3 Anglet"></div>
         <div class="m-cluster__slide"><img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=430&h=269&fit=crop" alt="Vue interieure"></div>
       </div>
-      <div class="m-cluster__photo-count"><svg viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg> 6</div>
+      <div class="m-cluster__photo-count"><svg aria-hidden="true" viewBox="0 0 12 12"><rect x="1" y="2" width="8" height="8" rx="1"/><path d="M3 2V1.5A.5.5 0 013.5 1h7a.5.5 0 01.5.5v7a.5.5 0 01-.5.5H10"/></svg> 6</div>
       <div class="m-cluster__dots"><div class="m-cluster__dot m-cluster__dot--active"></div><div class="m-cluster__dot"></div></div>
     </div>
     <div class="m-cluster__data">
-      <div class="m-cluster__location"><svg viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg> Anglet (Chambre d'Amour)</div>
-      <h2 class="m-cluster__title">Appartement T3</h2>
+      <div class="m-cluster__location"><svg aria-hidden="true" viewBox="0 0 11 14" fill="none"><path d="M5.5 1C3.01 1 1 3.01 1 5.5 1 9.125 5.5 13 5.5 13S10 9.125 10 5.5C10 3.01 7.99 1 5.5 1z" stroke="#64748B" stroke-width="1.2"/><circle cx="5.5" cy="5.5" r="1.5" stroke="#64748B" stroke-width="1.2"/></svg> Anglet (Chambre d'Amour)</div>
+      <h2 class="m-cluster__title"><a href="page_bien_mono_scrape.html">Appartement T3</a></h2>
       <div class="m-cluster__specs">
-        <div class="m-cluster__spec"><svg viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg> 72 m2</div>
+        <div class="m-cluster__spec"><svg aria-hidden="true" viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="0.5" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="0.5" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/><rect x="7" y="7" width="5.5" height="5.5" rx="0.5" stroke="#475569" stroke-width="1"/></svg> 72 m2</div>
         <span class="m-cluster__spec-dot">&middot;</span>
-        <div class="m-cluster__spec"><svg viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg> 2 ch.</div>
+        <div class="m-cluster__spec"><svg aria-hidden="true" viewBox="0 0 15 11" fill="none"><path d="M1 5.5V1h13v4.5M1 5.5h13M1 5.5V10M14 5.5V10" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg> 2 ch.</div>
         <span class="m-cluster__spec-dot">&middot;</span>
         <span class="m-cluster__dpe-badge">DPE B</span>
       </div>
@@ -2253,7 +2519,7 @@ select:focus-visible {
       <div class="m-cluster__bottom">
         <div class="m-cluster__agencies">
           <div class="m-cluster__avatars">
-            <div class="m-cluster__avatar m-cluster__avatar--z1"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#E30613"/><text x="24" y="29" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="white" letter-spacing="1">ORPI</text></svg></div>
+            <div class="m-cluster__avatar m-cluster__avatar--z1"><svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#E30613"/><text x="24" y="29" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="white" letter-spacing="1">ORPI</text></svg></div>
           </div>
           <span class="m-cluster__agency-name">Orpi Anglet</span>
         </div>
@@ -2269,7 +2535,7 @@ select:focus-visible {
      ============================================================ -->
 <div class="m-back-to-top">
   <a href="#top" class="m-back-to-top__link">
-    <svg viewBox="0 0 12 12"><path d="M6 10V2M2 6l4-4 4 4"/></svg>
+    <svg aria-hidden="true" viewBox="0 0 12 12"><path d="M6 10V2M2 6l4-4 4 4"/></svg>
     Retour en haut
   </a>
 </div>
@@ -2282,7 +2548,7 @@ select:focus-visible {
     <!-- Brand -->
     <div class="footer__brand">
       <div class="footer__brand-name">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none">
           <path d="M12 2L4 7v10l8 5 8-5V7l-8-5z" fill="#BACE27"/>
           <path d="M8 12l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -2310,13 +2576,13 @@ select:focus-visible {
     <!-- Social -->
     <div class="footer__social">
       <a href="#" class="footer__social-link" aria-label="Facebook">
-        <svg viewBox="0 0 12 12"><path d="M9 1H7.5A2.5 2.5 0 0 0 5 3.5V5H3.5v2H5v4h2V7h1.5L9 5H7V3.5a.5.5 0 0 1 .5-.5H9V1z"/></svg>
+        <svg aria-hidden="true" viewBox="0 0 12 12"><path d="M9 1H7.5A2.5 2.5 0 0 0 5 3.5V5H3.5v2H5v4h2V7h1.5L9 5H7V3.5a.5.5 0 0 1 .5-.5H9V1z"/></svg>
       </a>
       <a href="#" class="footer__social-link" aria-label="Twitter">
-        <svg viewBox="0 0 12 12"><path d="M11 1.5a5.08 5.08 0 0 1-1.5.75 2.28 2.28 0 0 0-4 1.5v.5A5.4 5.4 0 0 1 1 2s-2 4.5 2.5 6.5A5.84 5.84 0 0 1 0 10c4.5 2.5 10 0 10-5.75 0-.14 0-.28-.02-.42A3.63 3.63 0 0 0 11 1.5z"/></svg>
+        <svg aria-hidden="true" viewBox="0 0 12 12"><path d="M11 1.5a5.08 5.08 0 0 1-1.5.75 2.28 2.28 0 0 0-4 1.5v.5A5.4 5.4 0 0 1 1 2s-2 4.5 2.5 6.5A5.84 5.84 0 0 1 0 10c4.5 2.5 10 0 10-5.75 0-.14 0-.28-.02-.42A3.63 3.63 0 0 0 11 1.5z"/></svg>
       </a>
       <a href="#" class="footer__social-link" aria-label="Instagram">
-        <svg viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10" rx="3" stroke="currentColor" fill="none" stroke-width="1"/><circle cx="6" cy="6" r="2" stroke="currentColor" fill="none" stroke-width="1"/><circle cx="9" cy="3" r="0.5" fill="currentColor"/></svg>
+        <svg aria-hidden="true" viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10" rx="3" stroke="currentColor" fill="none" stroke-width="1"/><circle cx="6" cy="6" r="2" stroke="currentColor" fill="none" stroke-width="1"/><circle cx="9" cy="3" r="0.5" fill="currentColor"/></svg>
       </a>
     </div>
   </div>
@@ -2372,10 +2638,13 @@ select:focus-visible {
     ]
   ];
 
-  var cards = document.querySelectorAll('.cluster-card');
-  cards.forEach(function (card, i) {
-    var photos = photoSets[i];
-    if (!photos || photos.length < 2) return;
+  /* Desktop carousel — Bug 1 fix: use data-cluster-id instead of positional index */
+  var cards = document.querySelectorAll('.cluster-card[data-cluster-id]');
+  cards.forEach(function (card) {
+    var clusterId = parseInt(card.dataset.clusterId, 10);
+    var photos = photoSets[clusterId];
+    if (!photos) return; // guard: no photo set for this cluster id
+    if (photos.length < 2) return;
     var idx = 0;
     var img = card.querySelector('.cluster-card__photo-main > img');
     var prevBtn = card.querySelector('.cluster-card__arrow--prev');
@@ -2393,7 +2662,107 @@ select:focus-visible {
       img.src = photos[idx];
     });
   });
+
+  /* Mobile carousel — Bug 2 fix: sync dots with native scroll */
+  var mClusters = document.querySelectorAll('.m-cluster');
+  mClusters.forEach(function (card) {
+    var track = card.querySelector('.m-cluster__slides');
+    var dots = card.querySelectorAll('.m-cluster__dot');
+
+    if (track && dots.length > 0) {
+      track.addEventListener('scroll', function () {
+        var slideWidth = track.clientWidth;
+        var currentIndex = slideWidth > 0 ? Math.round(track.scrollLeft / slideWidth) : 0;
+        dots.forEach(function (dot, i) {
+          dot.classList.toggle('m-cluster__dot--active', i === currentIndex);
+        });
+      }, { passive: true });
+    }
+  });
 })();
+</script>
+
+<script>
+/* ============================================================
+   FILTERS BOTTOM SHEET — search_results mobile
+   ============================================================ */
+function openFiltersSheet() {
+  document.getElementById('filters-overlay').classList.add('open');
+  document.getElementById('filters-sheet').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeFiltersSheet() {
+  document.getElementById('filters-overlay').classList.remove('open');
+  document.getElementById('filters-sheet').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function resetFilters() {
+  document.querySelectorAll('.filters-sheet__pills').forEach(function(group) {
+    group.querySelectorAll('.filters-sheet__pill').forEach(function(pill, i) {
+      pill.classList.toggle('active', i === 0);
+    });
+  });
+  ['f-surface-min', 'f-budget-min', 'f-budget-max'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  updateFilterCount();
+}
+
+function updateFilterCount() {
+  var count = 0;
+  document.querySelectorAll('.filters-sheet__pills').forEach(function(group) {
+    var active = group.querySelector('.filters-sheet__pill.active');
+    if (active && active.dataset.value !== '') count++;
+  });
+  ['f-surface-min', 'f-budget-min', 'f-budget-max'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el && el.value.trim() !== '') count++;
+  });
+  var badge = document.getElementById('m-filters-count');
+  badge.textContent = count > 0 ? count : '';
+  badge.dataset.count = count;
+}
+
+function applyFilters() {
+  updateFilterCount();
+  closeFiltersSheet();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Pills: single-select per group
+  document.querySelectorAll('.filters-sheet__pill').forEach(function(pill) {
+    pill.addEventListener('click', function() {
+      var group = this.dataset.group;
+      document.querySelectorAll('.filters-sheet__pill[data-group="' + group + '"]').forEach(function(p) {
+        p.classList.remove('active');
+      });
+      this.classList.add('active');
+    });
+  });
+
+  // Numeric-only inputs
+  ['compact-surface','compact-budget-min','compact-budget-max','f-surface-min','f-budget-min','f-budget-max'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('input', function() {
+      var pos = this.selectionStart;
+      var cleaned = this.value.replace(/[^0-9]/g, '');
+      if (this.value !== cleaned) { this.value = cleaned; this.setSelectionRange(pos - 1, pos - 1); }
+    });
+  });
+
+  // Close on swipe down
+  var sheet = document.getElementById('filters-sheet');
+  if (sheet) {
+    var startY = 0;
+    sheet.addEventListener('touchstart', function(e) { startY = e.touches[0].clientY; }, { passive: true });
+    sheet.addEventListener('touchend', function(e) {
+      if (e.changedTouches[0].clientY - startY > 80) closeFiltersSheet();
+    });
+  }
+});
 </script>
 
 </body>

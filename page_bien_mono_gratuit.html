@@ -162,14 +162,6 @@
   color: var(--text-secondary);
 }
 .quick-view__spec svg { width: 16px; height: 16px; flex-shrink: 0; }
-/* DPE badge grade colors (base .badge-dpe in shared.css) */
-.badge-dpe--A { background: #e6f5e6; color: #1a7a1a; }
-.badge-dpe--B { background: #e6f9e6; color: #1a8a1a; }
-.badge-dpe--C { background: #fafce6; color: #6b6b00; }
-.badge-dpe--D { background: #fffde6; color: #8a8a00; }
-.badge-dpe--E { background: #fff5e0; color: #995c00; }
-.badge-dpe--F { background: #fff0e0; color: #b34700; }
-.badge-dpe--G { background: #ffe6e6; color: #cc0000; }
 
 /* ============================================================
    C — DESCRIPTION
@@ -412,11 +404,12 @@
   transition: transform 0.1s, box-shadow 0.2s;
 }
 .btn-cta:active { transform: scale(0.98); }
-.btn-cta-gratuit {
-  background: var(--primary-dark);
-  color: white;
+.btn-cta--primary {
+  background: var(--primary-accent);
+  color: var(--text-cta);
+  box-shadow: var(--shadow-lg);
 }
-.btn-cta-gratuit:hover { background: var(--btn-hover-gratuit); }
+.btn-cta--primary:hover { background: var(--btn-hover-premium); }
 
 /* Lead form */
 .lead-form { display: none; margin-top: var(--space-md); }
@@ -807,15 +800,23 @@
   margin-bottom: var(--space-md);
 }
 .m-diag__container {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-lg);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto 1fr;
+  column-gap: var(--space-md);
+}
+.m-diag__container > .m-diag-block {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 3;
+  min-width: 0;
 }
 .m-diag-block__title {
   font-size: 13px;
   font-weight: 600;
   color: var(--text-heading);
   margin-bottom: var(--space-sm);
+  align-self: end;
 }
 .m-diag-block__subtitle {
   font-size: 11px;
@@ -1187,20 +1188,20 @@
      ============================================================ -->
 <header class="top-bar">
   <div class="top-bar__inner">
-    <a href="search_results.html" class="top-bar__back" aria-label="Retour aux resultats">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="10 3 5 8 10 13"/></svg>
+    <a href="search_results.html" class="top-bar__back" aria-label="Retour aux resultats" onclick="event.preventDefault(); history.back();">
+      <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="10 3 5 8 10 13"/></svg>
       Resultats
     </a>
-    <a href="landing.html"><img class="top-bar__logo" src="logo-trackerimmo.svg" alt="TrackerImmo"></a>
+    <a href="index.html"><img class="top-bar__logo" src="logo-trackerimmo.svg" alt="TrackerImmo"></a>
   </div>
 </header>
 
 <!-- ============================================================
      COMPONENT: WowBanner — MOBILE ONLY
-     Mono-agence: "Commercialise par [name]"
+     Mono-agence: "Propose par [name]"
      ============================================================ -->
 <div class="wow-banner" id="wowBanner">
-  <svg class="wow-banner__icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5">
+  <svg aria-hidden="true" class="wow-banner__icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5">
     <circle cx="7.5" cy="7.5" r="5.5"/><path d="M16 16l-3.5-3.5"/>
   </svg>
   <span id="wowText"></span>
@@ -1232,15 +1233,15 @@
      ============================================================ -->
 <div class="m-back-to-top">
   <a href="#" class="m-back-to-top__link" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });">
-    <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 11 9 6 14 11"/></svg>
+    <svg aria-hidden="true" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 11 9 6 14 11"/></svg>
     Retour en haut
   </a>
 </div>
 
 <!-- Back link (desktop only, hidden on mobile via breadcrumb hide) -->
 <nav class="breadcrumb" aria-label="Fil d'Ariane">
-  <a class="breadcrumb__link" href="search_results.html">
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="10 4 6 8 10 12"/></svg>
+  <a class="breadcrumb__link" href="search_results.html" onclick="event.preventDefault(); history.back();">
+    <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="10 4 6 8 10 12"/></svg>
     Retour aux resultats
   </a>
 </nav>
@@ -1257,10 +1258,10 @@
       <span class="gallery__count" id="galleryCount"></span>
       <img class="gallery__main" id="galleryMain" src="" alt="Photo principale">
       <button class="gallery__arrow gallery__arrow--prev" onclick="galleryPrev()" aria-label="Photo precedente">
-        <svg viewBox="0 0 18 18"><polyline points="11 4 6 9 11 14"/></svg>
+        <svg aria-hidden="true" viewBox="0 0 18 18"><polyline points="11 4 6 9 11 14"/></svg>
       </button>
       <button class="gallery__arrow gallery__arrow--next" onclick="galleryNext()" aria-label="Photo suivante">
-        <svg viewBox="0 0 18 18"><polyline points="7 4 12 9 7 14"/></svg>
+        <svg aria-hidden="true" viewBox="0 0 18 18"><polyline points="7 4 12 9 7 14"/></svg>
       </button>
       <div class="gallery__dots" id="galleryDots"></div>
     </section>
@@ -1281,15 +1282,15 @@
       </div>
       <div class="quick-view__specs">
         <span class="quick-view__spec">
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="1"/><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>
+          <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="1"/><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>
           45 m²
         </span>
         <span class="quick-view__spec">
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="7" width="14" height="7" rx="1"/><path d="M3 7V4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v3"/></svg>
+          <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="7" width="14" height="7" rx="1"/><path d="M3 7V4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v3"/></svg>
           1 chambre
         </span>
         <span class="quick-view__spec">
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="2"/><line x1="2" y1="6" x2="14" y2="6"/></svg>
+          <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="2"/><line x1="2" y1="6" x2="14" y2="6"/></svg>
           2 pieces
         </span>
         <span class="badge-dpe badge-dpe--E">DPE E</span>
@@ -1358,7 +1359,7 @@
       </div>
     </div>
     <div class="m-bottom-bar__cta-wrap">
-      <button class="m-bottom-bar__cta btn-cta-gratuit" id="bbCta" onclick="openSheet()">Contacter l'agence</button>
+      <button class="m-bottom-bar__cta btn-cta--primary" id="bbCta" onclick="openSheet()">Contacter l'agence</button>
     </div>
   </div>
 </div>
@@ -1366,7 +1367,7 @@
 <!-- ============================================================
      COMPONENT: BottomSheet — MOBILE ONLY
      ============================================================ -->
-<div class="m-overlay" id="mOverlay" onclick="closeSheet()" aria-hidden="true"></div>
+<div class="m-overlay" id="mOverlay" onclick="closeSheet()" role="button" tabindex="0" aria-label="Fermer"></div>
 <div class="m-sheet" id="mSheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
   <div class="m-sheet__handle"></div>
   <div id="sheetContent"></div>
@@ -1393,7 +1394,7 @@ const agency = {
   ges: "D",
   dpeValue: "285 kWh/m\u00b2/an",
   gesValue: "42 kgCO\u2082/m\u00b2/an",
-  logo: '<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#1C1C1C"/><text x="24" y="17" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="#D4AF37" letter-spacing="0.5">CENTURY</text><text x="24" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#D4AF37">21</text><rect x="14" y="34" width="20" height="0.8" fill="#D4AF37"/></svg>',
+  logo: '<svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#1C1C1C"/><text x="24" y="17" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="#D4AF37" letter-spacing="0.5">CENTURY</text><text x="24" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#D4AF37">21</text><rect x="14" y="34" width="20" height="0.8" fill="#D4AF37"/></svg>',
   description: "Appartement T2 situe en plein centre-ville de Bayonne, a deux pas des Halles et des quais de la Nive. Ce bien de 45 m\u00b2 au 2eme etage comprend un sejour avec coin cuisine amenagee, une chambre avec placard, une salle d'eau avec WC. Immeuble en pierre de taille, bien entretenu. Ideal premier achat ou investissement locatif. Pas de travaux a prevoir.",
   characteristics: {
     "Type": "Appartement T2",
@@ -1423,19 +1424,33 @@ let isSwiping = false;
 // HELPERS
 // ============================================================
 function formatPrice(n) { return n.toLocaleString('fr-FR'); }
-function ctaClassShort() { return 'btn-cta-gratuit'; }
+const tiersPresents = [...new Set([agency].map(a => a.tier))];
+function ctaClass(ag, tp) {
+  if (ag.tier === 'premium') return 'btn-cta btn-cta--primary';
+  if (ag.tier === 'gratuit') return tp.includes('premium') ? 'btn-cta btn-cta--secondary' : 'btn-cta btn-cta--primary';
+  if (!tp.includes('premium') && !tp.includes('gratuit')) return 'btn-cta btn-cta--primary';
+  if (!tp.includes('premium')) return 'btn-cta btn-cta--secondary';
+  return 'btn-cta btn-cta--tertiary';
+}
+function ctaClassShort(ag, tp) {
+  if (ag.tier === 'premium') return 'btn-cta--primary';
+  if (ag.tier === 'gratuit') return tp.includes('premium') ? 'btn-cta--secondary' : 'btn-cta--primary';
+  if (!tp.includes('premium') && !tp.includes('gratuit')) return 'btn-cta--primary';
+  if (!tp.includes('premium')) return 'btn-cta--secondary';
+  return 'btn-cta--tertiary';
+}
 
 // SVG icon helpers
 const svgIcons = {
-  surface: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="1"/><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>',
-  bed: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="7" width="14" height="7" rx="1"/><path d="M3 7V4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v3"/></svg>',
-  rooms: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="2"/><line x1="2" y1="6" x2="14" y2="6"/></svg>',
-  pin: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M13 6.67C13 11 8 14.5 8 14.5S3 11 3 6.67a5 5 0 0 1 10 0z"/><circle cx="8" cy="6.67" r="1.8"/></svg>',
-  phone: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M14.5 11.3v2a1.3 1.3 0 0 1-1.4 1.3A13 13 0 0 1 1.4 2.9 1.3 1.3 0 0 1 2.7 1.5h2a1.3 1.3 0 0 1 1.3 1l.5 2.2a1.3 1.3 0 0 1-.4 1.3l-.9.9a10.5 10.5 0 0 0 4 4l.9-.9a1.3 1.3 0 0 1 1.3-.4l2.2.5a1.3 1.3 0 0 1 1 1.3z"/></svg>',
-  mail: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="1.5" y="3" width="13" height="10" rx="1.5"/><path d="M1.5 3l6.5 5.5L14.5 3"/></svg>',
-  globe: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8" cy="8" r="6.5"/><path d="M2 8h12M8 1.5a10.5 10.5 0 0 1 2.7 13M8 1.5a10.5 10.5 0 0 0-2.7 13"/></svg>',
-  clock: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8" cy="8" r="6.5"/><path d="M8 4v4l2.5 1.5"/></svg>',
-  grid: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="2" y="2" width="12" height="12" rx="1.5"/><path d="M2 6h12M6 2v12"/></svg>',
+  surface: '<svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="1"/><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>',
+  bed: '<svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="7" width="14" height="7" rx="1"/><path d="M3 7V4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v3"/></svg>',
+  rooms: '<svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="2"/><line x1="2" y1="6" x2="14" y2="6"/></svg>',
+  pin: '<svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M13 6.67C13 11 8 14.5 8 14.5S3 11 3 6.67a5 5 0 0 1 10 0z"/><circle cx="8" cy="6.67" r="1.8"/></svg>',
+  phone: '<svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M14.5 11.3v2a1.3 1.3 0 0 1-1.4 1.3A13 13 0 0 1 1.4 2.9 1.3 1.3 0 0 1 2.7 1.5h2a1.3 1.3 0 0 1 1.3 1l.5 2.2a1.3 1.3 0 0 1-.4 1.3l-.9.9a10.5 10.5 0 0 0 4 4l.9-.9a1.3 1.3 0 0 1 1.3-.4l2.2.5a1.3 1.3 0 0 1 1 1.3z"/></svg>',
+  mail: '<svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="1.5" y="3" width="13" height="10" rx="1.5"/><path d="M1.5 3l6.5 5.5L14.5 3"/></svg>',
+  globe: '<svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8" cy="8" r="6.5"/><path d="M2 8h12M8 1.5a10.5 10.5 0 0 1 2.7 13M8 1.5a10.5 10.5 0 0 0-2.7 13"/></svg>',
+  clock: '<svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8" cy="8" r="6.5"/><path d="M8 4v4l2.5 1.5"/></svg>',
+  grid: '<svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="2" y="2" width="12" height="12" rx="1.5"/><path d="M2 6h12M6 2v12"/></svg>',
 };
 
 // ============================================================
@@ -1584,7 +1599,7 @@ function renderAgencySection() {
 }
 
 function renderPanelCard() {
-  document.getElementById('panelHeaderText').textContent = `Commercialise par ${agency.name}`;
+  document.getElementById('panelHeaderText').textContent = `Propose par ${agency.name}`;
   document.getElementById('panelCards').innerHTML = `
     <div class="agency-card active">
       <div class="agency-card__header">
@@ -1599,12 +1614,12 @@ function renderPanelCard() {
         <span>${photos.length} photos</span>
       </div>
       <div class="agency-card__cta-zone">
-        <button class="btn-cta btn-cta-gratuit" id="ctaBtn" onclick="toggleLeadForm()">Contacter l'agence \u2192</button>
+        <button class="btn-cta btn-cta--primary" id="ctaBtn" onclick="toggleLeadForm()">Contacter l'agence \u2192</button>
         <div class="lead-form" id="leadForm0">
           <input class="lead-form__field" placeholder="Votre nom" aria-label="Votre nom" />
           <input class="lead-form__field" placeholder="Votre email" type="email" aria-label="Votre email" />
           <input class="lead-form__field" placeholder="Votre telephone" type="tel" aria-label="Votre telephone" />
-          <button class="lead-form__submit btn-cta btn-cta-gratuit" onclick="return false;">Envoyer ma demande</button>
+          <button class="lead-form__submit btn-cta btn-cta--primary" onclick="return false;">Envoyer ma demande</button>
           <p class="lead-form__reassurance">\uD83D\uDD12 Transmis a ${agency.name} uniquement.</p>
         </div>
       </div>
@@ -1616,7 +1631,7 @@ function renderPanelCard() {
 // ============================================================
 function renderWow() {
   const el = document.getElementById('wowText');
-  el.innerHTML = `Commercialise par <span class="wow-banner__count">${agency.name}</span>`;
+  el.innerHTML = `Propose par <span class="wow-banner__count">${agency.name}</span>`;
 }
 
 function renderMobileQuickView() {
@@ -1707,6 +1722,7 @@ function renderMobileBottomBar() {
 function openSheet() {
   document.getElementById('mOverlay').classList.add('open');
   document.getElementById('mSheet').classList.add('open');
+  document.body.style.overflow = 'hidden';
 
   const content = document.getElementById('sheetContent');
   content.innerHTML = `
@@ -1716,7 +1732,7 @@ function openSheet() {
       <input class="m-sheet__field" placeholder="Votre nom" />
       <input class="m-sheet__field" placeholder="Votre email" type="email" />
       <input class="m-sheet__field" placeholder="Votre telephone" type="tel" />
-      <button class="m-sheet__submit btn-cta-gratuit">Envoyer ma demande</button>
+      <button class="m-sheet__submit btn-cta--primary">Envoyer ma demande</button>
     </div>
     <p class="m-sheet__reassurance">\uD83D\uDD12 Transmis a ${agency.name} uniquement.</p>`;
 }
@@ -1724,6 +1740,7 @@ function openSheet() {
 function closeSheet() {
   document.getElementById('mOverlay').classList.remove('open');
   document.getElementById('mSheet').classList.remove('open');
+  document.body.style.overflow = '';
 }
 
 // ============================================================
@@ -1776,7 +1793,7 @@ renderMobileBottomBar();
   <div class="footer__inner">
     <div class="footer__brand">
       <div class="footer__brand-name">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none">
           <path d="M12 2L4 7v10l8 5 8-5V7l-8-5z" fill="#BACE27"/>
           <path d="M8 12l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -1800,13 +1817,13 @@ renderMobileBottomBar();
     </div>
     <div class="footer__social">
       <a href="#" class="footer__social-link" aria-label="Facebook">
-        <svg viewBox="0 0 12 12"><path d="M9 1H7.5A2.5 2.5 0 0 0 5 3.5V5H3.5v2H5v4h2V7h1.5L9 5H7V3.5a.5.5 0 0 1 .5-.5H9V1z"/></svg>
+        <svg aria-hidden="true" viewBox="0 0 12 12"><path d="M9 1H7.5A2.5 2.5 0 0 0 5 3.5V5H3.5v2H5v4h2V7h1.5L9 5H7V3.5a.5.5 0 0 1 .5-.5H9V1z"/></svg>
       </a>
       <a href="#" class="footer__social-link" aria-label="Twitter">
-        <svg viewBox="0 0 12 12"><path d="M11 1.5a5.08 5.08 0 0 1-1.5.75 2.28 2.28 0 0 0-4 1.5v.5A5.4 5.4 0 0 1 1 2s-2 4.5 2.5 6.5A5.84 5.84 0 0 1 0 10c4.5 2.5 10 0 10-5.75 0-.14 0-.28-.02-.42A3.63 3.63 0 0 0 11 1.5z"/></svg>
+        <svg aria-hidden="true" viewBox="0 0 12 12"><path d="M11 1.5a5.08 5.08 0 0 1-1.5.75 2.28 2.28 0 0 0-4 1.5v.5A5.4 5.4 0 0 1 1 2s-2 4.5 2.5 6.5A5.84 5.84 0 0 1 0 10c4.5 2.5 10 0 10-5.75 0-.14 0-.28-.02-.42A3.63 3.63 0 0 0 11 1.5z"/></svg>
       </a>
       <a href="#" class="footer__social-link" aria-label="Instagram">
-        <svg viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10" rx="3" stroke="currentColor" fill="none" stroke-width="1"/><circle cx="6" cy="6" r="2" stroke="currentColor" fill="none" stroke-width="1"/><circle cx="9" cy="3" r="0.5" fill="currentColor"/></svg>
+        <svg aria-hidden="true" viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10" rx="3" stroke="currentColor" fill="none" stroke-width="1"/><circle cx="6" cy="6" r="2" stroke="currentColor" fill="none" stroke-width="1"/><circle cx="9" cy="3" r="0.5" fill="currentColor"/></svg>
       </a>
     </div>
   </div>

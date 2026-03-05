@@ -54,6 +54,23 @@
   --btn-hover-gratuit: #0b3f47;
   --btn-hover-scrape: #f0f0ec;
 
+  /* Overlays */
+  --overlay-dark: rgba(0,0,0,0.55);
+  --overlay-backdrop: rgba(0,0,0,0.4);
+  --overlay-light-85: rgba(255,255,255,0.85);
+  --overlay-light-50: rgba(255,255,255,0.5);
+
+  /* Primary-dark alpha variants */
+  --primary-dark-4: rgba(14,78,87,0.04);
+  --primary-dark-8: rgba(14,78,87,0.08);
+  --primary-dark-15: rgba(14,78,87,0.15);
+
+  /* Couleurs fonctionnelles manquantes */
+  --color-negative: #DC2626;
+
+  /* Layout spécifique search */
+  --search-bar-overflow: 34px;
+
   --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
   --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
   --shadow-bar: 0 -4px 12px rgba(0,0,0,0.08);
@@ -67,6 +84,17 @@
   --radius-pill: 4px;
   --radius-thumb: 6px;
   --radius-full: 9999px;
+  --radius-tag: 6px;
+  --radius-searchbar: 12px;
+
+  /* Badge DPE — couleurs pastel pour les badges inline (différent des barres DPE) */
+  --badge-dpe-a-bg: #e6f5e6; --badge-dpe-a-text: #1a7a1a;
+  --badge-dpe-b-bg: #e6f9e6; --badge-dpe-b-text: #1a8a1a;
+  --badge-dpe-c-bg: #fafce6; --badge-dpe-c-text: #6b6b00;
+  --badge-dpe-d-bg: #fffde6; --badge-dpe-d-text: #8a8a00;
+  --badge-dpe-e-bg: #fff5e0; --badge-dpe-e-text: #995c00;
+  --badge-dpe-f-bg: #fff0e0; --badge-dpe-f-text: #b34700;
+  --badge-dpe-g-bg: #ffe6e6; --badge-dpe-g-text: #cc0000;
 
   /* Spacing scale (8px grid) */
   --space-xs: 4px;
@@ -223,7 +251,7 @@ a { text-decoration: none; color: inherit; }
   color: var(--primary-dark);
   background: rgba(186,206,39,0.15);
   border: 1px solid rgba(186,206,39,0.3);
-  border-radius: 6px;
+  border-radius: var(--radius-tag);
   padding: 5px 12px;
 }
 .badge-dpe {
@@ -235,6 +263,17 @@ a { text-decoration: none; color: inherit; }
   padding: 3px 10px;
   border-radius: var(--radius-badge);
 }
+.badge-dpe--A { background: var(--badge-dpe-a-bg); color: var(--badge-dpe-a-text); }
+.badge-dpe--B { background: var(--badge-dpe-b-bg); color: var(--badge-dpe-b-text); }
+.badge-dpe--C { background: var(--badge-dpe-c-bg); color: var(--badge-dpe-c-text); }
+.badge-dpe--D { background: var(--badge-dpe-d-bg); color: var(--badge-dpe-d-text); }
+.badge-dpe--E { background: var(--badge-dpe-e-bg); color: var(--badge-dpe-e-text); }
+.badge-dpe--F { background: var(--badge-dpe-f-bg); color: var(--badge-dpe-f-text); }
+.badge-dpe--G { background: var(--badge-dpe-g-bg); color: var(--badge-dpe-g-text); }
+
+/* Star rating SVG fill */
+.star-filled { fill: currentColor; }
+.star-empty { fill: var(--color-star-empty); }
 
 /* ---- RESPONSIVE (shared components) ---- */
 @media (max-width: 768px) {
@@ -276,4 +315,13 @@ a { text-decoration: none; color: inherit; }
   clip: rect(0,0,0,0);
   white-space: nowrap;
   border: 0;
+}
+
+/* ---- REDUCED MOTION ---- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

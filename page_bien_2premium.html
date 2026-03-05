@@ -163,14 +163,6 @@
   color: var(--text-secondary);
 }
 .quick-view__spec svg { width: 16px; height: 16px; flex-shrink: 0; }
-/* DPE badge grade colors (base .badge-dpe in shared.css) */
-.badge-dpe--A { background: #e6f5e6; color: #1a7a1a; }
-.badge-dpe--B { background: #e6f9e6; color: #1a8a1a; }
-.badge-dpe--C { background: #fafce6; color: #6b6b00; }
-.badge-dpe--D { background: #fffde6; color: #8a8a00; }
-.badge-dpe--E { background: #fff5e0; color: #995c00; }
-.badge-dpe--F { background: #fff0e0; color: #b34700; }
-.badge-dpe--G { background: #ffe6e6; color: #cc0000; }
 
 /* ============================================================
    C — DESCRIPTION
@@ -455,23 +447,23 @@
   transition: transform 0.1s, box-shadow 0.2s;
 }
 .btn-cta:active { transform: scale(0.98); }
-.btn-cta-premium {
+.btn-cta--primary {
   background: var(--primary-accent);
   color: var(--text-cta);
   box-shadow: var(--shadow-lg);
 }
-.btn-cta-premium:hover { background: var(--btn-hover-premium); }
-.btn-cta-gratuit {
+.btn-cta--primary:hover { background: var(--btn-hover-premium); }
+.btn-cta--secondary {
   background: var(--primary-dark);
   color: white;
 }
-.btn-cta-gratuit:hover { background: var(--btn-hover-gratuit); }
-.btn-cta-scrape {
+.btn-cta--secondary:hover { background: var(--btn-hover-gratuit); }
+.btn-cta--tertiary {
   background: var(--bg-page);
   border: 1px solid var(--border-default);
   color: var(--text-heading);
 }
-.btn-cta-scrape:hover { background: var(--btn-hover-scrape); }
+.btn-cta--tertiary:hover { background: var(--btn-hover-scrape); }
 
 .agency-card__phone-link {
   display: block;
@@ -797,6 +789,7 @@
 .wow-banner__range {
   font-weight: 600;
   color: var(--text-heading);
+  white-space: nowrap;
 }
 
 /* Agency Selector — Trivago-style */
@@ -1159,15 +1152,23 @@
   margin-bottom: var(--space-md);
 }
 .m-diag__container {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-lg);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto 1fr;
+  column-gap: var(--space-md);
+}
+.m-diag__container > .m-diag-block {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 3;
+  min-width: 0;
 }
 .m-diag-block__title {
   font-size: 13px;
   font-weight: 600;
   color: var(--text-heading);
   margin-bottom: var(--space-sm);
+  align-self: end;
 }
 .m-diag-block__subtitle {
   font-size: 11px;
@@ -1706,11 +1707,11 @@
      ============================================================ -->
 <header class="top-bar">
   <div class="top-bar__inner">
-    <a href="search_results.html" class="top-bar__back" aria-label="Retour aux resultats">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="10 3 5 8 10 13"/></svg>
+    <a href="search_results.html" class="top-bar__back" aria-label="Retour aux resultats" onclick="event.preventDefault(); history.back();">
+      <svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="10 3 5 8 10 13"/></svg>
       Resultats
     </a>
-    <a href="landing.html"><img class="top-bar__logo" src="logo-trackerimmo.svg" alt="TrackerImmo"></a>
+    <a href="index.html"><img class="top-bar__logo" src="logo-trackerimmo.svg" alt="TrackerImmo"></a>
   </div>
 </header>
 
@@ -1719,7 +1720,7 @@
      Ephemeral banner showing agency count + price range.
      ============================================================ -->
 <div class="wow-banner" id="wowBanner">
-  <svg class="wow-banner__icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5">
+  <svg aria-hidden="true" class="wow-banner__icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5">
     <circle cx="7.5" cy="7.5" r="5.5"/><path d="M16 16l-3.5-3.5"/>
   </svg>
   <span id="wowText"></span>
@@ -1757,7 +1758,7 @@
      ============================================================ -->
 <div class="m-back-to-top">
   <a href="#" class="m-back-to-top__link" onclick="event.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' });">
-    <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 11 9 6 14 11"/></svg>
+    <svg aria-hidden="true" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 11 9 6 14 11"/></svg>
     Retour en haut
   </a>
 </div>
@@ -1774,10 +1775,10 @@
       <span class="gallery__count" id="galleryCount"></span>
       <img class="gallery__main" id="galleryMain" src="" alt="Photo principale">
       <button class="gallery__arrow gallery__arrow--prev" onclick="galleryPrev()" aria-label="Photo precedente">
-        <svg viewBox="0 0 18 18"><polyline points="11 4 6 9 11 14"/></svg>
+        <svg aria-hidden="true" viewBox="0 0 18 18"><polyline points="11 4 6 9 11 14"/></svg>
       </button>
       <button class="gallery__arrow gallery__arrow--next" onclick="galleryNext()" aria-label="Photo suivante">
-        <svg viewBox="0 0 18 18"><polyline points="7 4 12 9 7 14"/></svg>
+        <svg aria-hidden="true" viewBox="0 0 18 18"><polyline points="7 4 12 9 7 14"/></svg>
       </button>
       <div class="gallery__dots" id="galleryDots"></div>
     </section>
@@ -1870,7 +1871,7 @@
 <!-- ============================================================
      COMPONENT: BottomSheet — MOBILE ONLY
      ============================================================ -->
-<div class="m-overlay" id="mOverlay" onclick="closeSheet()" aria-hidden="true"></div>
+<div class="m-overlay" id="mOverlay" onclick="closeSheet()" role="button" tabindex="0" aria-label="Fermer"></div>
 <div class="m-sheet" id="mSheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
   <div class="m-sheet__handle"></div>
   <div id="sheetContent"></div>
@@ -1887,7 +1888,7 @@ const agencies = [
     id: 0,
     name: "Lafor\u00eat Anglet",
     short: "Lafor\u00eat",
-    logo: '<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#FFD700"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#2D5016" letter-spacing="0.3">LAFORET</text><path d="M20 36 L24 25 L28 36" stroke="#2D5016" stroke-width="1.5" fill="none"/><path d="M18 36 L24 28 L30 36" stroke="#2D5016" stroke-width="1.2" fill="none" opacity="0.5"/></svg>',
+    logo: '<svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#FFD700"/><text x="24" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" font-weight="700" fill="#2D5016" letter-spacing="0.3">LAFORET</text><path d="M20 36 L24 25 L28 36" stroke="#2D5016" stroke-width="1.5" fill="none"/><path d="M18 36 L24 28 L30 36" stroke="#2D5016" stroke-width="1.2" fill="none" opacity="0.5"/></svg>',
     tier: "premium",
     price: "520\u00a0000",
     priceNum: 520000,
@@ -1938,7 +1939,7 @@ const agencies = [
     id: 1,
     name: "Orpi",
     short: "Orpi",
-    logo: '<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#E30613"/><text x="24" y="29" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="white" letter-spacing="1">ORPI</text></svg>',
+    logo: '<svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#E30613"/><text x="24" y="29" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="white" letter-spacing="1">ORPI</text></svg>',
     tier: "premium",
     price: "498\u00a0000",
     priceNum: 498000,
@@ -1985,7 +1986,7 @@ const agencies = [
     id: 2,
     name: "Century 21",
     short: "C21",
-    logo: '<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#1C1C1C"/><text x="24" y="17" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="#D4AF37" letter-spacing="0.5">CENTURY</text><text x="24" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#D4AF37">21</text><rect x="14" y="34" width="20" height="0.8" fill="#D4AF37"/></svg>',
+    logo: '<svg aria-hidden="true" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#1C1C1C"/><text x="24" y="17" text-anchor="middle" font-family="Inter,sans-serif" font-size="6" font-weight="700" fill="#D4AF37" letter-spacing="0.5">CENTURY</text><text x="24" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#D4AF37">21</text><rect x="14" y="34" width="20" height="0.8" fill="#D4AF37"/></svg>',
     tier: "scrape",
     price: "485\u00a0000",
     priceNum: 485000,
@@ -2035,37 +2036,39 @@ function priceRange() {
   return { min: Math.min(...prices), max: Math.max(...prices) };
 }
 function formatPrice(n) { return n.toLocaleString('fr-FR'); }
-function ctaBtnClass(ag) {
-  if (ag.tier === 'premium') return 'btn-cta btn-cta-premium';
-  if (ag.tier === 'gratuit') return 'btn-cta btn-cta-gratuit';
-  return 'btn-cta btn-cta-scrape';
+const tiersPresents = [...new Set(agencies.map(a => a.tier))];
+function ctaBtnClass(ag, tp) {
+  return 'btn-cta ' + ctaClassShort(ag, tp);
 }
-function ctaClassShort(ag) {
-  if (ag.tier === 'premium') return 'btn-cta-premium';
-  if (ag.tier === 'gratuit') return 'btn-cta-gratuit';
-  return 'btn-cta-scrape';
+function ctaClassShort(ag, tp) {
+  const tiers = tp || tiersPresents;
+  if (ag.tier === 'premium') return 'btn-cta--primary';
+  if (ag.tier === 'gratuit') return tiers.includes('premium') ? 'btn-cta--secondary' : 'btn-cta--primary';
+  if (!tiers.includes('premium') && !tiers.includes('gratuit')) return 'btn-cta--primary';
+  if (!tiers.includes('premium')) return 'btn-cta--secondary';
+  return 'btn-cta--tertiary';
 }
 
 // SVG icon helpers
 const svgIcons = {
-  surface: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="1"/><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>',
-  bed: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="7" width="14" height="7" rx="1"/><path d="M3 7V4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v3"/></svg>',
-  rooms: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="2"/><line x1="2" y1="6" x2="14" y2="6"/></svg>',
-  pin: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M13 6.67C13 11 8 14.5 8 14.5S3 11 3 6.67a5 5 0 0 1 10 0z"/><circle cx="8" cy="6.67" r="1.8"/></svg>',
-  phone: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M14.5 11.3v2a1.3 1.3 0 0 1-1.4 1.3A13 13 0 0 1 1.4 2.9 1.3 1.3 0 0 1 2.7 1.5h2a1.3 1.3 0 0 1 1.3 1l.5 2.2a1.3 1.3 0 0 1-.4 1.3l-.9.9a10.5 10.5 0 0 0 4 4l.9-.9a1.3 1.3 0 0 1 1.3-.4l2.2.5a1.3 1.3 0 0 1 1 1.3z"/></svg>',
-  mail: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="1.5" y="3" width="13" height="10" rx="1.5"/><path d="M1.5 3l6.5 5.5L14.5 3"/></svg>',
-  globe: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8" cy="8" r="6.5"/><path d="M2 8h12M8 1.5a10.5 10.5 0 0 1 2.7 13M8 1.5a10.5 10.5 0 0 0-2.7 13"/></svg>',
-  clock: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8" cy="8" r="6.5"/><path d="M8 4v4l2.5 1.5"/></svg>',
-  grid: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="2" y="2" width="12" height="12" rx="1.5"/><path d="M2 6h12M6 2v12"/></svg>',
-  checkAnis: '<svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" fill="#BACE27"/><path d="M4 7L6 9L10 5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-  checkAnisLg: '<svg viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" fill="#BACE27"/><path d="M5.5 9L8 11.5L12.5 6.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-  checkAnisSm: '<svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.5" fill="#BACE27"/><path d="M3.5 6L5.5 8L8.5 4.5" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-  checkAnisXs: '<svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4.5" fill="#BACE27"/><path d="M3 5L4.5 6.5L7 3.5" stroke="white" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-  partnerBadge: '<svg viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.5" fill="#BACE27" stroke="#8FA31C"/><path d="M3.5 6L5.5 8L8.5 4.5" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-  infoCircle: '<svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="6"/><text x="7" y="10.5" text-anchor="middle" font-size="10" font-weight="700" fill="white" font-family="Inter">i</text></svg>',
-  bell: '<svg viewBox="0 0 16 16"><path d="M8 1.5a4 4 0 0 0-4 4v3l-1.3 1.95a.5.5 0 0 0 .42.77h9.76a.5.5 0 0 0 .42-.77L12 8.5v-3a4 4 0 0 0-4-4zM6.5 12.5a1.5 1.5 0 0 0 3 0"/></svg>',
-  star: (filled) => `<svg viewBox="0 0 16 16" fill="${filled ? 'currentColor' : 'var(--color-star-empty)'}"><path d="M8 1.12l1.95 3.95 4.36.64-3.16 3.08.75 4.34L8 10.94l-3.9 2.19.75-4.34L1.69 5.71l4.36-.64L8 1.12z"/></svg>`,
-  phoneCall: '<svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+  surface: '<svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="1"/><line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/></svg>',
+  bed: '<svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="7" width="14" height="7" rx="1"/><path d="M3 7V4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v3"/></svg>',
+  rooms: '<svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="2"/><line x1="2" y1="6" x2="14" y2="6"/></svg>',
+  pin: '<svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M13 6.67C13 11 8 14.5 8 14.5S3 11 3 6.67a5 5 0 0 1 10 0z"/><circle cx="8" cy="6.67" r="1.8"/></svg>',
+  phone: '<svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M14.5 11.3v2a1.3 1.3 0 0 1-1.4 1.3A13 13 0 0 1 1.4 2.9 1.3 1.3 0 0 1 2.7 1.5h2a1.3 1.3 0 0 1 1.3 1l.5 2.2a1.3 1.3 0 0 1-.4 1.3l-.9.9a10.5 10.5 0 0 0 4 4l.9-.9a1.3 1.3 0 0 1 1.3-.4l2.2.5a1.3 1.3 0 0 1 1 1.3z"/></svg>',
+  mail: '<svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="1.5" y="3" width="13" height="10" rx="1.5"/><path d="M1.5 3l6.5 5.5L14.5 3"/></svg>',
+  globe: '<svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8" cy="8" r="6.5"/><path d="M2 8h12M8 1.5a10.5 10.5 0 0 1 2.7 13M8 1.5a10.5 10.5 0 0 0-2.7 13"/></svg>',
+  clock: '<svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8" cy="8" r="6.5"/><path d="M8 4v4l2.5 1.5"/></svg>',
+  grid: '<svg aria-hidden="true" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="2" y="2" width="12" height="12" rx="1.5"/><path d="M2 6h12M6 2v12"/></svg>',
+  checkAnis: '<svg aria-hidden="true" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" fill="#BACE27"/><path d="M4 7L6 9L10 5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  checkAnisLg: '<svg aria-hidden="true" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" fill="#BACE27"/><path d="M5.5 9L8 11.5L12.5 6.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  checkAnisSm: '<svg aria-hidden="true" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.5" fill="#BACE27"/><path d="M3.5 6L5.5 8L8.5 4.5" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  checkAnisXs: '<svg aria-hidden="true" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4.5" fill="#BACE27"/><path d="M3 5L4.5 6.5L7 3.5" stroke="white" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  partnerBadge: '<svg aria-hidden="true" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5.5" fill="#BACE27" stroke="#8FA31C"/><path d="M3.5 6L5.5 8L8.5 4.5" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  infoCircle: '<svg aria-hidden="true" viewBox="0 0 14 14"><circle cx="7" cy="7" r="6"/><text x="7" y="10.5" text-anchor="middle" font-size="10" font-weight="700" fill="white" font-family="Inter">i</text></svg>',
+  bell: '<svg aria-hidden="true" viewBox="0 0 16 16"><path d="M8 1.5a4 4 0 0 0-4 4v3l-1.3 1.95a.5.5 0 0 0 .42.77h9.76a.5.5 0 0 0 .42-.77L12 8.5v-3a4 4 0 0 0-4-4zM6.5 12.5a1.5 1.5 0 0 0 3 0"/></svg>',
+  star: (filled) => `<svg aria-hidden="true" viewBox="0 0 16 16" class="${filled ? 'star-filled' : 'star-empty'}"><path d="M8 1.12l1.95 3.95 4.36.64-3.16 3.08.75 4.34L8 10.94l-3.9 2.19.75-4.34L1.69 5.71l4.36-.64L8 1.12z"/></svg>`,
+  phoneCall: '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
 };
 
 function starsHTML(rating) {
@@ -2310,20 +2313,20 @@ function renderPanelCards() {
 
     if (ag.tier === 'premium') {
       cardHTML += `
-        <button class="btn-cta btn-cta-premium" onclick="event.stopPropagation(); toggleLeadForm(${i})">Contacter l'agence &rarr;</button>
+        <button class="${ctaBtnClass(ag)}" onclick="event.stopPropagation(); toggleLeadForm(${i})">Contacter l'agence &rarr;</button>
         <span class="agency-card__phone-link" onclick="event.stopPropagation(); this.textContent='${ag.phone}'">Afficher le numero</span>
         <div class="lead-form" id="leadForm${i}">
           <input class="lead-form__field" placeholder="Votre nom" />
           <input class="lead-form__field" placeholder="Votre email" type="email" />
           <input class="lead-form__field" placeholder="Votre telephone" type="tel" />
-          <button class="lead-form__submit btn-cta btn-cta-premium" onclick="event.stopPropagation()">Envoyer ma demande</button>
+          <button class="lead-form__submit ${ctaBtnClass(ag)}" onclick="event.stopPropagation()">Envoyer ma demande</button>
           <p class="lead-form__reassurance">&#128274; Transmis a ${ag.name} uniquement.</p>
         </div>`;
     } else {
       // Scrape — find the best alt premium (not currently selected, or fallback to first premium)
       const altPremium = getAltPremiumAgency(selectedIndex) || getPremiumAgency();
       cardHTML += `
-        <button class="btn-cta btn-cta-scrape" onclick="event.stopPropagation(); toggleScrapeExpand(${i})">Contacter l'agence &rarr;</button>
+        <button class="${ctaBtnClass(ag)}" onclick="event.stopPropagation(); toggleScrapeExpand(${i})">Contacter l'agence &rarr;</button>
         <div class="scrape-expand" id="scrapeExpand${i}">
           <div class="scrape-expand__notice">
             <div class="scrape-expand__notice-icon">${svgIcons.infoCircle}</div>
@@ -2355,9 +2358,9 @@ function renderWow() {
   const el = document.getElementById('wowText');
   if (agencies.length > 1) {
     const r = priceRange();
-    el.innerHTML = `Ce bien est propose par <span class="wow-banner__count">${agencies.length} agences</span> \u00b7 <span class="wow-banner__range">${formatPrice(r.min)} \u20ac a ${formatPrice(r.max)} \u20ac</span>`;
+    el.innerHTML = `Trouv\u00e9 chez <span class="wow-banner__count">${agencies.length} agences</span> <span class="wow-banner__range">${formatPrice(r.min)} \u20ac \u2014 ${formatPrice(r.max)} \u20ac</span>`;
   } else {
-    el.innerHTML = `Commercialise par <span class="wow-banner__count">${agencies[0].name}</span>`;
+    el.innerHTML = `Propose par <span class="wow-banner__count">${agencies[0].name}</span>`;
   }
 }
 
@@ -2370,9 +2373,9 @@ function renderSelector() {
   if (!isMulti) {
     const ag = agencies[0];
     container.innerHTML = `
-      <div class="mono-banner" style="padding:0; border:none;">
+      <div class="mono-banner" >
         <div class="mono-banner__avatar">${ag.logo}</div>
-        <span class="mono-banner__text">Commercialise par <span class="mono-banner__name">${ag.name}</span></span>
+        <span class="mono-banner__text">Propose par <span class="mono-banner__name">${ag.name}</span></span>
       </div>`;
     return;
   }
@@ -2407,7 +2410,7 @@ function renderSelector() {
       <div class="selector-others">
         <div class="selector-others__toggle ${isOthersOpen ? 'open' : ''}" id="othersToggle" onclick="toggleOthers()">
           <span class="selector-others__toggle-label">${others.length} autre${others.length > 1 ? 's' : ''} agence${others.length > 1 ? 's' : ''}</span>
-          <svg class="selector-others__toggle-chevron" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 9 12 14 7"/></svg>
+          <svg aria-hidden="true" class="selector-others__toggle-chevron" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 9 12 14 7"/></svg>
         </div>
         <div class="selector-others__list ${isOthersOpen ? 'open' : ''}" id="othersList">
           ${others.map(ag => `
@@ -2513,7 +2516,7 @@ function renderMobileAgencySection(ag) {
       </div>`;
   } else {
     html += `
-      <div class="m-agency__header" style="margin-bottom:4px;">
+      <div class="m-agency__header" style="margin-bottom:var(--space-xs);">
         <div><div class="m-agency__title m-agency__title--sm">${ag.name}</div></div>
       </div>
       <div class="m-agency__minimal">${svgIcons.pin} ${ag.address}</div>`;
@@ -2544,6 +2547,7 @@ function openSheet() {
   const ag = agencies[selectedIndex];
   document.getElementById('mOverlay').classList.add('open');
   document.getElementById('mSheet').classList.add('open');
+  document.body.style.overflow = 'hidden';
 
   const content = document.getElementById('sheetContent');
 
@@ -2555,7 +2559,7 @@ function openSheet() {
         <h3 class="m-sheet__title" id="sheetTitle">Contacter ${ag.name}</h3>
         <p class="m-sheet__subtitle">${ag.price} \u20ac \u2014 ${ag.surface}</p>
         <div class="m-sheet__notice">
-          <div class="m-sheet__notice-icon"><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="var(--color-warning)"/><text x="7" y="10.5" text-anchor="middle" font-size="10" font-weight="700" fill="white" font-family="Inter">i</text></svg></div>
+          <div class="m-sheet__notice-icon"><svg aria-hidden="true" viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="var(--color-warning)"/><text x="7" y="10.5" text-anchor="middle" font-size="10" font-weight="700" fill="white" font-family="Inter">i</text></svg></div>
           <div class="m-sheet__notice-text">${ag.name} n'est pas encore partenaire TrackerImmo. Ses informations n'ont pas ete verifiees.</div>
         </div>
         <div class="m-sheet__fields">
@@ -2606,6 +2610,7 @@ function openSheet() {
 function closeSheet() {
   document.getElementById('mOverlay').classList.remove('open');
   document.getElementById('mSheet').classList.remove('open');
+  document.body.style.overflow = '';
 }
 
 // ============================================================
@@ -2656,7 +2661,7 @@ function toggleScrapeExpand(index) {
   expand.classList.toggle('open');
   const isOpen = expand.classList.contains('open');
   const zone = expand.closest('.agency-card__cta-zone');
-  const cta = zone?.querySelector('.btn-cta-scrape');
+  const cta = zone?.querySelector('.btn-cta--tertiary');
   if (cta) cta.style.display = isOpen ? 'none' : '';
 }
 
@@ -2684,7 +2689,7 @@ selectAgency(0);
   <div class="footer__inner">
     <div class="footer__brand">
       <div class="footer__brand-name">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none">
           <path d="M12 2L4 7v10l8 5 8-5V7l-8-5z" fill="#BACE27"/>
           <path d="M8 12l3 3 5-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -2708,13 +2713,13 @@ selectAgency(0);
     </div>
     <div class="footer__social">
       <a href="#" class="footer__social-link" aria-label="Facebook">
-        <svg viewBox="0 0 12 12"><path d="M9 1H7.5A2.5 2.5 0 0 0 5 3.5V5H3.5v2H5v4h2V7h1.5L9 5H7V3.5a.5.5 0 0 1 .5-.5H9V1z"/></svg>
+        <svg aria-hidden="true" viewBox="0 0 12 12"><path d="M9 1H7.5A2.5 2.5 0 0 0 5 3.5V5H3.5v2H5v4h2V7h1.5L9 5H7V3.5a.5.5 0 0 1 .5-.5H9V1z"/></svg>
       </a>
       <a href="#" class="footer__social-link" aria-label="Twitter">
-        <svg viewBox="0 0 12 12"><path d="M11 1.5a5.08 5.08 0 0 1-1.5.75 2.28 2.28 0 0 0-4 1.5v.5A5.4 5.4 0 0 1 1 2s-2 4.5 2.5 6.5A5.84 5.84 0 0 1 0 10c4.5 2.5 10 0 10-5.75 0-.14 0-.28-.02-.42A3.63 3.63 0 0 0 11 1.5z"/></svg>
+        <svg aria-hidden="true" viewBox="0 0 12 12"><path d="M11 1.5a5.08 5.08 0 0 1-1.5.75 2.28 2.28 0 0 0-4 1.5v.5A5.4 5.4 0 0 1 1 2s-2 4.5 2.5 6.5A5.84 5.84 0 0 1 0 10c4.5 2.5 10 0 10-5.75 0-.14 0-.28-.02-.42A3.63 3.63 0 0 0 11 1.5z"/></svg>
       </a>
       <a href="#" class="footer__social-link" aria-label="Instagram">
-        <svg viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10" rx="3" stroke="currentColor" fill="none" stroke-width="1"/><circle cx="6" cy="6" r="2" stroke="currentColor" fill="none" stroke-width="1"/><circle cx="9" cy="3" r="0.5" fill="currentColor"/></svg>
+        <svg aria-hidden="true" viewBox="0 0 12 12"><rect x="1" y="1" width="10" height="10" rx="3" stroke="currentColor" fill="none" stroke-width="1"/><circle cx="6" cy="6" r="2" stroke="currentColor" fill="none" stroke-width="1"/><circle cx="9" cy="3" r="0.5" fill="currentColor"/></svg>
       </a>
     </div>
   </div>
